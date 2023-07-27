@@ -1,0 +1,13 @@
+.sample-button-panel {
+    margin-bottom: 0;
+    float: right;
+}
+
+.sample-main-panel {
+    height: 44px;
+    margin-bottom: 8px;
+}
+
+.layui-btn-normal {
+    margin-right: 8px!important;
+}

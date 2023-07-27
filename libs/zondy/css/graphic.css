@@ -1,0 +1,68 @@
+.layui-form-item .layui-input-inline {
+    float: left;
+    width: 165px;
+    margin-right: 0;
+    margin-left: 3px;
+}
+
+.layui-form-select {
+    width: 183px;
+}
+
+.layui-btn-normal {
+    width: 88px;
+}
+
+.graphic-button-margin {
+    margin-right: 8px!important;
+}
+
+.sample-button-panel {
+    margin-bottom: 0;
+}
+
+.sample-button-panel:after{
+    display: block;
+    content: '';
+    visibility: hidden;
+    clear: both;
+}
+
+.layui-form-item {
+    margin-bottom: 8px;
+}
+
+.sample-button-panel {
+    margin-top: 8px;
+}
+.layui-form-switch{
+    margin-top:5px;
+}
+
+
+#editPanel{
+    display: none;
+    top: 70px;
+    max-height: calc(100% - 80px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#editPanel::-webkit-scrollbar {
+    width: 4px;
+    height: 6px;
+    background-color:  rgba(0, 0, 0, 1);
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+#editPanel::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    background-color:  rgba(0, 0, 0, 1);
+}
+
+/*定义滑块 内阴影+圆角*/
+#editPanel::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #555;
+}

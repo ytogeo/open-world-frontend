@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:zondyPlotSymbol="https://www.mapgis.com" height="16.933mm" id="svg8665"
+  style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+  version="1.1" viewBox="0 0 1693.3 1693.3" width="16.933mm" xml:space="preserve" zondyPlotSymbol:desc=""
+  zondyPlotSymbol:id="943fd60a-8fc0-11ed-b00d-a4ae1118b602" zondyPlotSymbol:name="毫米单位符号"
+  zondyPlotSymbol:pose="1" zondyPlotSymbol:type="simplepoint" zondyPlotSymbol:version="1.0"
+  zondyPlotSymbol:origin="0.5,0.99">
+  <defs id="defs1237">
+    <style id="style4109" type="text/css">
+      .str0 {
+        stroke: #3a85c6;
+        stroke-width: 50;
+        stroke-miterlimit: 22.9256
+      }
+
+      .fil0 {
+        fill: #ffffff
+      }
+    </style>
+  </defs>
+  <g id="图层_x0020_1">
+    <metadata id="CorelCorpID_0Corel-Layer" />
+
+    <circle class="fil0 str0" cx="850" cy="843.29" id="circle908" r="500" />
+    <text xml:space="preserve" id="text52040"
+      style="font-size:200px;line-height:1.25;font-family:SimHei;-inkscape-font-specification:SimHei;white-space:pre;shape-inside:url(#rect52042);display:inline;fill:#3a85c6;">
+      <tspan x="550" y="900" id="tspan2249">MapGIS</tspan>
+    </text>
+  </g>
+</svg>

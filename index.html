@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8" />
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="libs/layui-v2.6.8/layui/css/layui.css" />
+  <link rel="stylesheet" type="text/css" href="css/aside-style.css" />
+  <link rel="stylesheet" type="text/css" href="css/my-style.css" />
+  <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
+
+  <title>Open World首页</title>
+  <style>
+    @import url(Build/CesiumUnminified/Widgets/widgets.css);
+
+    html,
+    body,
+    main,
+    #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-y: hidden;
+    }
+
+    #cesium-container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #cesium-container .cesium-viewer-bottom {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="stylesheet" type="text/css" href="css/cover-layui.css" />
+  <!--数据表中工具条-->
+  <script type="text/html" id="info-tool-bar">
+    <a title="查看信息" lay-event="view-info" href="javascript:void(0);">
+      <i class="layui-icon info-bar-icon">&#xe63c;</i>
+    </a>
+    <a title="下载模型" lay-event="download-model" href="javascript:void(0);">
+      <i class="layui-icon info-bar-icon">&#xe601;</i>
+    </a>
+    <a title="删除" lay-event="delete-model" href="javascript:void(0);">
+      <i class="layui-icon info-bar-icon">&#xe640;</i>
+    </a>
+    <a title="添加到地图" lay-event="add-to-map-model" href="javascript:void(0);">
+      <i class="layui-icon info-bar-icon" style="font-size:13.5px;">&#xe715;</i>
+    </a>
+    <a title="上传到广场" lay-event="upload-to-square" href="javascript:void(0);">
+      <i class="layui-icon info-bar-icon" style="font-size:13.8px;">&#xe681;</i>
+    </a>
+  </script>
+
+  <!--标题-->
+  <header class="header left">
+    <div class="left nav">
+      <ul>
+        <li class="nav_active"><i class="nav_map"></i><a href="index.html" style="text-decoration: none">地图界面</a></li>
+        <li>
+          <i class="nav_tool"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick="switchMenuDisplay()" title="点击展开/收回工具栏">我的工具</a><i id="menu-display-state"
+            class="layui-icon layui-icon-down" style="position: relative; top: 3%"></i>
+        </li>
+        <li><i class="nav_build"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick="chooseimage()">开始建模</a></li>
+        <li><i class="nav_add"></i><a href="javascript:void(0)" style="text-decoration: none" onclick="">添加数据</a></li>
+      </ul>
+    </div>
+    <div class="header_center left">
+      <h2><strong>Open World 实景三维模型生产管理开放平台</strong></h2>
+      <p class="color_font">
+        <small>3D Real Scene Model Production&Management Open Platform</small>
+      </p>
+    </div>
+    <div class="right nav text_right">
+      <ul>
+        <li><i class="nav_help"></i><a href="help.html" target="_blank" style="text-decoration: none">？？？？</a></li>
+        <li><i class="nav_help"></i><a href="help.html" target="_blank" style="text-decoration: none">？？？？</a></li>
+        <li><i class="nav_square"></i><a href="model-square.html" target="_blank" style="text-decoration: none">共享广场</a>
+        </li>
+        <li><i class="nav_user"></i><a href="javascript:void(0)" onclick="switchAside()"
+            style="text-decoration: none">用户界面</a></li>
+        <!-- <li><i class="nav_7"></i><a href="javascript:void(0)" onclick="querymodel()">查询模型</a> </li> -->
+      </ul>
+    </div>
+    <!--菜单栏：我的工具-->
+    <div class="tool-menu" id="tool-menu">
+      <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
+          class="menu-item-text">基础工具</span></div>
+      <div class="tool-menu-item" onclick="analysisToolSelect()"><i class="menu-item-logo-analysis"></i><span
+          class="menu-item-text">空间分析</span></div>
+    </div>
+  </header>
+
+  <!--侧边栏：用户界面-->
+  <aside id="aside-container" class="aside-container">
+    <div class="aside-content" id="aside-content">
+      <!-- <span id="hint-text-login" class="hint-text">您还未登录！请<a href="javascript:void(0)" onclick="userLogin()">登录</a></span> -->
+      <div class="user-closet" id="user-closet">
+        <div class="obj-closet">
+          <!--侧边栏：展示OBJ模型-->
+          <div class="obj-display" id="obj-display">
+            <span id="hint-text-obj-display" class="hint-text">暂无内容</span>
+            <div id="render-loading-box">渲染中</div>
+            <canvas id="obj-canvas" style="visibility: hidden"> </canvas>
+          </div>
+          <!--侧边栏：OBJ的地理信息-->
+          <div class="obj-geoinfo-display">
+            <span id="hint-text-info-display" class="hint-text">暂无内容</span>
+            <div id="detailed-info-head" class="detailed-info-head">
+              <span style="position: relative; top: 25%">地理信息</span>
+            </div>
+            <div id="detailed-info" class="grid-container" style="visibility: hidden">
+              <div class="grid-item field-value">所在城市</div>
+              <div class="grid-item table-value" id="city-dbinfo">加载中</div>
+              <div class="grid-item field-value">位置名称</div>
+              <div class="grid-item table-value" id="location-name-dbinfo">加载中</div>
+              <div class="grid-item field-value">详细位置</div>
+              <div class="grid-item table-value" id="poi-dbinfo">加载中</div>
+              <div class="grid-item field-value">经度</div>
+              <div class="grid-item table-value" id="lng-dbinfo">加载中</div>
+              <div class="grid-item field-value">纬度</div>
+              <div class="grid-item table-value" id="lat-dbinfo">加载中</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--侧边栏：展示用户数据库中的记录-->
+      <div class="user-db-table">
+        <table id="db-table" lay-filter="db-table"></table>
+      </div>
+    </div>
+  </aside>
+
+  <!--主界面-->
+  <main>
+    <!--地图-->
+    <div id="map">
+      <!--图层选择按钮-->
+      <button id="choose-layer-button" class="map-setting-button layui-btn" title="图层选择">
+        <i class="layui-icon layui-icon-template-1"></i>
+      </button>
+      <!--天气效果按钮-->
+      <button id="display-weather-button" class="map-setting-button layui-btn" title="天气效果"
+        onclick="weatherWinDisplay()">
+        <i class="layui-icon"> &#x2601;</i>
+      </button>
+      <button id="all-model-manager-button" class="map-setting-button layui-btn" title="模型管理"
+        onclick=" modelManagerDisplay()">
+        <i class="layui-icon layui-icon-app"></i>
+      </button>
+      <!--cesium容器-->
+      <div id="cesium-container"></div>
+    </div>
+    <!--弹窗：用户登录-->
+    <div id="user-login">
+      <div class="user-icon-container">
+        <div class="icon-user"></div>
+      </div>
+      <div class="user-information-container">
+        <form class="layui-form">
+          <div class="layui-form-item" style="margin-top: 15px">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block" style="width: 65%">
+              <input type="text" id="username" required lay-verify="required" autocomplete="off" class="layui-input"
+                placeholder="用户名" />
+            </div>
+          </div>
+          <div class="layui-form-item" style="margin-top: 15px">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block" style="width: 65%">
+              <input type="password" id="password" required lay-verify="required" autocomplete="off" class="layui-input"
+                placeholder="密码" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--弹窗：基础工具箱-->
+    <div id="basic-tool-box">
+      <div class="tool-box-container">
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：空间分析工具箱-->
+    <div id="analysis-tool-box">
+      <div class="tool-box-container">
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+        <div class="tool-box-item">
+          <div class="tool-box-item-icon icon-measure"></div>
+          <span class="tool-box-item-text">距离量测</span>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：天气效果-->
+    <div id="weather-display">
+      <div class="weather-display-container">
+        <div class="weather-item">
+          <div class="weather-item-icon icon-weather-current"></div>
+          <span class="weather-item-text">实时天气</span>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon icon-weather-rainy"></div>
+          <span class="weather-item-text">模拟降雨</span>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon icon-weather-foggy"></div>
+          <span class="weather-item-text">模拟雾天</span>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon icon-weather-snowy"></div>
+          <span class="weather-item-text">模拟降雪</span>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：图层选择-->
+    <div id="layer-choose-window" hidden>
+      <form id="ShowLayerForm" class="layui-form">
+        <div class="layui-form-item" style="margin: 15px">
+          <div id="ChooseLayer">
+            <div id="dark-map-selectbox" style="display: inline">
+              <img src="image/dark_map_sample.jpg" height="150px" width="150px" />
+              <input type="radio" id="Layer1" name="layerClass" lay-filter="cLayer" value="1" title="普通地图" checked />
+            </div>
+            <div id="tdt-map-selectbox" style="display: inline">
+              <img src="image/tdt_imagery_sample.jpg" height="150px" width="150px" />
+              <input type="radio" id="Layer2" name="layerClass" lay-filter="cLayer" value="2" title="实景影像" />
+            </div>
+            <input type="text" id="Layerresult" name="CheckResult" hidden />
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--弹窗：图像重建-->
+    <div class="layui-upload" display="none" id="choose-img">
+      <button type="button" class="layui-btn" id="uploadimg"
+        style="background-color: rgba(15, 74, 151, 0.7); color: #edffff">多图片上传</button>
+      <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px">
+        <div class="layui-upload-list" id="up-load-list"></div>
+      </blockquote>
+    </div>
+    <!--弹窗：重建后输入信息-->
+    <div id="model-infocard-write" style="display: none">
+      <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+          <li class="layui-this">模型基本内容</li>
+          <li>地理位置</li>
+        </ul>
+        <div class="layui-tab-content" style="height: auto; overflow: hidden">
+          <!--基本内容-->
+          <div class="layui-tab-item layui-show" id="info">
+            <form class="layui-form">
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型ID</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="model_id0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" readonly />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型名称</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="ModelName0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型描述</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="ModelInfo0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型类型</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="ModelType0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">提交人</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="PostName0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="time0" required lay-verify="required" autocomplete="off" class="layui-input" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--地理位置-->
+          <div class="layui-tab-item" id="nature">
+            <form class="layui-form">
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">市名</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="city0" required lay-verify="required" autocomplete="off" class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">位置名称</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="location0" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">详细地址</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="poi0" required lay-verify="required" autocomplete="off" class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">经度</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="lng0" required lay-verify="required" autocomplete="off" class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">纬度</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="lat0" required lay-verify="required" autocomplete="off" class="layui-input" />
+                </div>
+              </div>
+              <button type="button" class="layui-btn layui-btn-fluid" id="get_lnglat" onclick="get_lnglat0()"
+                style="background-color: rgba(15, 74, 151, 0.7)">
+                获取经纬度
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：查询模型信息-->
+    <div id="model-infocard-show" style="display: none">
+      <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+          <li class="layui-this">模型基本内容</li>
+          <li>地理位置</li>
+        </ul>
+        <div class="layui-tab-content" style="height: auto; overflow: hidden">
+          <!--基本内容-->
+          <div class="layui-tab-item layui-show" id="basic-info-show">
+            <form class="layui-form">
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型ID</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="model-id-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" readonly />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型名称</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="model-name-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型描述</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="model-info-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">模型类型</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="model-type-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">提交人</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="postname-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="time-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--地理位置-->
+          <div class="layui-tab-item" id="location-show">
+            <form class="layui-form">
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">市名</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="city-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">位置名称</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="location-name-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">详细地址</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="poi-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">经度</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="lng-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">纬度</label>
+                <div class="layui-input-block" style="width: 65%">
+                  <input type="text" id="lat-show" required lay-verify="required" autocomplete="off"
+                    class="layui-input" />
+                </div>
+              </div>
+              <button type="button" class="layui-btn layui-btn-fluid" onclick="getLngLatShow()"
+                style="background-color: rgba(15, 74, 151, 0.7)">
+                获取经纬度
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：模型位置尺寸调整-->
+    <div id="adjust-tiles">
+      <form id="adjust-form" class="layui-form" style="position: relative;top: 10px;">
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">X轴平移</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="x-translate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">Y轴平移</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="y-translate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">Z轴平移</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="z-translate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">X轴旋转</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="x-rotate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">Y轴旋转</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="y-rotate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">Z轴旋转</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="z-rotate" class="adjust-slide"></div>
+          </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 15px">
+          <label class="layui-form-label">比例缩放</label>
+          <div class="layui-input-block" style="width: 50%">
+            <div id="scale-adjust" class="adjust-slide"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--弹窗：模型管理器-->
+    <div id="all-model-manager">
+      <!-- <span id="hint-text-model-manager" class="hint-text">暂无内容</span> -->
+      <div class="model-list-container" id="model-list-container">
+        <!--模型列表中item的一个示例：-->
+        <!-- <div class="model-list-item">
+          <input type="checkbox" name="visibility" title="显隐性" checked>
+          <label for="modelName">模型名称</label>
+          <div class="model-operations">
+            <a href="javascript:void(0)" style="color:#edffff;text-decoration: none" title="编辑模型位置"
+              onclick="">&#x270e;</a>
+            <a href="javascript:void(0)" style="color:#edffff;text-decoration: none" title="从地图中删除模型" onclick="">
+              &#xd7;</a>
+          </div>
+        </div> -->
+      </div>
+
+    </div>
+    <!--tooltip：鼠标移动跟随tooltip-->
+    <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
+  </main>
+
+  <!--禁用右键菜单-->
+  <script type="text/javascript">
+    document.oncontextmenu = function () {
+      return false;
+    };
+  </script>
+  <!-- <script src="libs/Cesium_Build/CesiumUnminified/Cesium.js"></script> -->
+  <script type="importmap">
+    {
+        "imports": {
+          "three": "/libs/three.js-master/build/three.module.js"
+        }
+      }
+    </script>
+  <!-- 配置type="importmap",.html文件也能和项目开发环境一样方式引入threejs -->
+
+  <script src="libs/zondy/include-cesium-local.js"></script>
+  <script src="js/cesium-init.js"></script>
+  <script src="libs/layui-v2.6.8/layui/layui.js">
+    layui.use(['element', 'form', 'laydate', 'slider'], function () {
+      var element = layui.element;
+      var form = layui.form;
+      var laydate = layui.laydate;
+      var slider = layui.slider;
+    })
+  </script>
+  <script src="js/model-add-to-map.js"></script>
+  <script src="js/aside-init.js"></script>
+  <script src="js/tool-menu-init.js"></script>
+  <script src="js/model-reconstruction.js"></script>
+  <script src="js/weather-display.js"></script>
+  <!--ThreeJS相关，渲染侧边栏模型预览窗口-->
+  <script type="module">
+    //flag：是否加载完成，防止在场景中加入多个模型
+      let isCompleteLoading = true;
+      //引入layui的table，注册点击事件
+      var table = layui.table;
+      //layui的table行单击监听，会引发事件冒泡且无法阻止……弃用。暂时使用双击展示。
+      table.on("rowDouble(db-table)", function (obj) {
+        //加载完成时才能触发点击事件
+        if (isCompleteLoading == true) {
+          //flag：加载未完成
+          isCompleteLoading = false;
+          displayItemObj(obj.data);
+          //table行设为选中状态
+          obj.tr.addClass("layui-table-click").siblings().removeClass("layui-table-click");
+        }
+      });
+
+      var isShowItemInfo = false; //表示是否点击了行→展示了信息
+      //threejs相关
+      import * as THREE from "three";
+      import { OrbitControls } from "/libs/three.js-master/examples/jsm/controls/OrbitControls.js";
+      import { OBJLoader } from "/libs/three.js-master/examples/jsm/loaders/OBJLoader.js";
+      import { MTLLoader } from "/libs/three.js-master/examples/jsm/loaders/MTLLoader.js";
+      const scene = new THREE.Scene();
+      //使用loadingmanager，用于为所有loader添加onload回调函数（mtl调用了preload，所以需要使用manager添加onload）
+      var manager = new THREE.LoadingManager();
+      manager.onLoad = objOnLoad;
+
+      //初始化loader时，添加到manager中
+      const objLoader = new OBJLoader(manager);
+      const mtlLoader = new MTLLoader(manager);
+      //画布
+      const canvas = document.querySelector("#obj-canvas");
+      var canvasDiv = document.getElementById("obj-display");
+      canvas.setAttribute("width", 390);
+      canvas.setAttribute("height", 300);
+      //渲染器
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        canvas,
+      });
+      renderer.setSize(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
+      renderer.setClearColor(0xffffff, 0.9);
+      //相机
+      const fov = 45; // 摄像机视锥体垂直视野角度
+      const aspect = canvasDiv.offsetWidth / canvasDiv.offsetHeight; //摄像机视锥体长宽比
+      const near = 0.001; //摄像机视锥体近端面
+      const far = 10000; //摄像机视锥体远端面
+      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      camera.position.z = 0.15;
+      const controls = new OrbitControls(camera, canvas);
+      controls.update();
+      //光源
+      const pointLight = new THREE.PointLight(0xffffff, 1.0);
+      pointLight.position.set(400, 0, 0); //点光源放在x轴上
+      scene.add(pointLight);
+
+      //暂存引用，用于后期删除
+      var curObj = null;
+      var curMtl = null;
+
+      /**
+       * 加载obj模型
+       */
+      function loadObjWithMtl(objPath) {
+        //移除上次模型
+        scene.remove(curObj);
+        scene.remove(curMtl);
+        //控制器重置
+        controls.reset();
+        //加载带mtl的obj
+        mtlLoader.load(objPath + ".mtl", (mtl) => {
+          curMtl = mtl;
+          mtl.side = THREE.DoubleSide;
+          mtl.preload();
+          objLoader.setMaterials(mtl);
+          objLoader.load(objPath, (obj) => {
+            curObj = obj;
+            obj.position.set(0, 0, 0);
+            obj.scale.set(0.1, 0.1, 0.1);
+            /*防止模型变黑*/
+            obj.traverse(function (child) {
+              if (child.isMesh) {
+                child.frustumCulled = false;
+                //模型阴影
+                child.castShadow = true;
+                //模型自发光
+                child.material.emissive = child.material.color;
+                child.material.emissiveMap = child.material.map;
+              }
+            });
+            /*将模型调整到屏幕中心（原点）*/
+            //计算模型尺寸
+            var box = new THREE.Box3();
+            box.expandByObject(obj);
+            var x = (box.max.x + box.min.x) / 2;
+            var y = (box.max.y + box.min.y) / 2;
+            var z = (box.max.z + box.min.z) / 2;
+            //调整模型位置
+            obj.position.set(0 - x, 0 - y, 0 - z);
+            scene.add(obj);
+            console.log("complete adding!");
+          });
+          renderer.render(scene, camera);
+        });
+      }
+
+      /**
+       * table的item点击事件，构造path传给加载的函数
+       * @param {*} item
+       */
+      function displayItemObj(item) {
+        var objId = item.zipname;
+        var objPath = "http://127.0.0.1:8180/OBJ/" + objId + "/scene_dense_mesh_refine_texture.obj";
+        //加上loading遮罩
+        let loadingBox = document.getElementById("render-loading-box");
+        let objCanvas = document.getElementById("obj-canvas");
+        loadingBox.style.display = "block";
+        objCanvas.style.visibility = "hidden";
+        //展示地理信息
+        displayGeoInfo(item);
+        loadObjWithMtl(objPath);
+      }
+      // 渲染
+      function render() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+      }
+      //必要的？
+      requestAnimationFrame(render);
+
+      /**
+       * 点击行时的各种可视性调整，展示地理信息
+       */
+      function displayGeoInfo(item) {
+        let infoBox = document.getElementById("detailed-info");
+        //let infoBoxHead = document.getElementById("detailed-info-head");
+        let hintTextInfo = document.getElementById("hint-text-info-display");
+        let hintTextObj = document.getElementById("hint-text-obj-display");
+        infoBox.style.visibility = "visible";
+        //infoBoxHead.style.visibility = "visible";
+        hintTextInfo.style.visibility = "hidden";
+        hintTextObj.style.visibility = "hidden";
+        /*将数据库中的信息放进表格中*/
+        let city = document.getElementById("city-dbinfo");
+        let locationName = document.getElementById("location-name-dbinfo");
+        let poi = document.getElementById("poi-dbinfo");
+        let lng = document.getElementById("lng-dbinfo");
+        let lat = document.getElementById("lat-dbinfo");
+        city.innerHTML = item.city;
+        locationName.innerHTML = item.location;
+        poi.innerHTML = item.poi;
+        lng.innerHTML = item.lng;
+        lat.innerHTML = item.lat;
+      }
+      /**
+       * Obj加载完成后撤销遮罩层并展示模型
+       */
+      function objOnLoad() {
+        let loadingBox = document.getElementById("render-loading-box");
+        let objCanvas = document.getElementById("obj-canvas");
+        loadingBox.style.display = "none";
+        objCanvas.style.visibility = "visible";
+        //flag：加载完成
+        isCompleteLoading = true;
+      }
+    </script>
+</body>
+
+</html>

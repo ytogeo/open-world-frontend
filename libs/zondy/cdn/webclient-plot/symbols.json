@@ -1,0 +1,264 @@
+{
+  "name": "测试库",
+  "rootPath": "",
+  "symbols": [
+    {
+      "path": "常用符号库/",
+      "name": "常用符号库",
+      "id": "17592c36-2cc8-11ed-be99-1c1b0d789da8",
+      "type": "folder",
+      "items": [
+        {
+          "path": "基础符号/",
+          "name": "基础符号",
+          "id": "175a1614-2cc8-11ed-89d7-1c1b0d789da8",
+          "type": "folder",
+          "items": [
+            {
+              "id": "1",
+              "name": "三角形",
+              "type": "triangle",
+              "path": "icon/常用符号库/基础符号/三角形.svg"
+            },
+            {
+              "id": "2",
+              "name": "",
+              "type": "simplearea",
+              "path": "icon/常用符号库/基础符号/任意区.svg"
+            },
+            {
+              "id": "56",
+              "name": "",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/地质灾害.svg"
+            },
+            {
+              "id": "4",
+              "name": "",
+              "type": "simpleline",
+              "path": "icon/常用符号库/基础符号/工具线.svg"
+            },
+            {
+              "id": "5",
+              "name": "折线",
+              "type": "pathway",
+              "path": "icon/常用符号库/基础符号/折线.svg"
+            },
+            {
+              "id": "6",
+              "name": "文本",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/文本-中.svg"
+            },
+            {
+              "id": "7",
+              "name": "文本",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/文本-小.svg"
+            },
+            {
+              "id": "8",
+              "name": "文本",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/文本-特大.svg"
+            },
+            {
+              "id": "9",
+              "name": "文本",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/文本.svg"
+            },
+            {
+              "id": "57",
+              "name": "",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/气象灾害.svg"
+            },
+            {
+              "id": "55",
+              "name": "",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/基础符号/踩踏.svg"
+            }
+          ]
+        },
+        {
+          "path": "常规点/",
+          "name": "常规点",
+          "id": "175ace7e-2cc8-11ed-97e9-1c1b0d789da8",
+          "type": "folder",
+          "items": [
+            {
+              "id": "11",
+              "name": "小队2",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/小队.svg"
+            },
+            {
+              "id": "33",
+              "name": "小队2",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/小队2.svg"
+            },
+            {
+              "id": "31",
+              "name": "展示牌",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/展示牌4-1.svg"
+            },
+            {
+              "id": "17",
+              "name": "展示牌",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/展示牌4-2.svg"
+            },
+            {
+              "id": "18",
+              "name": "展示牌",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/展示牌4.svg"
+            },
+            {
+              "id": "13",
+              "name": "",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/展示牌5-1.svg"
+            },
+            {
+              "id": "14",
+              "name": "横版展示牌",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/展示牌5.svg"
+            },
+            {
+              "id": "22",
+              "name": "第13小队",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/第13小队.svg"
+            },
+            {
+              "id": "24",
+              "name": "第3区域",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/第3区域.svg"
+            },
+            {
+              "id": "15",
+              "name": "第4大队",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/第4大队.svg"
+            },
+            {
+              "id": "28",
+              "name": "第7小队",
+              "type": "simplepoint",
+              "path": "icon/常用符号库/常规点/第7小队.svg"
+            }
+          ]
+        },
+        {
+          "path": "常规线/",
+          "name": "常规线",
+          "id": "175b5306-2cc8-11ed-9657-1c1b0d789da8",
+          "type": "folder",
+          "items": [
+            {
+              "id": "37",
+              "name": "",
+              "type": "simpleline",
+              "path": "icon/常用符号库/常规线/堑壕-延伸.svg"
+            },
+            {
+              "id": "38",
+              "name": "",
+              "type": "simpleline",
+              "path": "icon/常用符号库/常规线/堑壕.svg"
+            },
+            {
+              "id": "39",
+              "name": "撤离线",
+              "type": "simpleline",
+              "path": "icon/常用符号库/常规线/撤离线.svg"
+            },
+            {
+              "id": "34",
+              "name": "箭头",
+              "type": "simpleline",
+              "path": "icon/常用符号库/常规线/箭头.svg"
+            }
+          ]
+        },
+        {
+          "path": "常规面/",
+          "name": "常规面",
+          "id": "175ba0ec-2cc8-11ed-adb1-1c1b0d789da8",
+          "type": "folder",
+          "items": [
+            {
+              "id": "45",
+              "name": "",
+              "type": "simplearea",
+              "path": "icon/常用符号库/常规面/贴地区.svg"
+            },
+            {
+              "id": "44",
+              "name": "",
+              "type": "simplearea",
+              "path": "icon/常用符号库/常规面/贴地区2.svg"
+            }
+          ]
+        },
+        {
+          "path": "算法符号/",
+          "name": "算法符号",
+          "id": "175ba0ed-2cc8-11ed-9ecc-1c1b0d789da8",
+          "type": "folder",
+          "items": [
+            {
+              "id": "53",
+              "name": "",
+              "type": "kidney",
+              "path": "icon/常用符号库/算法符号/区域.svg"
+            },
+            {
+              "id": "49",
+              "name": "双箭",
+              "type": "doublearrow",
+              "path": "icon/常用符号库/算法符号/双箭.svg"
+            },
+            {
+              "id": "50",
+              "name": "多箭头",
+              "type": "multiarrow",
+              "path": "icon/常用符号库/算法符号/多箭.svg"
+            },
+            {
+              "id": "48",
+              "name": "箭头",
+              "type": "squadarrow",
+              "path": "icon/常用符号库/算法符号/平尾.svg"
+            },
+            {
+              "id": "47",
+              "name": "燕尾箭头",
+              "type": "tailedsquadarrow",
+              "path": "icon/常用符号库/算法符号/燕尾.svg"
+            },
+            {
+              "id": "46",
+              "name": "直尾箭头",
+              "type": "singlearrow",
+              "path": "icon/常用符号库/算法符号/直尾.svg"
+            },
+            {
+              "id": "52",
+              "name": "单箭头",
+              "type": "assaultarrow",
+              "path": "icon/常用符号库/算法符号/箭头.svg"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

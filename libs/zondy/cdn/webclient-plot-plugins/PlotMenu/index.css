@@ -1,0 +1,201 @@
+
+#side {
+  flex: 1;
+  height: 90%;
+  background-color: antiquewhite;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  border-radius: 2px;
+}
+/* sidebar default */
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(44, 44, 44);
+  height: 100%;
+  min-width: 320px;
+  border-radius: 2px;
+}
+.sidebar-menu > li {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow-y:auto ;
+}
+
+.sidebar-menu .treeview{
+  height: calc(70% - 44px);
+}
+.sidebar-menu > li > a {
+  padding: 12px 5px 12px 15px;
+  display: block;
+  border-left: 3px solid transparent;
+  color: #E1E1E1;
+}
+.sidebar-menu > li > a > .fa {
+  width: 20px;
+}
+.sidebar-menu > li:hover > a,
+.sidebar-menu > li.active > a {
+  color: #1890FF;
+  border-left-color: #1890FF;
+}
+.sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: rgb(44, 44, 44);
+}
+.sidebar-menu > li .label,
+.sidebar-menu > li .badge {
+  margin-top: 3px;
+  margin-right: 5px;
+}
+.sidebar-menu li.header {
+  padding: 13px 25px 13px 15px;
+  font-size: 18px;
+  color: #E1E1E1;
+  background: rgb(44, 44, 44);
+  display: flex;
+ justify-content: space-between;
+  border-radius: 2px;
+  border-bottom: 1px solid rgba(68, 68, 68, 1);
+}
+.sidebar-menu li.label {
+  padding: 10px 25px 10px 15px;
+  font-size: 12px;
+  color: #4b646f;
+  background: #1a2226;
+  height: 37px;
+}
+.sidebar-menu li > a > .fa-angle-left {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin-right: 10px;
+  margin-top: 3px;
+}
+.sidebar-menu li.active > a > .fa-angle-left {
+  transform: rotate(-90deg);
+}
+.sidebar-menu li.active > .treeview-menu {
+  display: block;
+}
+.sidebar-menu a {
+  color: #E1E1E1;
+  text-decoration: none;
+}
+.sidebar-menu .treeview-menu {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-menu .treeview-menu .treeview-menu {
+  padding-left: 0px;
+}
+.sidebar-menu .treeview-menu > li {
+  margin: 0;
+}
+.sidebar-menu .treeview-menu > li > a {
+  padding: 12px 5px 12px 30px;
+  display: block;
+  font-size: 14px;
+  color: #E1E1E1;
+  background-color: rgb(44, 44, 44);
+}
+
+.sidebar-menu .treeview-menu .treeview-menu > li > a {
+  padding: 12px 5px 12px 45px;
+  display: block;
+  font-size: 14px;
+  color: #E1E1E1;
+  background-color: rgb(44, 44, 44);
+}
+
+.sidebar-menu .treeview-menu .treeview-menu .treeview-menu > li > a {
+  padding: 12px 5px 12px 60px;
+  display: block;
+  font-size: 14px;
+  color: #E1E1E1;
+  background-color: rgb(44, 44, 44);
+}
+
+.sidebar-menu
+  .treeview-menu
+  .treeview-menu
+  .treeview-menu
+  .treeview-menu
+  > li
+  > a {
+  padding: 12px 5px 12px 75px;
+  display: block;
+  font-size: 14px;
+  color: #E1E1E1;
+  background-color: rgb(44, 44, 44);
+}
+
+.sidebar-menu .treeview-menu > li > a > .fa {
+  width: 20px;
+}
+.sidebar-menu .treeview-menu > li > a > .fa-angle-left,
+.sidebar-menu .treeview-menu > li > a > .fa-angle-down {
+  width: auto;
+}
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu .treeview-menu > li > a:hover {
+  color: #1890FF;
+}
+
+/* change */
+
+.sidebar-menu a {
+  text-decoration: none;
+}
+.sidebar-menu .itemBox .itemBox-content {
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+}
+.sidebar-menu .itemBox .itemBox-content .itemBox-ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.sidebar-menu .itemBox .itemBox-content .itemBox-ul .itemlistLiStyle {
+  list-style: none;
+  /* 将默认的列表符号去掉 */
+  padding: 0;
+  /* 将默认的内边距去掉 */
+  margin: 0;
+  /* 将默认的外边距去掉 */
+  cursor: pointer;
+}
+.sidebar-menu .itemBox .itemBox-content .itemBox-ul .itemlistLiStyle:hover {
+  background-color: rgb(44, 44, 44);
+  border-radius: 0.2rem;
+}
+
+/* bootstrap.css */
+
+.pull-right {
+  float: right !important;
+}
+
+/* 滚动条样式 */
+*::-webkit-scrollbar {
+  width: 6px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgb(44, 44, 44);
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+}
+*::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.1);
+  background: #ededed;
+  border-radius: 6px;
+}

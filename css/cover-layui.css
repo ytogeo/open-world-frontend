@@ -1,0 +1,347 @@
+.layui-table td,
+.layui-table th,
+.layui-table-col-set,
+.layui-table-fixed-r,
+.layui-table-grid-down,
+.layui-table-header,
+.layui-table-page,
+.layui-table-tips-main,
+.layui-table-tool,
+.layui-table-total,
+.layui-table-view,
+.layui-table[lay-skin=line],
+.layui-table[lay-skin=row] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(55, 100, 224);
+
+}
+
+.layui-table {
+    width: 100%;
+    background-color: rgb(0, 52, 82, 0.7);
+    color: #00c3ff;
+
+}
+
+/*修改滚动条样式*/
+/*修改滚动条样式*/
+/*修改滚动条样式*/
+::-webkit-scrollbar {
+    width: 15px;
+
+}
+
+::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(1, 21, 48, 1);
+    box-shadow: inset 0 0 5px rgba(1, 21, 48, 1);
+    background: rgba(1, 21, 48, 1);
+}
+
+::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(14, 54, 94, 0.2);
+    box-shadow: inset 0 0 5px rgba(14, 54, 94, 0.2);
+    border-radius: 5px;
+    background: rgba(14, 54, 94, 0.1);
+}
+
+.layui-table tbody tr:hover,
+.layui-table thead tr,
+.layui-table-click,
+.layui-table-header,
+.layui-table-hover,
+.layui-table-mend,
+.layui-table-patch,
+.layui-table-tool,
+.layui-table-total,
+.layui-table-total tr,
+.layui-table[lay-even] tr:nth-child(even) {
+    background-color: rgba(68, 136, 187);
+}
+
+.layui-table-header {
+    opacity: 0.7;
+}
+
+.layui-table thead tr {
+    opacity: 1;
+}
+
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 136, 187);
+}
+
+.layui-laypage button,
+.layui-laypage input {
+    height: 30px;
+    line-height: 30px;
+    border-radius: 2px;
+    vertical-align: top;
+    background-color: rgba(68, 136, 187);
+    box-sizing: border-box;
+}
+
+select {
+    background-color: rgba(68, 136, 187);
+}
+
+.layui-laypage a,
+.layui-laypage span {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 15px;
+    height: 28px;
+    line-height: 28px;
+    margin: 0 -1px 5px 0;
+    background-color: #fff;
+    color: #48b;
+    font-size: 12px;
+}
+
+.layui-laypage .layui-laypage-skip {
+    height: 30px;
+    line-height: 30px;
+    color: rgb(68 136 187);
+}
+
+.layui-table-tips-main {
+    margin: -44px 0 0 -1px;
+    max-height: 150px;
+    padding: 8px 15px;
+    font-size: 14px;
+    overflow-y: scroll;
+    background-color: rgb(0, 52, 82, 0.7);
+    color: #00c3ff;
+}
+
+.layui-table-tips-c {
+    position: absolute;
+    right: -3px;
+    top: -13px;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    cursor: pointer;
+    background-color: rgb(68 136 187);
+    border-radius: 50%;
+    color: #fff;
+}
+
+.layui-table-grid-down {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 100%;
+    padding: 5px 0;
+    border-width: 0 0 0 1px;
+    text-align: center;
+    background-color: rgb(90, 138, 175);
+    color: #999;
+    cursor: pointer
+}
+
+.layui-table-grid-down:hover {
+    background-color: rgb(0, 52, 82, 0.7);
+}
+
+.layui-tab-card>.layui-tab-title {
+    background-color: rgb(0, 52, 82, 0.7);
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+    background-color: rgb(0 76 119 / 70%);
+}
+
+.layui-tab-bar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    width: 30px;
+    height: 39px;
+    line-height: 39px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    text-align: center;
+    background-color: rgb(0 76 119 / 70%);
+    cursor: pointer;
+}
+
+.layui-badge-rim,
+.layui-border,
+.layui-colla-content,
+.layui-colla-item,
+.layui-collapse,
+.layui-elem-field,
+.layui-form-pane .layui-form-item[pane],
+.layui-form-pane .layui-form-label,
+.layui-input,
+.layui-layedit,
+.layui-layedit-tool,
+.layui-panel,
+.layui-quote-nm,
+.layui-select,
+.layui-tab-bar,
+.layui-tab-card,
+.layui-tab-title,
+.layui-tab-title .layui-this:after,
+.layui-textarea {
+    border-color: rgb(4 88 138);
+}
+
+.layui-tab-title .layui-this {
+    color: rgb(0, 195, 255);
+}
+
+.layui-tab-content {
+    padding: 15px 0;
+    overflow: auto;
+}
+
+.layui-layer-page .layui-layer-content {
+    position: relative;
+    overflow: auto;
+    background: rgb(0, 52, 82, 0.7);
+}
+
+.layui-layer-title {
+    padding: 0 80px 0 20px;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #32525b;
+    font-size: 14px;
+    color: #b3dee5;
+    overflow: hidden;
+    border-radius: 2px 2px 0 0;
+}
+
+.layui-layer {
+    -webkit-overflow-scrolling: touch;
+    top: 150px;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(4, 21, 65, 0.84);
+    -webkit-background-clip: content;
+    border-radius: 2px;
+    box-shadow: rgb(49 82 91) 0px 0px 20px;
+}
+
+body {
+    line-height: 1.6;
+    color: #edffff;
+    font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+}
+
+.layui-form-checkbox,
+.layui-form-select dl dd.layui-disabled {
+    background-color: #a5b4e8a3;
+}
+
+.layui-form-checked span,
+.layui-form-checked:hover span {
+    background-color: rgb(32 80 185 / 70%);
+}
+
+.layui-form-checked i,
+.layui-form-checked:hover i {
+    color: rgb(32 80 185 / 70%);
+}
+
+.layui-input,
+.layui-select,
+.layui-textarea {
+    height: 38px;
+    line-height: 1.3;
+    line-height: 38px\9;
+    border-width: 1px;
+    border-style: solid;
+    background-color: rgb(6 17 26);
+    color: #edffff;
+    border-radius: 5px;
+}
+
+
+.layui-input {
+    border-color: rgb(89 193 255);
+    margin-top: 6px;
+}
+
+.layui-btn-sm {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 14px;
+    margin: 5px;
+}
+
+.layui-form-select dl {
+
+    position: absolute;
+    left: 0;
+    top: 42px;
+    padding: 5px 0;
+    z-index: 899;
+    min-width: 100%;
+    border: 1px solid #eee;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #0f1d40;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+.layui-form-select dl dd.layui-this {
+    background-color: #003662;
+    color: #fff;
+}
+
+.layui-btn {
+    /* line-height: 40px; */
+    /*border: 1px solid transparent;*/
+    padding: 0 5px;
+    /*background-color: rgba(15, 74, 151, 0.7);*/
+    color: #edffff;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.layui-input,
+.layui-textarea {
+    display: block;
+    width: 90%;
+    padding-left: 10px;
+}
+
+.layui-form-label {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    /*width: 60px;*/
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+}
+
+.layui-form-radio:hover *,
+.layui-form-radioed,
+.layui-form-radioed>i {
+    color: rgba(157, 217, 252, 0.942);
+}
+.layui-table, .layui-table-view {
+    margin: 0px 0;
+}

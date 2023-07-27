@@ -1,0 +1,15 @@
+#map {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 100vh;
+}
+#mapgis-3d-viewer {
+    position: absolute;
+    display: flex;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    height: 100vh;
+}
