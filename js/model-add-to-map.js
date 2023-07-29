@@ -22,8 +22,6 @@ class ModelManager {
     ry = 0;
     rz = 0;
     scale = 0;
-    //是否在调整状态下
-    isAdjusted = false;
     /**
      * 构造参数。传入模型的引用以及其真实经纬度
      * @param {*} model 
@@ -75,8 +73,7 @@ function modelManagerDisplay() {
             layero[0].childNodes[2].childNodes[0].style.top = "-8px";
             layero[0].childNodes[2].childNodes[0].style.right = "-5px";
         },
-    })
-    console.log(modelManagerDic)
+    });
 }
 /**
  * 动态渲染模型管理器界面：添加
@@ -332,7 +329,7 @@ function initSliders(params) {
 }
 
 /**
- * 初始化3dtiles到地图上
+ * 初始化Gltf到地图上
  * @param {*} id 
  * @param {*} modelname
  * @param {*} lng 

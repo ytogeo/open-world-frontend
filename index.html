@@ -13,7 +13,6 @@
   <link rel="stylesheet" type="text/css" href="css/aside-style.css" />
   <link rel="stylesheet" type="text/css" href="css/my-style.css" />
   <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
-
   <title>Open World首页</title>
   <style>
     @import url(Build/CesiumUnminified/Widgets/widgets.css);
@@ -242,19 +241,19 @@
     <!--弹窗：天气效果-->
     <div id="weather-display">
       <div class="weather-display-container">
-        <div class="weather-item">
+        <!-- <div class="weather-item">
           <div class="weather-item-icon icon-weather-current"></div>
           <span class="weather-item-text">实时天气</span>
-        </div>
-        <div class="weather-item">
+        </div> -->
+        <div class="weather-item" onclick="initRain()">
           <div class="weather-item-icon icon-weather-rainy"></div>
           <span class="weather-item-text">模拟降雨</span>
         </div>
-        <div class="weather-item">
+        <div class="weather-item" onclick="initFog()">
           <div class="weather-item-icon icon-weather-foggy"></div>
           <span class="weather-item-text">模拟雾天</span>
         </div>
-        <div class="weather-item">
+        <div class="weather-item" onclick="initSnow()">
           <div class="weather-item-icon icon-weather-snowy"></div>
           <span class="weather-item-text">模拟降雪</span>
         </div>
@@ -552,6 +551,45 @@
       </div>
 
     </div>
+    <!--弹窗：降雪效果-->
+    <div id="snow-effect-manager">
+      <div class="weather-adjust-container">
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">雪花大小</label>
+          <div id="snow-size-slider" class="weather-adjust-slider"></div>
+        </div>
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">降雪速度</label>
+          <div id="snow-speed-slider" class="weather-adjust-slider"></div>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：降雨效果-->
+    <div id="rain-effect-manager">
+      <div class="weather-adjust-container">
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">雨滴大小</label>
+          <div id="rain-size-slider" class="weather-adjust-slider"></div>
+        </div>
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">降雨速度</label>
+          <div id="rain-speed-slider" class="weather-adjust-slider"></div>
+        </div>
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">倾斜角度</label>
+          <div id="rain-angle-slider" class="weather-adjust-slider"></div>
+        </div>
+      </div>
+    </div>
+    <!--弹窗：雾天效果-->
+    <div id="fog-effect-manager">
+      <div class="weather-adjust-container">
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">雾气浓度</label>
+          <div id="fog-visibility-slider" class="weather-adjust-slider"></div>
+        </div>
+      </div>
+    </div>
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -574,6 +612,7 @@
 
   <script src="libs/zondy/include-cesium-local.js"></script>
   <script src="js/cesium-init.js"></script>
+  <script src="js/advanced-analysis.js"></script>
   <script src="libs/layui-v2.6.8/layui/layui.js">
     layui.use(['element', 'form', 'laydate', 'slider'], function () {
       var element = layui.element;

@@ -468,6 +468,7 @@ input[type="file"] {
     border-radius: 50%;
     background-position: center center;
     background-repeat: no-repeat;
+    background-size: 55px;
     margin-top: 10px;
     margin-bottom: 15px;
     /*background-size: cover;*/
@@ -483,22 +484,22 @@ input[type="file"] {
 
 .icon-weather-current {
     background-image: url("../image/cur_weather_logo.png");
-    background-color: rgb(130, 183, 248);
+    background-color: rgba(249, 208, 4, 0.858);
 }
 
 .icon-weather-rainy {
     background-image: url("../image/rainy_weather_logo.png");
-    background-color: rgba(146, 192, 253, 0.64);
+    background-color: rgba(51, 135, 244, 0.774);
 }
 
 .icon-weather-foggy {
     background-image: url("../image/foggy_weather_logo.png");
-    background-color: rgba(146, 192, 253, 0.64);
+    background-color: rgba(124, 195, 127, 0.719);
 }
 
 .icon-weather-snowy {
     background-image: url("../image/snowy_weather_logo.png");
-    background-color: rgba(146, 192, 253, 0.64);
+    background-color: rgba(36, 250, 225, 0.542);
 }
 
 /*鼠标跟随tooltip*/
@@ -550,10 +551,38 @@ input[type="file"] {
 }
 
 .model-list-item>.model-operations {
-    display: inline-block;/*同行*/
+    display: inline-block;
+    /*同行*/
     position: absolute;
     right: 10px;
 }
+
 .model-list-item>.model-operations>a {
-    margin:2px;
+    margin: 2px;
+}
+
+.weather-adjust-container {
+    position: relative;
+    top: 23px;
+    left: 5px;
+    width: 95%;
+}
+
+.weather-adjust-item {
+    position: relative;
+    width: 180px;
+}
+
+.weather-adjust-label {
+    display: inline-block;
+    margin: 10px;
+    left: 10px;
+}
+
+.weather-adjust-slider {
+    display: inline-block;
+    position: absolute;
+    top: 18px;
+    margin-left: 15px;
+    width: 170px;
 }
