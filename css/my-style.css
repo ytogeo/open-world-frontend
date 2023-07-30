@@ -323,6 +323,12 @@ input[type="file"] {
     margin-left: 0px;
 }
 
+#display-model-pin-button {
+    bottom: 21%;
+    margin-left: 0px;
+}
+
+
 /*登录界面*/
 .user-icon-container {
     height: 90px;

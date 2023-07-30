@@ -2,16 +2,21 @@
  * @file 这个文件用于初始化侧边栏（用户界面）
  */
 const myserver = "http://127.0.0.1:8081"
+const pinDataSource = new Map();
+/**
+ * 初始化侧边栏用户界面数据库
+ */
 
 function initUserTable() {
     layui.use('table', function () {
         var table = layui.table;
         table.render({
+            id: 'db-table',
             elem: '#db-table',
             height: '325px',
             url: myserver + '/wxcloud_query',
             parseData: function (res) { //res 即为原始返回的数据
-                console.log(res)
+                initPinDataSource(res.data) //有点小问题……res.data只有当前分页的数据，而不是全部数据。要正确展示pin，首先需要将所有数据都在表格里显示过才行
                 return {
                     "code": res.errcode, //解析接口状态
                     "msg": res.errmsg, //解析提示文本
@@ -47,7 +52,7 @@ function initUserTable() {
 
                     {
                         title: '操作',
-                        width: 120,
+                        width: 125,
                         align: 'center',
                         fixed: 'right',
                         toolbar: '#info-tool-bar',
@@ -69,7 +74,7 @@ function initUserTable() {
             var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
             if (layEvent === 'view-info') { //查看信息
                 viewer.camera.flyTo({
-                    destination: Cesium.Cartesian3.fromDegrees(data["lng"], data["lat"], 1000),
+                    destination: Cesium.Cartesian3.fromDegrees(data["lng"], data["lat"], 500),
                     orientation: {
                         heading: Cesium.Math.toRadians(0.0),
                         pitch: Cesium.Math.toRadians(-90.0),
@@ -124,8 +129,23 @@ function initUserTable() {
 
     });
 }
+/**
+ * 初始化地图上Pin的数据源
+ * @param {*} data 数据库返回的数据
+ */
+function initPinDataSource(data) {
+    for (let i = 0; i < data.length; i++) {
+        let item = JSON.parse(data[i]);
+        //将数据添加到数据源中（id作为key，lng和lat作为value）
+        pinDataSource.set(item["zipname"], {
+            id: item["zipname"],
+            lng: item["lng"],
+            lat: item["lat"],
+            type: item["ModelType"],
+        });
+    }
+}
 initUserTable();
-
 let isAsideShow = false;
 /**
  * 实现侧边栏的显示与隐藏的函数
@@ -180,7 +200,7 @@ function model_info_submit() {
     data["zipname"] = $("#model-id-show").val();
     data["ModelName"] = $("#model-name-show").val();
     data["ModelInfo"] = $("#model-info-show").val();
-    data["ModelType"] = $("#model-type-show").val();
+    data["ModelType"] = $('#modelType-show input[name="modelType"]:checked').val();
     data["PostName"] = $("#postname-show").val();
     data["city"] = $("#city-show").val();
     data["location"] = $("#location-name-show").val();
@@ -202,11 +222,12 @@ function model_info_submit() {
 /**
  * 弹窗展示模型信息
  */
-function viewModel_info(item, entity, originalColor) {
+function viewModel_info(item) {
+    let form = layui.form;
     $("#model-id-show").val(item["zipname"]);
     $("#model-name-show").val(item["ModelName"]);
     $("#model-info-show").val(item["ModelInfo"]);
-    $("#model-type-show").val(item["ModelType"]);
+    $("#modelType-show input[name='modelType'][value=" + item["ModelType"] + "]").attr("checked", true);
     $("#postname-show").val(item["PostName"]);
     $("#city-show").val(item["city"]);
     $("#location-name-show").val(item["location"]);
@@ -214,6 +235,7 @@ function viewModel_info(item, entity, originalColor) {
     $("#lng-show").val(item["lng"]);
     $("#lat-show").val(item["lat"]);
     $("#time-show").val(item["time"]);
+    form.render(); //由于对单选框进行动态赋值，所以这里要重新渲染一下
     layui.use("layer", function () {
         layer.open({
             type: 1,
@@ -222,7 +244,7 @@ function viewModel_info(item, entity, originalColor) {
             title: "模型信息", //弹出层的标题
             content: $('#model-infocard-show'),
             shade: 0, //不显示遮罩
-            area: ['300px', '560px'],
+            area: ['400px', '560px'],
             offset: ['80px', '10px'],
             closeBtn: 2,
             btn: ['保存'],

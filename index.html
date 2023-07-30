@@ -9,7 +9,7 @@
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="libs/layui-v2.6.8/layui/css/layui.css" />
+  <link rel="stylesheet" href="libs/layui-v2.8.11/layui/css/layui.css" />
   <link rel="stylesheet" type="text/css" href="css/aside-style.css" />
   <link rel="stylesheet" type="text/css" href="css/my-style.css" />
   <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
@@ -155,11 +155,15 @@
       <!--天气效果按钮-->
       <button id="display-weather-button" class="map-setting-button layui-btn" title="天气效果"
         onclick="weatherWinDisplay()">
-        <i class="layui-icon"> &#x2601;</i>
+        <i class="layui-icon" style="position: relative;font-size:23px;top:3px;"> &#x2601;</i>
       </button>
       <button id="all-model-manager-button" class="map-setting-button layui-btn" title="模型管理"
         onclick=" modelManagerDisplay()">
         <i class="layui-icon layui-icon-app"></i>
+      </button>
+      <button id="display-model-pin-button" class="map-setting-button layui-btn" title="打开模型标记"
+        onclick="switchDisplayState()">
+        <i id="display-model-pin-button-icon" class="layui-icon layui-icon-eye"></i>
       </button>
       <!--cesium容器-->
       <div id="cesium-container"></div>
@@ -319,9 +323,10 @@
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
                 <label class="layui-form-label">模型类型</label>
-                <div class="layui-input-block" style="width: 65%">
-                  <input type="text" id="ModelType0" required lay-verify="required" autocomplete="off"
-                    class="layui-input" />
+                <div class="layui-input-block" style="width: 85%" id="modelType-write">
+                  <input type="radio" name="modelType" value="建筑" title="建筑" checked>
+                  <input type="radio" name="modelType" value="雕塑" title="雕塑">
+                  <input type="radio" name="modelType" value="其他物件" title="其他物件">
                 </div>
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
@@ -417,9 +422,10 @@
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
                 <label class="layui-form-label">模型类型</label>
-                <div class="layui-input-block" style="width: 65%">
-                  <input type="text" id="model-type-show" required lay-verify="required" autocomplete="off"
-                    class="layui-input" />
+                <div class="layui-input-block" style="width: 85%" id="modelType-show">
+                  <input type="radio" name="modelType" value="建筑" title="建筑">
+                  <input type="radio" name="modelType" value="雕塑" title="雕塑">
+                  <input type="radio" name="modelType" value="其他物件" title="其他物件">
                 </div>
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
@@ -613,7 +619,7 @@
   <script src="libs/zondy/include-cesium-local.js"></script>
   <script src="js/cesium-init.js"></script>
   <script src="js/advanced-analysis.js"></script>
-  <script src="libs/layui-v2.6.8/layui/layui.js">
+  <script src="libs/layui-v2.8.11/layui/layui.js">
     layui.use(['element', 'form', 'laydate', 'slider'], function () {
       var element = layui.element;
       var form = layui.form;
@@ -622,6 +628,7 @@
     })
   </script>
   <script src="js/model-add-to-map.js"></script>
+  <script src="js/pin-add-to-map.js"></script>
   <script src="js/aside-init.js"></script>
   <script src="js/tool-menu-init.js"></script>
   <script src="js/model-reconstruction.js"></script>
@@ -728,7 +735,7 @@
             //调整模型位置
             obj.position.set(0 - x, 0 - y, 0 - z);
             scene.add(obj);
-            console.log("complete adding!");
+            //console.log("complete adding!");
           });
           renderer.render(scene, camera);
         });

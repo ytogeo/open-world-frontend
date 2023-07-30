@@ -87,7 +87,7 @@ function chooseimage() {
                         title: "模型信息填写", //弹出层的标题
                         content: $('#model-infocard-write'),
                         shade: 0, //不显示遮罩
-                        area: ['300px', '560px'],
+                        area: ['400px', '560px'],
                         offset: 'auto',
                         btn: ['保存'],
                         yes: function (index, layero) {
@@ -99,7 +99,7 @@ function chooseimage() {
                             data["zipname"] = $("#model_id0").val();
                             data["ModelName"] = $("#ModelName0").val();
                             data["ModelInfo"] = $("#ModelInfo0").val();
-                            data["ModelType"] = $("#ModelType0").val();
+                            data["ModelType"] = $('#modelType-write input[name="modelType"]:checked').val();
                             data["PostName"] = $("#PostName0").val();
                             data["city"] = $("#city0").val();
                             data["location"] = $("#location0").val();

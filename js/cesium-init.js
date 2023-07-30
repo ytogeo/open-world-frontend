@@ -34,6 +34,8 @@ viewer = new Cesium.Viewer("cesium-container", {
         styleId: 'clg7s6veu000k01p3q9xjadf2',
         accessToken: 'pk.eyJ1IjoiaG91Y2hhb2dpcyIsImEiOiJjbGc3c3Njem4wbXVqM3NxeWFpbnJleHZnIn0.WRlYOVdh-05m6LJTt9u_IQ',
     }),
+    //选中entity的绿色框框
+    selectionIndicator: true,
 });
 
 //开启深度检测
