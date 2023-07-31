@@ -123,26 +123,3 @@ document.getElementById("choose-layer-button").addEventListener('click', functio
 //构建pinBuilder
 const pinBuilder = new Cesium.PinBuilder();
 
-// //加载学校3dtiles
-// var tileset = viewer.scene.primitives.add(
-//     new Cesium.Cesium3DTileset({
-//         url: "data/tiles/tileset.json",
-//     })
-// );
-// tileset.readyPromise.then(function (tileset) {
-//     //高度偏差，正数为向上偏，负数为向下偏，根据真实的模型位置不断进行调整
-//     var heightOffset = 15;
-//     //计算tileset的绑定范围
-//     var boundingSphere = tileset.boundingSphere;
-//     //计算中心点位置
-//     var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-//     //计算中心点位置坐标
-//     var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude,
-//         cartographic.latitude, 0);
-//     //偏移后的三维坐标
-//     var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude,
-//         cartographic.latitude, heightOffset);
-//     var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
-//     //tileset.modelMatrix转换
-//     tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
-// })

@@ -1,7 +1,7 @@
 /**
  * @file 这个文件用于初始化侧边栏（用户界面）
  */
-const myserver = "http://127.0.0.1:8081"
+
 const pinDataSource = new Map();
 /**
  * 初始化侧边栏用户界面数据库
@@ -16,7 +16,6 @@ function initUserTable() {
             height: '325px',
             url: myserver + '/wxcloud_query',
             parseData: function (res) { //res 即为原始返回的数据
-                initPinDataSource(res.data) //有点小问题……res.data只有当前分页的数据，而不是全部数据。要正确展示pin，首先需要将所有数据都在表格里显示过才行
                 return {
                     "code": res.errcode, //解析接口状态
                     "msg": res.errmsg, //解析提示文本
@@ -145,7 +144,12 @@ function initPinDataSource(data) {
         });
     }
 }
+//初始化侧边栏用户表格
 initUserTable();
+//发送请求，初始化pinDataSource
+$.post(myserver + '/wxcloud-query-total-data', function (res) {
+    initPinDataSource(res.data)
+});
 let isAsideShow = false;
 /**
  * 实现侧边栏的显示与隐藏的函数

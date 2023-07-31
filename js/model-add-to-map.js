@@ -2,6 +2,7 @@
  * @file 将模型对应的GLTF添加到地图上
  * 注：params参数（对象形式）：存储滑块的值（value），不是直接用于模型变换的参数
  */
+const myserver = "http://127.0.0.1:8081"
 let curModelManager = null; //储存当前操作的模型管理器
 let sliderList = document.getElementsByClassName("adjust-slide"); //获取所有滑块
 let modelManagerDic = new Map(); //模型管理器字典，key是id，value是ModelManager实例
@@ -32,6 +33,21 @@ class ModelManager {
         this.model = model;
         this.modelLng = lng;
         this.modelLat = lat;
+    }
+    getInfo() {
+        return {
+            id: this.model.id,
+            modelName: this.model.name,
+            modelLng: this.modelLng,
+            modelLat: this.modelLat,
+            lng: this.lng,
+            lat: this.lat,
+            height: this.height,
+            rx: this.rx,
+            ry: this.ry,
+            rz: this.rz,
+            scale: this.scale,
+        }
     }
     //以对象形式返回参数
     getParams() {
@@ -139,8 +155,17 @@ function deleteElementOfModelManager(obj) {
     modelManagerDic.delete(id);
     //从模型管理器界面删除模型item
     obj.parentNode.parentNode.remove();
-    //提示信息
-    layer.msg('删除成功');
+    //从用户的模型放置数据库中删除模型
+    let param = {
+        id: id
+    };
+    $.post(myserver + '/wxcloud-delete-model-from-map', param, function (res) {
+        if (res == 0) {
+            layer.msg('删除成功');
+        } else {
+            layer.msg('删除失败，请检查网络');
+        }
+    });
 }
 /**
  * 通过监听checkbox实现模型显隐性修改
@@ -203,19 +228,27 @@ function editModelAdjustment(obj) {
             closeBtn: 2,
             btn: ['保存', '重置'],
             yes: function (index, layero) {
-                curModelManager = null;
-                layer.msg('调整完成');
-                //滑块归零
-                initSliders({
-                    lng: 0,
-                    lat: 0,
-                    height: 0,
-                    rx: 0,
-                    ry: 0,
-                    rz: 0,
-                    scale: 0
+                //构造post请求到后端接口，将当前模型的所有信息（id+调整参数）保存到数据库
+                data = curModelManager.getInfo();
+                $.post(myserver + '/wxcloud-update-model-to-map', data, function (res) {
+                    if (res == 0) {
+                        curModelManager = null;
+                        layer.msg('调整完成');
+                        //滑块归零
+                        initSliders({
+                            lng: 0,
+                            lat: 0,
+                            height: 0,
+                            rx: 0,
+                            ry: 0,
+                            rz: 0,
+                            scale: 0
+                        });
+                        layer.close(index);
+                    } else {
+                        layer.msg('调整失败，请检查网络');
+                    }
                 });
-                layer.close(index);
             },
             btn2: function (index, layero) {
                 //重置模型状态
@@ -225,6 +258,14 @@ function editModelAdjustment(obj) {
                 initSliders(curModelManager.getParams());
                 return false; //防止弹窗关闭
             },
+            //直接取消，则同样重置模型状态和滑块状态
+            cancel: function (index, layero) {
+                //重置模型状态
+                curModelManager.setParams(params);
+                adjustModel(curModelManager, curModelManager.getParams())
+                //重置滑块状态
+                initSliders(curModelManager.getParams());
+            }
         })
     });
 }
@@ -257,19 +298,27 @@ function addModelToMap(id, modelname, lng, lat) {
             closeBtn: 2,
             btn: ['保存', '重置'],
             yes: function (index, layero) {
-                curModelManager = null;
-                layer.msg('调整完成');
-                //滑块归零
-                initSliders({
-                    lng: 0,
-                    lat: 0,
-                    height: 0,
-                    rx: 0,
-                    ry: 0,
-                    rz: 0,
-                    scale: 0
+                data = curModelManager.getInfo();
+                //构造post请求到后端接口，将当前模型的所有信息（id+调整参数）保存到数据库
+                $.post(myserver + '/wxcloud-add-model-to-map', data, function (res) {
+                    if (res == 0) {
+                        layer.msg('调整完成');
+                        curModelManager = null;
+                        //滑块归零
+                        initSliders({
+                            lng: 0,
+                            lat: 0,
+                            height: 0,
+                            rx: 0,
+                            ry: 0,
+                            rz: 0,
+                            scale: 0
+                        });
+                        layer.close(index);
+                    } else {
+                        layer.msg('调整失败，请检查网络');
+                    }
                 });
-                layer.close(index);
             },
             btn2: function (index, layero) {
                 //重置模型状态
@@ -294,6 +343,30 @@ function addModelToMap(id, modelname, lng, lat) {
                     scale: 0
                 });
                 return false; //防止弹窗关闭
+            },
+            //直接取消，则同样重置模型状态和滑块状态
+            cancel: function (index, layero) {
+                //重置模型状态
+                curModelManager.setParams({
+                    lng: 0,
+                    lat: 0,
+                    height: 0,
+                    rx: 0,
+                    ry: 0,
+                    rz: 0,
+                    scale: 0
+                });
+                adjustModel(curModelManager, curModelManager.getParams())
+                //重置滑块状态
+                initSliders({
+                    lng: 0,
+                    lat: 0,
+                    height: 0,
+                    rx: 0,
+                    ry: 0,
+                    rz: 0,
+                    scale: 0
+                });
             },
         })
     });
@@ -354,4 +427,64 @@ function initGltfToMap(id, modelname, lng, lat) {
     addElementOfModelManager(id, modelname);
     //flyTo该模型
     viewer.flyTo(model);
+    return curModelManager;
 }
+
+/**
+ * 从数据库中获取需要添加到地图上的模型的信息，并添加
+ */
+function initModelOnMap() {
+    $.post(myserver + '/wxcloud-query-model-of-map', function (res) {
+        //res返回的数据与ModelManager的getInfo方法返回内容相同
+        for (let i = 0; i < res.data.length; i++) {
+            initGltfFromDb(res.data[i]);
+        }
+    })
+}
+/**
+ * 根据单条记录data添加模型到地图
+ * @param {*} data 
+ */
+function initGltfFromDb(data) {
+    let item = JSON.parse(data);
+    let id = item["zipname"];
+    if (modelManagerDic.has(id)) {
+        return; //防止重复添加
+    }
+    let modelName = item["modelname"];
+    let modelLng = item["modellng"];
+    let modelLat = item["modellat"];
+    //加入模型
+    var path = "http://127.0.0.1:8180/GLTF/" + id + "/scene_dense_mesh_refine_texture.gltf";
+    var model = new Cesium.Entity({
+        id: id,
+        name: modelName,
+        position: Cesium.Cartesian3.fromDegrees(modelLng, modelLat, 50),
+        model: {
+            uri: path,
+            scale: 10,
+        }
+    })
+    //初始化每个模型的同时，创建对应的模型管理器
+    let curModelManagerForInit = new ModelManager(model, modelLng, modelLat);
+    //获得模型调整参数。Json传回来的是字符串！要参与调整运算的得是数字！！如果不转成Number会导致卡死
+    let params = {
+        lng: Number(item["lng"]),
+        lat: Number(item["lat"]),
+        height: Number(item["height"]),
+        rx: Number(item["rx"]),
+        ry: Number(item["ry"]),
+        rz: Number(item["rz"]),
+        scale: Number(item["scale"]),
+    }
+    curModelManagerForInit.setParams(params);
+    //放入字典（map）储存，id与ModelManager一一对应
+    modelManagerDic.set(id, curModelManagerForInit);
+    //动态渲染模型管理器界面
+    addElementOfModelManager(id, modelName);
+    //根据读出的参数调整模型
+    adjustModel(curModelManagerForInit, curModelManagerForInit.getParams());
+    //将模型添加到场景
+    viewer.entities.add(model);
+}
+initModelOnMap();
