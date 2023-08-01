@@ -127,6 +127,7 @@ function initUserTable() {
         });
 
     });
+
 }
 /**
  * 初始化地图上Pin的数据源

@@ -75,8 +75,8 @@
         </li>
         <li><i class="nav_build"></i><a href="javascript:void(0)" style="text-decoration: none"
             onclick="chooseimage()">开始建模</a></li>
-        <li><i class="nav_add"></i><a href="javascript:void(0)" style="text-decoration: none"
-            onclick="">添加数据</a></li>
+        <li><i class="nav_add"></i><a id="add-tiles-data" href="javascript:void(0)" style="text-decoration: none"
+            onclick="">导入3DTiles</a></li>
       </ul>
     </div>
     <div class="header_center left">
@@ -159,8 +159,12 @@
         <i class="layui-icon" style="position: relative;font-size:23px;top:3px;"> &#x2601;</i>
       </button>
       <button id="all-model-manager-button" class="map-setting-button layui-btn" title="模型管理"
-        onclick=" modelManagerDisplay()">
+        onclick="modelManagerDisplay()">
         <i class="layui-icon layui-icon-app"></i>
+      </button>
+      <button id="display-temp-3dtiles-button" class="map-setting-button layui-btn" title="3DTiles管理"
+        onclick="tilesManagerDisplay()">
+        <i class="layui-icon"></i>
       </button>
       <button id="display-model-pin-button" class="map-setting-button layui-btn" title="打开模型标记"
         onclick="switchDisplayState()">
@@ -558,6 +562,21 @@
       </div>
 
     </div>
+    <!--弹窗：3DTiles管理器-->
+    <div id="temp-3dtiles-manager">
+      <!-- <span id="hint-text-model-manager" class="hint-text">暂无内容</span> -->
+      <div class="model-list-container" id="tiles-list-container">
+        <!--模型列表中item的一个示例：-->
+        <!-- <div class="model-list-item">
+          <input type="checkbox" name="visibility" title="显隐性" checked>
+          <label for="modelName">模型名称</label>
+          <div class="model-operations">
+            <a href="javascript:void(0)" style="color:#edffff;text-decoration: none" title="从地图中删除模型" onclick="">
+              &#xd7;</a>
+          </div>
+        </div> -->
+      </div>
+    </div>
     <!--弹窗：降雪效果-->
     <div id="snow-effect-manager">
       <div class="weather-adjust-container">
@@ -633,6 +652,7 @@
   <script src="js/aside-init.js"></script>
   <script src="js/tool-menu-init.js"></script>
   <script src="js/model-reconstruction.js"></script>
+  <script src="js/user-add-tiles.js"></script>
   <script src="js/weather-display.js"></script>
   <!--ThreeJS相关，渲染侧边栏模型预览窗口-->
   <script type="module">

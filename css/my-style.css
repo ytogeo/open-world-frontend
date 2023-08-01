@@ -323,11 +323,20 @@ input[type="file"] {
     margin-left: 0px;
 }
 
-#display-model-pin-button {
+#display-temp-3dtiles-button {
     bottom: 21%;
     margin-left: 0px;
+    /*layui没有合适的，自定义按钮图标*/
+    background-image: url("../image/tiles_button_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 21px;
 }
 
+#display-model-pin-button {
+    bottom: 26%;
+    margin-left: 0px;
+}
 
 /*登录界面*/
 .user-icon-container {
