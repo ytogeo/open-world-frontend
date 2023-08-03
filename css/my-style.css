@@ -460,6 +460,14 @@ input[type="file"] {
     background-color: chocolate;
 }
 
+.icon-buffer-analysis {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/buffer_analysis_logo.png");
+    background-color: rgba(62, 148, 101, 0.897);
+}
+
 /*
 *  天气选择界面样式
 */
@@ -600,4 +608,34 @@ input[type="file"] {
     top: 18px;
     margin-left: 15px;
     width: 170px;
+}
+
+/*缓冲区分析窗口*/
+.buffer-analysis-container {
+    position: relative;
+    top: 10px;
+    left: 5px;
+    width: 80%;
+    margin: auto;
+}
+
+
+.my-form-container {
+    position: relative;
+    left: 15px;
+}
+
+.my-form-item {
+    position: relative;
+    margin-top: 15px;
+}
+
+.my-form-label {
+    display: inline-block;
+    left: 10px;
+}
+
+.my-form-input {
+    display: inline-block;
+    margin-left: 10px;
 }

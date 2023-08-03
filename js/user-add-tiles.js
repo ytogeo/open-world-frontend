@@ -71,63 +71,62 @@ function tilesManagerDisplay() {
     });
 }
 /**
- * 动态渲染模型管理器界面：添加
+ * 动态渲染3DTiles管理器界面：添加
  * @param {*} id 
- * @param {*} modelname 
+ * @param {*} tilesname 
  */
-function addElementOfTilesManager(id, modelname) {
+function addElementOfTilesManager(id, tilesname) {
     //获得container父容器
-    let modelManagerContainer = document.getElementById('tiles-list-container');
+    let tilesManagerContainer = document.getElementById('tiles-list-container');
     //item父容器
-    let modelListItem = document.createElement('div');
-    modelListItem.setAttribute('class', 'model-list-item');
+    let tilesListItem = document.createElement('div');
+    tilesListItem.setAttribute('class', 'model-list-item');
     //重要: 将item的id设为模型id，方便后续从子元素中获取到该父元素的id，从而从字典中获取到对应的模型管理器
-    modelListItem.setAttribute('id', id);
+    tilesListItem.setAttribute('id', id);
     //item子容器1：复选框
-    let modelListItemCheckbox = document.createElement('input');
-    modelListItemCheckbox.setAttribute('type', 'checkbox');
-    modelListItemCheckbox.setAttribute('name', 'visibility');
-    modelListItemCheckbox.setAttribute('title', '显隐性');
-    modelListItemCheckbox.setAttribute('onclick', 'checkBoxChangeTilesVisibility(this)');
-    modelListItemCheckbox.checked = true;
+    let tilesListItemCheckbox = document.createElement('input');
+    tilesListItemCheckbox.setAttribute('type', 'checkbox');
+    tilesListItemCheckbox.setAttribute('name', 'visibility');
+    tilesListItemCheckbox.setAttribute('title', '显隐性');
+    tilesListItemCheckbox.setAttribute('onclick', 'checkBoxChangeTilesVisibility(this)');
+    tilesListItemCheckbox.checked = true;
     //item子容器2：模型名称
-    let modelListItemName = document.createElement('label');
-    modelListItemName.setAttribute('for', 'modelName');
-    modelListItemName.innerHTML = modelname;
+    let tilesListItemName = document.createElement('label');
+    tilesListItemName.setAttribute('for', 'modelName');
+    tilesListItemName.innerHTML = tilesname;
     /*
      * item子容器3：模型操作
      */
     //模型操作父容器
-    let modelListItemOperation = document.createElement('div');
-    modelListItemOperation.setAttribute('class', 'model-operations');
+    let tilesListItemOperation = document.createElement('div');
+    tilesListItemOperation.setAttribute('class', 'model-operations');
     //模型操作子容器1：删除
-    let modelListItemDelete = document.createElement('a');
-    modelListItemDelete.setAttribute('herf', 'javascript:void(0)');
-    modelListItemDelete.setAttribute('style', 'color:#edffff;text-decoration: none;cursor: pointer;');
-    modelListItemDelete.setAttribute('title', '删除模型');
-    modelListItemDelete.setAttribute('onclick', 'deleteElementOfTilesManager(this)');
-    modelListItemDelete.innerHTML = '&#xd7;';
+    let tilesListItemDelete = document.createElement('a');
+    tilesListItemDelete.setAttribute('herf', 'javascript:void(0)');
+    tilesListItemDelete.setAttribute('style', 'color:#edffff;text-decoration: none;cursor: pointer;');
+    tilesListItemDelete.setAttribute('title', '删除模型');
+    tilesListItemDelete.setAttribute('onclick', 'deleteElementOfTilesManager(this)');
+    tilesListItemDelete.innerHTML = '&#xd7;';
     //操作子容器添加到父容器
-    modelListItemOperation.appendChild(modelListItemDelete);
+    tilesListItemOperation.appendChild(tilesListItemDelete);
     //item子容器添加到item父容器
-    modelListItem.appendChild(modelListItemCheckbox);
-    modelListItem.appendChild(modelListItemName);
-    modelListItem.appendChild(modelListItemOperation);
+    tilesListItem.appendChild(tilesListItemCheckbox);
+    tilesListItem.appendChild(tilesListItemName);
+    tilesListItem.appendChild(tilesListItemOperation);
     //item添加到container父容器
-    modelManagerContainer.appendChild(modelListItem);
+    tilesManagerContainer.appendChild(tilesListItem);
 }
 /**
- * 动态渲染模型管理器界面：删除
+ * 动态渲染3DTiles管理器界面：删除
  * @param {*} obj
  */
 function deleteElementOfTilesManager(obj) {
-    console.log(tilesManagerDic)
     let id = obj.parentNode.parentNode.id;
-    //从界面中删除模型
+    //从界面中删除3DTiles
     viewer.scene.primitives.remove(tilesManagerDic.get(id));
-    //从字典中删除模型管理器
-    modelManagerDic.delete(id);
-    //从模型管理器界面删除模型item
+    //从字典中删除3DTiles管理器
+    tilesManagerDic.delete(id);
+    //从3DTiles管理器界面删除3DTilesitem
     obj.parentNode.parentNode.remove();
     layer.msg("删除成功");
 }
@@ -137,7 +136,7 @@ function deleteElementOfTilesManager(obj) {
  * @param {*} obj 
  */
 function checkBoxChangeTilesVisibility(obj) {
-    //获取模型id
+    //获取3DTilesid
     let id = obj.parentNode.id;
     tilesManagerDic.get(id).show = obj.checked;
 }

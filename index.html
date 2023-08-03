@@ -225,9 +225,9 @@
     <!--弹窗：空间分析工具箱-->
     <div id="analysis-tool-box">
       <div class="tool-box-container">
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="bufferAnalysis()">
+          <div class="tool-box-item-icon icon-buffer-analysis"></div>
+          <span class="tool-box-item-text">缓冲区分析</span>
         </div>
         <div class="tool-box-item">
           <div class="tool-box-item-icon icon-measure"></div>
@@ -616,6 +616,31 @@
         </div>
       </div>
     </div>
+    <!--弹窗：缓冲区分析-->
+    <div id="buffer-analysis">
+      <div class="my-form-container" style="width:335px;top:12px;">
+        <div class="my-form-item">
+          <label class="my-form-label">缓冲半径</label>
+          <input class="my-form-input" type="text" id="buffer-radius" style="width:120px;">
+          <select id="radius-unit" lay-verify="" style="background-color: #edffff;font-size:13.5px;">
+            <option value="meters">米</option>
+            <option value="kilometers">千米</option>
+            <option value="radians">弧度</option>
+            <option value="degrees">角度</option>
+          </select>
+        </div>
+        <div class="my-form-item">
+          <label class="my-form-label">绘制图形</label>
+          <div class="my-form-input">
+            <button class="layui-btn layui-btn-sm" style="margin-left: 0px;font-size:13px;"
+              onclick="drawPointForBuffer()">绘制点</button>
+            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="drawPolylineForBuffer()">绘制线</button>
+            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="drawPolygonForBuffer()">绘制面</button>
+            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="removeEntities()">清除</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -636,9 +661,9 @@
     </script>
   <!-- 配置type="importmap",.html文件也能和项目开发环境一样方式引入threejs -->
 
-  <script src="libs/zondy/include-cesium-local.js"></script>
+  <script include="turf" src="libs/zondy/include-cesium-local.js"></script>
   <script src="js/cesium-init.js"></script>
-  <script src="js/advanced-analysis.js"></script>
+
   <script src="libs/layui-v2.8.11/layui/layui.js">
     layui.use(['element', 'form', 'laydate', 'slider'], function () {
       var element = layui.element;
@@ -647,6 +672,7 @@
       var slider = layui.slider;
     })
   </script>
+  <script src="js/buffer-analysis.js"></script>
   <script src="js/model-add-to-map.js"></script>
   <script src="js/pin-add-to-map.js"></script>
   <script src="js/aside-init.js"></script>

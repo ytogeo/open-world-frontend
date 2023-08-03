@@ -2,7 +2,6 @@
  * @file 这个文件用于实现天气相关粒子效果的展示
  */
 
-let snowManager = advancedAnalysisManager; //雪花效果管理器接入高级分析模块，因为要换一个雪花效果，这个模块里的方便改一些
 let weatherManager = new Cesium.WeatherEffect(viewer); //新建天气管理器
 let weatherSliderList = ['snow-size-slider', 'snow-speed-slider']
 /**

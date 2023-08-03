@@ -218,10 +218,16 @@ function model_info_submit() {
         if (res == 0) {
             layer.msg('更新成功');
             initUserTable();
+            //重新初始化PinDataSource
+            pinDataSource.clear();
+            $.post(myserver + '/wxcloud-query-total-data', function (res) {
+                initPinDataSource(res.data)
+            });
         } else {
             layer.msg('更新失败');
         }
     });
+
 }
 
 /**
