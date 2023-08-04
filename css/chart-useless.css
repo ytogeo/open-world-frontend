@@ -1,0 +1,276 @@
+body{
+	background: rgb(5 18 35 / 70%);
+	color: #fff;
+}
+
+.all{
+	height: 100%;
+	overflow: hidden;
+	padding: 30px 10px 30px 10px;	
+}
+.width-box{
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	position: relative;
+	
+}
+.item-box{
+	background: rgb(20 37 62);
+	border-radius: 5px;
+	height: 100%;
+	padding-top: 60px;
+}
+.item-box>.item-title{
+	height: 60px;
+	padding-top: 10px;
+	margin-top: -60px;
+	line-height: 50px;
+	padding-left: 14px;
+	color: #aaa;
+	font-weight: 600;
+}
+.item-box>.item-title.tc{
+	text-align: center;
+	padding-left: 0; 
+}
+.item-con{
+	height: 100%;
+	position: relative;
+}
+
+.page-body{
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+.page-body
+{
+	
+	transition: all 0.5s;
+}
+.page-body.shown{
+	transform: scale(1);
+	opacity: 1;
+}
+.page-body.changing{
+	transform: scale(0.75);
+	opacity: 0.5;
+}
+
+
+
+/* 整体布局 */
+.top{
+	height: 70px;
+	margin-top: -150px;
+	background: #191f28;
+}
+
+.title{
+	height: 80px;
+}
+
+.main{
+	height: 100%;	
+}
+
+
+
+/* top */
+.top-box{	
+	padding: 0 190px 0 200px;
+}
+.logo{
+	float: left;
+	width: 200px;
+	margin-left: -200px;
+	padding: 22px 0;
+}
+.account{
+	float: right;
+	width: 190px;
+	margin-right: -190px;
+	text-align: right;
+	padding-top: 15px;
+}
+
+.menu{
+	text-align: center;
+	padding-top: 20px;
+}
+.menu>a{
+	display: inline-block;
+	height: 30px;
+	line-height: 20px;
+	padding: 5px;
+	margin: 0 15px;
+	color: #aaa;
+	font-size: 14px;
+	letter-spacing: 1px;
+	position: relative;
+	transition: all 0.5s;
+}
+.menu>a.active{
+	color: #fff;
+	font-size: 16px;	
+}
+.menu>a:before , .menu>a:after{
+	content: "";
+	position: absolute;
+	bottom: -20px;
+	width: 0;
+	border-top: solid 2px #ddd;	
+	transition: all 0.5s;	
+}
+.menu>a:before{
+	right: 50%
+}
+.menu>a:after{
+	left: 50%
+}
+.menu>a:hover{
+	color: #ddd;
+}
+.menu>a:hover:before , .menu>a:hover:after{
+	width: 50%;
+}
+
+/* account */
+.account-box{
+	cursor: pointer;
+}
+.account .face{
+	display: inline-block;
+	vertical-align: top;
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	overflow: hidden;	
+	background: linear-gradient(to bottom right, #ffa6bd , #c167f2);
+	transition: all 0.4s;
+}
+.account .face>img{
+	width: 40px;
+	border-radius: 20px;
+	transition: all 0.4s;
+}
+.account .opation{
+	display: inline-block;
+	vertical-align: top;
+	width: 20px;
+	height: 20px;
+	position: relative;	
+	margin: 10px 0 0 6px;
+	color: #aaa;
+	transition: all 0.4s;
+}
+.account .opation:before,.account .opation:after{
+	content: "";
+	position: absolute;
+	display: inline-block;
+	border-top: solid 2px;
+	left: 5px;
+	box-sizing: border-box;
+}
+.account .opation:before{
+	width: 10px;	
+	height: 12px;
+	border-bottom: solid 2px;
+	top: 4px;
+}
+.account .opation:after{
+	width: 12px;
+	top: 9px;
+}
+.account-box:hover>.opation{
+	color: #fff;
+}
+.account-box:hover>.face{
+	padding: 2px;
+}
+.account-box:hover>.face>img{
+	width: 36px;
+}
+
+
+
+/* Title */
+.title-box{
+	padding: 25px 0;
+}
+.title .text{
+	font-size: 24px;
+	line-height: 30px;
+	color: #bbb;
+}
+.title .help{
+	display: block;	
+	width: 105px;
+	height: 30px;
+	border-radius: 3px;
+	border: solid 1px #aaa;
+	line-height: 28px;
+	text-align: center;
+	float: right;
+	color: #bbb;
+}
+
+
+/* ********************************************************************************************* */
+/* Page Style */
+
+/* default */
+.index-row1 , .index-row2{
+	display: flex;
+	margin-bottom: 30px;
+}
+.index-row1>.col4{
+	height: 300px;
+}
+.index-row1>.col4:first-child{
+	padding-right: 20px;
+}
+.index-row1>.col4:last-child{
+	padding-left: 20px;
+}
+.index-row1>.col4:nth-child(2){
+	padding: 0 10px;
+}
+
+.index-row2>.col6{
+	height: 400px;
+}
+.index-row2>.col6:first-child{
+	padding-right: 15px;
+}
+.index-row2>.col6:last-child{
+	padding-left: 15px;
+}
+.numbers{
+	text-align: center;
+}
+.numbers>span{
+	display: block;
+}
+.numbers .num-icon{
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	background: rgba(255,255,255,0.1);
+	margin:  25px auto;
+}
+.numbers .num-text{
+	color: #fff;
+	line-height: 40px;
+	font-size: 24px;
+}
+.svg-con{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+

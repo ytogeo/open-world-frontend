@@ -70,8 +70,8 @@
         <li class="nav_active"><i class="nav_map"></i><a href="index.html" style="text-decoration: none">地图界面</a></li>
         <li>
           <i class="nav_tool"></i><a href="javascript:void(0)" style="text-decoration: none"
-            onclick="switchMenuDisplay()" title="点击展开/收回工具栏">我的工具</a><i id="menu-display-state"
-            class="layui-icon layui-icon-down" style="position: relative; top: 3%"></i>
+            onmouseover="showMenu()">我的工具</a><i id="menu-display-state" class="layui-icon layui-icon-down"
+            style="position: relative; top: 3%"></i>
         </li>
         <li><i class="nav_build"></i><a href="javascript:void(0)" style="text-decoration: none"
             onclick="chooseimage()">开始建模</a></li>
@@ -97,7 +97,7 @@
       </ul>
     </div>
     <!--菜单栏：我的工具-->
-    <div class="tool-menu" id="tool-menu">
+    <div class="tool-menu" id="tool-menu" onmouseleave="hideMenu()">
       <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
           class="menu-item-text">基础工具</span></div>
       <div class="tool-menu-item" onclick="analysisToolSelect()"><i class="menu-item-logo-analysis"></i><span
@@ -634,7 +634,8 @@
           <div class="my-form-input">
             <button class="layui-btn layui-btn-sm" style="margin-left: 0px;font-size:13px;"
               onclick="drawPointForBuffer()">绘制点</button>
-            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="drawPolylineForBuffer()">绘制线</button>
+            <button class="layui-btn layui-btn-sm" style="font-size:13px;"
+              onclick="drawPolylineForBuffer()">绘制线</button>
             <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="drawPolygonForBuffer()">绘制面</button>
             <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="removeEntities()">清除</button>
           </div>
@@ -663,7 +664,6 @@
 
   <script include="turf" src="libs/zondy/include-cesium-local.js"></script>
   <script src="js/cesium-init.js"></script>
-
   <script src="libs/layui-v2.8.11/layui/layui.js">
     layui.use(['element', 'form', 'laydate', 'slider'], function () {
       var element = layui.element;
@@ -672,6 +672,8 @@
       var slider = layui.slider;
     })
   </script>
+  <!-- <script src="./libs/echarts.js"></script> -->
+  <!-- <script src="js/buffer-echart.js"></script> -->
   <script src="js/buffer-analysis.js"></script>
   <script src="js/model-add-to-map.js"></script>
   <script src="js/pin-add-to-map.js"></script>

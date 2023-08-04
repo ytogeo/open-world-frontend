@@ -3,6 +3,7 @@
  */
 let entityControllerForBuffer = null;
 let mouseEventManagerForBuffer = null;
+let entitiesForBuffer = new Array();
 
 function bufferAnalysis() {
     layer.open({
@@ -24,43 +25,26 @@ function bufferAnalysis() {
             mouseEventManagerForBuffer = new CesiumZondy.Manager.MouseEventManager({
                 viewer: viewer
             });
+            //移除Pin点击事件，防止冲突
+            if (handlerOfClickPin != null) {
+                handlerOfClickPin.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK, leftClickCallback);
+            }
         },
         cancel: function (index, layero) {
             removeEntities();
             entityControllerForBuffer = null;
             mouseEventManagerForBuffer = null;
+            //恢复Pin点击事件
+            if (handlerOfClickPin != null) {
+                handlerOfClickPin = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+                handlerOfClickPin.setInputAction(clickPin, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            }
+            //关闭窗体
             layer.close(index);
         }
     })
 }
 
-// layer.open({
-//     title: ['缓冲区分析', 'height:30px;font-size:13.5px;line-height:30px;'],
-//     type: 1,
-//     shade: 0,
-//     offset: ['150px', '15px'],
-//     area: ["350px", "165px"],
-//     content: $("#buffer-analysis"),
-//     success: function (layero, index) {
-//         //修改了title样式，但是closeBtn样式没有改变，所以通过获取子结点的方式手动调整×号位置
-//         layero[0].childNodes[2].childNodes[0].style.top = "-8px";
-//         layero[0].childNodes[2].childNodes[0].style.right = "-5px";
-//         //构造几何绘制控制对象
-//         entityControllerForBuffer = new CesiumZondy.Manager.EntityController({
-//             viewer: viewer
-//         });
-//         //构造鼠标事件管理对象
-//         mouseEventManagerForBuffer = new CesiumZondy.Manager.MouseEventManager({
-//             viewer: viewer
-//         });
-//     },
-//     cancel: function (index, layero) {
-//         layer.close(index);
-//         //移除提示的toolTip
-//         mapDiv.removeEventListener('mousemove', showTooltip);
-//         mapDiv.removeEventListener('mouseout', hideTooltip);
-//     }
-// })
 
 /**
  * 绘制点
@@ -82,9 +66,11 @@ function drawPointForBuffer() {
         //添加点：经度、纬度、高程、名称、像素大小、颜色、外边线颜色、边线宽度
         let point = entityControllerForBuffer.appendPoint(lng, lat, height, '点', 10, new Cesium.Color(32 / 255, 178 / 255, 170 / 255, 1), new Cesium.Color(255 / 255, 255 / 255, 0 / 255, 1), 1.5);
         points.push(point);
+        entitiesForBuffer.push(point);
     });
     //注册鼠标右键单击事件
     mouseEventManagerForBuffer.registerMouseEvent('RIGHT_CLICK', function (e) {
+        //缓冲区分析
         let radius = document.getElementById('buffer-radius').value;
         if (radius === '') {
             layer.msg("请输入缓冲区半径")
@@ -107,6 +93,7 @@ function drawPolylineForBuffer() {
     displayHintTextOfBufferAnalysis();
     var pointArray = new Array();
     var allPoint = new Array();
+    let tempLineArray = new Array();
     //注册鼠标左键单击事件
     mouseEventManagerForBuffer.registerMouseEvent('LEFT_CLICK', function (e) {
         //屏幕坐标转笛卡尔坐标
@@ -125,7 +112,8 @@ function drawPolylineForBuffer() {
         //添加点
         if (pointArray.length > 3) {
             //绘制线（名称、点数组、线宽、线颜色、是否识别带高度的坐标、是否贴地形、附加属性）
-            entityControllerForBuffer.appendLine('贴地形线', pointArray, 2, new Cesium.Color(0 / 255, 255 / 255, 255 / 255, 0.8), true, true, {});
+            let tempLine = entityControllerForBuffer.appendLine('贴地形线', pointArray, 2, new Cesium.Color(0 / 255, 255 / 255, 255 / 255, 0.8), true, true, {});
+            tempLineArray.push(tempLine);
             pointArray = new Array();
             pointArray.push(lng);
             pointArray.push(lat);
@@ -158,11 +146,16 @@ function drawPolylineForBuffer() {
     });
     //注册鼠标右键单击事件
     mouseEventManagerForBuffer.registerMouseEvent('RIGHT_CLICK', function (e) {
-        //移除所有实体
-        entityControllerForBuffer.removeAllEntities();
         if (allPoint.length > 3) {
             //绘制线（名称、点数组、线宽、线颜色、是否识别带高度的坐标、是否贴地形、附加属性）
             let polylineForAnalyis = entityControllerForBuffer.appendLine('贴地形线', allPoint, 2, new Cesium.Color(0 / 255, 255 / 255, 255 / 255, 0.8), true, true, {});
+            entitiesForBuffer.push(polylineForAnalyis);
+            //移除暂时画的实体
+            for (let i = 0; i < tempLineArray.length; i++) {
+                viewer.entities.remove(tempLineArray[i]);
+            }
+            tempLineArray = [];
+            //缓冲区分析
             let linePositions = polylineForAnalyis.polyline.positions._value;
             let radius = document.getElementById('buffer-radius').value;
             if (radius === '') {
@@ -182,7 +175,7 @@ function drawPolylineForBuffer() {
     });
 }
 /**
- * 绘制面
+ * 绘制面（已屎山……）
  */
 let movePolygon = null;
 let lastPolygon = null;
@@ -214,10 +207,11 @@ function drawPolygonForBuffer() {
         }
         //第三次点击，画一个面
         if (viewer.entities.getById('moveline') != null) {
-            viewer.entities.removeById('moveline');
+            viewer.entities.removeById('moveline'); //移除点击前最后的动线
         }
+        //移除上一次画好的暂时面
         entityControllerForBuffer.removeEntity(lastPolygon);
-        //绘制面
+        //绘制新的暂时面
         lastPolygon = entityControllerForBuffer.appendPolygon('贴地形面', pointArray, new Cesium.Color(135 / 255, 206 / 255, 250 / 255, 0.8), true, {});
         if (movePolygon != null) {
             entityControllerForBuffer.removeEntity(movePolygon)
@@ -228,6 +222,7 @@ function drawPolygonForBuffer() {
     });
     //注册鼠标移动事件
     mouseEventManagerForBuffer.registerMouseEvent('MOUSE_MOVE', function (e) {
+        //移除上一次画好的动面
         if (movePolygon != null) {
             entityControllerForBuffer.removeEntity(movePolygon)
         }
@@ -252,7 +247,7 @@ function drawPolygonForBuffer() {
             });
             return
         }
-        //绘制完第一条边后的移动
+        //绘制完第一条边后的移动，绘制动面
         //如果还没有移动过，则不清除上一次的点
         if (pointArray.length > 6) {
             pointArray = pointArray.splice(0, pointArray.length - 3);
@@ -270,17 +265,23 @@ function drawPolygonForBuffer() {
     });
     //注册鼠标右键单击事件
     mouseEventManagerForBuffer.registerMouseEvent('RIGHT_CLICK', function (e) {
-        //将最后一次移动的清除掉
+        //将最后一次移动的点、暂时面和动面清除掉
         pointArray = pointArray.splice(0, pointArray.length - 3);
-        //移除所有实体
-        entityControllerForBuffer.removeAllEntities();
+        entityControllerForBuffer.removeEntity(lastPolygon);
+        entityControllerForBuffer.removeEntity(movePolygon);
+        //移除上一次画好的动面
         if (pointArray.length > 3) {
             //绘制最终的面
             let polygonForAnalyis = entityControllerForBuffer.appendPolygon('贴地形面', pointArray, new Cesium.Color(30 / 255, 144 / 255, 255 / 255, 0.8), true, {});
+            entitiesForBuffer.push(polygonForAnalyis);
+            //缓冲区分析
             let polygonPositions = polygonForAnalyis.polygon.hierarchy._value.positions;
             let radius = document.getElementById('buffer-radius').value;
             if (radius === '') {
                 removeEntities();
+                if (movePolygon != null) {
+                    entityControllerForBuffer.removeEntity(movePolygon)
+                }
                 layer.msg("请输入缓冲区半径")
                 return;
             }
@@ -293,8 +294,6 @@ function drawPolygonForBuffer() {
         mouseEventManagerForBuffer.unRegisterMouseEvent('LEFT_CLICK');
         mouseEventManagerForBuffer.unRegisterMouseEvent('MOUSE_MOVE');
         mouseEventManagerForBuffer.unRegisterMouseEvent('RIGHT_CLICK');
-        //结束绘制后，应当计算缓冲区
-        //待补
     });
 }
 
@@ -311,7 +310,9 @@ function removeEntities() {
     mouseEventManagerForBuffer.unRegisterMouseEvent('MOUSE_MOVE');
     mouseEventManagerForBuffer.unRegisterMouseEvent('RIGHT_CLICK');
     //移除所有实体
-    entityControllerForBuffer.removeAllEntities();
+    for (let i = 0; i < entitiesForBuffer.length; i++) {
+        viewer.entities.remove(entitiesForBuffer[i]);
+    }
 }
 let bufferPolygon = null;
 
@@ -346,7 +347,9 @@ function pointBufferAnalysis(points, radius, unit) {
                 classificationType: Cesium.ClassificationType.BOTH
             }
         });
+        entitiesForBuffer.push(bufferPolygon);
     }
+    getPinInsert(buffered);
 }
 /**
  * 线缓冲区分析
@@ -356,7 +359,6 @@ function pointBufferAnalysis(points, radius, unit) {
  */
 function polylineBufferAnalysis(polylinePositions, radius, unit) {
     var pointsOfLine = new Array();
-    console.log(polylinePositions)
     //整理坐标
     for (let j = 0; j < polylinePositions.length; j++) {
         var wgsPosistions = Cesium.Cartographic.fromCartesian(polylinePositions[j]);
@@ -383,6 +385,8 @@ function polylineBufferAnalysis(polylinePositions, radius, unit) {
             classificationType: Cesium.ClassificationType.BOTH
         }
     });
+    entitiesForBuffer.push(bufferPolygon);
+    getPinInsert(buffered);
 }
 /**
  * 面缓冲区分析
@@ -420,10 +424,38 @@ function polygonBufferAnalysis(polygonPositions, radius, unit) {
             classificationType: Cesium.ClassificationType.BOTH
         }
     });
+    entitiesForBuffer.push(bufferPolygon);
+    getPinInsert(buffered);
 }
 
 /**
- * 令div跟随鼠标移动，形成tooltip效果：展示获取经纬度的提示文本
+ * 获取缓冲区与Pin点的交集
+ * @param {*} bufferPolygon 
+ */
+function getPinInsert(bufferPolygon) {
+    let insertedPinArray = new Array();
+    let insertedJsonArray = [];
+    //将pin转为turf的点
+    for (let i of pinDataSource.values()) {
+        var point = turf.point([Number(i.lng), Number(i.lat)]); //这里要将字符串转为数字
+        //判断点是否在缓冲区内
+        var isInside = turf.booleanPointInPolygon(point, bufferPolygon);
+        if (isInside) {
+            //将符合条件的pin存入数组
+            insertedPinArray.push(i);
+            let data = {
+                id: i.id
+            }
+            //向后端发送请求，查找符合条件的pin对应的记录
+            $.post(myserver + '/wxcloud-dify-query-of-id', data, function (res) {
+                insertedJsonArray.push(JSON.parse(res)); //拼接为JsonArray
+            });
+        }
+    }
+    initEcharts(insertedJsonArray);
+}
+/**
+ * 令div跟随鼠标移动，形成tooltip效果：展示缓冲区分析的操作提示文本
  */
 
 function showTooltipForBuffer(evt) {

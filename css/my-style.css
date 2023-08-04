@@ -374,12 +374,14 @@ input[type="file"] {
 }
 
 .tool-menu-active {
+    /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
     height: 80px;
 }
 
 /*hover伪类，实现鼠标悬停特效*/
 .tool-menu-item:hover {
     background-color: #385987d3;
+
 }
 
 .tool-menu-item {
