@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>统计分析</title>
+    <link rel="stylesheet" href="libs/layui-v2.8.11/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="css/my-style.css" />
+    <link rel="stylesheet" type="text/css" href="css/chart.css" />
+    <link rel="stylesheet" href="css/font-some.css" />
+    <link rel="stylesheet" type="text/css" href="css/leo.css" />
+
+</head>
+
+<body>
+    <link href="css/cover-layui.css" rel="stylesheet" />
+    <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
+    <script src="libs/layui-v2.8.11/layui/layui.js"></script>
+    <div class="all">
+        <div class="main scroll">
+            <div class="width-box scroll-con" id="main-box">
+                <div class="page-body">
+                    <div class="index-row1">
+                        <div class="col4">
+                            <div class="item-box">
+                                <div class="item-title">数据总量</div>
+                                <div class="item-con">
+                                    <div class="chartNum">
+                                        <span style="font-size: 30px;">模型总量</span>
+                                    </div>
+                                    <div class="chartNum" id="chart1">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col4">
+                            <div class="item-box">
+                                <div class="item-title">位置名称</div>
+                                <div class="item-con" id="chart2"></div>
+                            </div>
+                        </div>
+                        <div class="col4">
+                            <div class="item-box">
+                                <div class="item-title">模型类型</div>
+                                <div class="item-con" id="chart3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="index-row2">
+                        <div class="col6">
+                            <div class="item-box">
+                                <div class="item-title">提交数量排名</div>
+                                <div class="item-con" id="chart4"></div>
+                            </div>
+                        </div>
+                        <div class="col6">
+                            <div class="item-box">
+                                <div class="item-title">详细地址</div>
+                                <div class="item-con" id="chart5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="./libs/echarts.js"></script>
+    <script src="js/buffer-echart.js"></script>
+    <!-- <script src="./js/Numberflip.js"></script> -->
+</body>
+
+</html>

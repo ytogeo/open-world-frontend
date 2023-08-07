@@ -4,7 +4,14 @@
 let entityControllerForBuffer = null;
 let mouseEventManagerForBuffer = null;
 let entitiesForBuffer = new Array();
+//初始化分析功能管理类
+var analysisManagerForBuffer = new CesiumZondy.Manager.AnalysisManager({
+    viewer: viewer
+});
 
+/**
+ * 缓冲区分析入口
+ */
 function bufferAnalysis() {
     layer.open({
         title: ['缓冲区分析', 'height:30px;font-size:13.5px;line-height:30px;'],
@@ -25,6 +32,16 @@ function bufferAnalysis() {
             mouseEventManagerForBuffer = new CesiumZondy.Manager.MouseEventManager({
                 viewer: viewer
             });
+            //强制展示Pin
+            if (!isDisplayPin) {
+                let visibilityStateIcon = document.getElementById("display-model-pin-button-icon");
+                visibilityStateIcon.classList.remove("layui-icon-eye");
+                visibilityStateIcon.classList.add("layui-icon-eye-invisible");
+                visibilityStateIcon.title = "关闭模型标记";
+                isDisplayPin = true;
+                //添加pin到地图
+                addPinToMap(pinDataSource);
+            }
             //移除Pin点击事件，防止冲突
             if (handlerOfClickPin != null) {
                 handlerOfClickPin.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK, leftClickCallback);
@@ -79,6 +96,13 @@ function drawPointForBuffer() {
         }
         let unit = document.getElementById('radius-unit').value;
         pointBufferAnalysis(points, radius, unit)
+        //注销各项事件
+        //调用此函数时若鼠标仍在地图内，textDiv不会消失，则需额外移除提示文本
+        textDiv.style.display = "none";
+        textDiv.innerHTML = "提示文本";
+        //注销提示的toolTip事件
+        mapDiv.removeEventListener('mousemove', showTooltipForBuffer);
+        mapDiv.removeEventListener('mouseout', hideTooltipForBuffer);
         mouseEventManagerForBuffer.unRegisterMouseEvent('LEFT_CLICK');
         mouseEventManagerForBuffer.unRegisterMouseEvent('RIGHT_CLICK');
     });
@@ -134,7 +158,7 @@ function drawPolylineForBuffer() {
         var height = cartographic.height;
         var firstPosition = Cesium.Cartesian3.fromDegrees(pointArray[0], pointArray[1], pointArray[2]);
         var movePosition = Cesium.Cartesian3.fromDegrees(lng, lat, height);
-        var redBox = viewer.entities.add({
+        var moveLine = viewer.entities.add({
             id: 'moveline',
             polyline: {
                 positions: [firstPosition, movePosition],
@@ -143,6 +167,7 @@ function drawPolylineForBuffer() {
                 clampToGround: true, //贴地
             }
         });
+        tempLineArray.push(moveLine);
     });
     //注册鼠标右键单击事件
     mouseEventManagerForBuffer.registerMouseEvent('RIGHT_CLICK', function (e) {
@@ -169,6 +194,12 @@ function drawPolylineForBuffer() {
         pointArray = new Array();
         allPoint = new Array();
         //注销鼠标各项事件
+        //调用此函数时若鼠标仍在地图内，textDiv不会消失，则需额外移除提示文本
+        textDiv.style.display = "none";
+        textDiv.innerHTML = "提示文本";
+        //注销提示的toolTip事件
+        mapDiv.removeEventListener('mousemove', showTooltipForBuffer);
+        mapDiv.removeEventListener('mouseout', hideTooltipForBuffer);
         mouseEventManagerForBuffer.unRegisterMouseEvent('LEFT_CLICK');
         mouseEventManagerForBuffer.unRegisterMouseEvent('MOUSE_MOVE');
         mouseEventManagerForBuffer.unRegisterMouseEvent('RIGHT_CLICK');
@@ -294,6 +325,12 @@ function drawPolygonForBuffer() {
         mouseEventManagerForBuffer.unRegisterMouseEvent('LEFT_CLICK');
         mouseEventManagerForBuffer.unRegisterMouseEvent('MOUSE_MOVE');
         mouseEventManagerForBuffer.unRegisterMouseEvent('RIGHT_CLICK');
+        //调用此函数时若鼠标仍在地图内，textDiv不会消失，则需额外移除提示文本
+        textDiv.style.display = "none";
+        textDiv.innerHTML = "提示文本";
+        //注销提示的toolTip事件
+        mapDiv.removeEventListener('mousemove', showTooltipForBuffer);
+        mapDiv.removeEventListener('mouseout', hideTooltipForBuffer);
     });
 }
 
@@ -313,6 +350,12 @@ function removeEntities() {
     for (let i = 0; i < entitiesForBuffer.length; i++) {
         viewer.entities.remove(entitiesForBuffer[i]);
     }
+    entitiesForBuffer = [];
+    //移除动态圆特效
+    for (let i of scanEffectArray) {
+        analysisManagerForBuffer.removeSceneEffect(i);
+    }
+    scanEffectArray = [];
 }
 let bufferPolygon = null;
 
@@ -434,7 +477,6 @@ function polygonBufferAnalysis(polygonPositions, radius, unit) {
  */
 function getPinInsert(bufferPolygon) {
     let insertedPinArray = new Array();
-    let insertedJsonArray = [];
     //将pin转为turf的点
     for (let i of pinDataSource.values()) {
         var point = turf.point([Number(i.lng), Number(i.lat)]); //这里要将字符串转为数字
@@ -443,16 +485,29 @@ function getPinInsert(bufferPolygon) {
         if (isInside) {
             //将符合条件的pin存入数组
             insertedPinArray.push(i);
-            let data = {
-                id: i.id
-            }
-            //向后端发送请求，查找符合条件的pin对应的记录
-            $.post(myserver + '/wxcloud-dify-query-of-id', data, function (res) {
-                insertedJsonArray.push(JSON.parse(res)); //拼接为JsonArray
-            });
         }
     }
-    initEcharts(insertedJsonArray);
+    //添加动态圆特效
+    changePinState(insertedPinArray);
+}
+/**
+ * 在符合条件的Pin上添加特效（动态圆）
+ * @param {*} insertedPinArray 
+ */
+let scanEffectArray = new Array();
+
+function changePinState(insertedPinArray) {
+    for (let i of insertedPinArray) {
+        scanEffect = new Cesium.CircleScanEffect(viewer, {
+            center: Cesium.Cartesian3.fromDegrees(i.lng, i.lat, 20),
+            radius: 50,
+            scanColor: new Cesium.Color(135 / 255, 206 / 255, 250 / 255, 0.5),
+            duration: 2000
+        });
+        //添加添加场景特效-动态圆
+        analysisManagerForBuffer.addSceneEffect(scanEffect);
+        scanEffectArray.push(scanEffect);
+    }
 }
 /**
  * 令div跟随鼠标移动，形成tooltip效果：展示缓冲区分析的操作提示文本

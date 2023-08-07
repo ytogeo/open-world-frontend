@@ -2,7 +2,7 @@
  * @description：将模型以pin的形式添加到地图
  * 注：pinDataSource 为一个Map类型的全局变量，在向微信数据库发出请求时就存储了pin信息。key为模型id，value值的对象包括【id：模型id、zipname，lng：纬度，lat：经度，type：模型类型】
  */
-let isDisplayPin = true; //pin的展示状态
+let isDisplayPin = false; //pin的展示状态
 let pinArray = new Array(); //存储加载到地图上的pin对象
 let handlerOfClickPin = null; //点击pin时的事件
 
@@ -11,12 +11,12 @@ let handlerOfClickPin = null; //点击pin时的事件
  */
 function switchDisplayState() {
     let visibilityStateIcon = document.getElementById("display-model-pin-button-icon");
-    //pin展示的状态下，点击可以关闭pin
-    if (isDisplayPin) {
+    //展示Pin
+    if (!isDisplayPin) {
         visibilityStateIcon.classList.remove("layui-icon-eye");
         visibilityStateIcon.classList.add("layui-icon-eye-invisible");
         visibilityStateIcon.title = "关闭模型标记";
-        isDisplayPin = false;
+        isDisplayPin = true;
         //添加pin到地图
         addPinToMap(pinDataSource);
         return;
@@ -25,7 +25,7 @@ function switchDisplayState() {
     visibilityStateIcon.classList.remove("layui-icon-eye-invisible");
     visibilityStateIcon.classList.add("layui-icon-eye");
     visibilityStateIcon.title = "打开模型标记";
-    isDisplayPin = true;
+    isDisplayPin = false;
     //从地图上移除Pin
     removePinFromMap(pinArray);
 }

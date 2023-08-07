@@ -273,6 +273,14 @@ input[type="file"] {
     background-size: cover;
 }
 
+.nav_statistics {
+    vertical-align: middle;
+    background-image: url("../image/statistics_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 /*选中特效？*/
 .nav_active {
     border-bottom: 4px solid #4b8df8;
@@ -467,7 +475,23 @@ input[type="file"] {
     height: 70px;
     /* margin-left: 18px; */
     background-image: url("../image/buffer_analysis_logo.png");
-    background-color: rgba(62, 148, 101, 0.897);
+    background-color: rgba(88, 200, 138, 0.897);
+}
+
+.icon-viewshed-analysis {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/view_shed_analysis_logo.png");
+    background-color: rgba(233, 213, 122, 0.922);
+}
+
+.icon-visibility-analysis {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/visibility_analysis_logo.png");
+    background-color: rgba(173, 240, 234, 0.922);
 }
 
 /*

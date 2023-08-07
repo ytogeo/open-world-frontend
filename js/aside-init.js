@@ -1,5 +1,5 @@
 /**
- * @file 这个文件用于初始化侧边栏（用户界面）
+ * @file 这个文件用于初始化侧边栏（用户界面）+统计分析入口
  */
 
 const pinDataSource = new Map();
@@ -276,5 +276,23 @@ function viewModel_info(item) {
                 layer.close(index);
             }
         })
+    });
+}
+
+/**
+ * 展示统计分析窗口的入口
+ */
+function displayStatistics() {
+    layui.use("layer", function () {
+        var layer = layui.layer;
+        layer.open({
+            type: 2,
+            title: "统计分析", //弹出层的标题
+            content: 'chart.html',
+            shade: 0, //不显示遮罩
+            area: ['85%', '90%'],
+            maxmin: false,
+            closeBtn: 2,
+        });
     });
 }

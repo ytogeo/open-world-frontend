@@ -88,9 +88,10 @@
     <div class="right nav text_right">
       <ul>
         <li><i class="nav_help"></i><a href="help.html" target="_blank" style="text-decoration: none">？？？？</a></li>
-        <li><i class="nav_help"></i><a href="help.html" target="_blank" style="text-decoration: none">？？？？</a></li>
         <li><i class="nav_square"></i><a href="model-square.html" target="_blank" style="text-decoration: none">共享广场</a>
         </li>
+        <li><i class="nav_statistics"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick=" displayStatistics()">数据统计</a></li>
         <li><i class="nav_user"></i><a href="javascript:void(0)" onclick="switchAside()"
             style="text-decoration: none">用户界面</a></li>
         <!-- <li><i class="nav_7"></i><a href="javascript:void(0)" onclick="querymodel()">查询模型</a> </li> -->
@@ -229,13 +230,13 @@
           <div class="tool-box-item-icon icon-buffer-analysis"></div>
           <span class="tool-box-item-text">缓冲区分析</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="viewshedAnalysis()">
+          <div class="tool-box-item-icon icon-viewshed-analysis"></div>
+          <span class="tool-box-item-text">视域分析</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="visibilityAnalysis()">
+          <div class="tool-box-item-icon icon-visibility-analysis"></div>
+          <span class="tool-box-item-text">通视分析</span>
         </div>
         <div class="tool-box-item">
           <div class="tool-box-item-icon icon-measure"></div>
@@ -560,7 +561,6 @@
           </div>
         </div> -->
       </div>
-
     </div>
     <!--弹窗：3DTiles管理器-->
     <div id="temp-3dtiles-manager">
@@ -642,6 +642,36 @@
         </div>
       </div>
     </div>
+    <!--弹窗：视域分析-->
+    <div id="viewshed-analysis">
+      <div class="my-form-container" style="width:335px;top:20px;">
+        操作提示：鼠标左键选择观察点，右键确定观察范围，完成可视域分析。
+      </div>
+      <!-- <div class="weather-adjust-container">
+        <div class="weather-adjust-item">
+          <label class="weather-adjust-label">雾气浓度</label>
+          <div id="fog-visibility-slider" class="weather-adjust-slider"></div>
+        </div>
+      </div> -->
+    </div>
+    <!--弹窗：通视分析-->
+    <div id="visibilityAnalysisDiv" hidden>
+      <br>
+      <form id="visibilityAnalysisForm" class="layui-form">
+        <div class="layui-form-item">
+          <label class="layui-form-label">观察点</label>
+          <button id="drawViewPoint" type="button" class="layui-btn">绘制观察点
+          </button>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">被观察点</label>
+          <div class="layui-input-inline">
+            <button id="drawDestinationPoint" type="button" class="layui-btn">绘制被观察点
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -672,8 +702,8 @@
       var slider = layui.slider;
     })
   </script>
-  <!-- <script src="./libs/echarts.js"></script> -->
-  <!-- <script src="js/buffer-echart.js"></script> -->
+  <script src="js/viewshed-analysis.js"></script>
+  <script src="js/visibility-analysis.js"></script>
   <script src="js/buffer-analysis.js"></script>
   <script src="js/model-add-to-map.js"></script>
   <script src="js/pin-add-to-map.js"></script>
