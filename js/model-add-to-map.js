@@ -185,7 +185,9 @@ function checkBoxChangeVisibility(obj) {
  * @param {*} params 
  */
 function adjustModel(modelManager, params) {
+
     let entity = modelManager.model;
+    console.log(entity.position)
     let modelLng = parseFloat(modelManager.modelLng);
     let modelLat = parseFloat(modelManager.modelLat);
     //调整位置：平移

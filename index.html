@@ -87,7 +87,9 @@
     </div>
     <div class="right nav text_right">
       <ul>
-        <li><i class="nav_help"></i><a href="help.html" target="_blank" style="text-decoration: none">？？？？</a></li>
+        <li><i class="nav_wander"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick="activeWandering()">沉浸漫游</a>
+        </li>
         <li><i class="nav_square"></i><a href="model-square.html" target="_blank" style="text-decoration: none">共享广场</a>
         </li>
         <li><i class="nav_statistics"></i><a href="javascript:void(0)" style="text-decoration: none"
@@ -100,7 +102,9 @@
     <!--菜单栏：我的工具-->
     <div class="tool-menu" id="tool-menu" onmouseleave="hideMenu()">
       <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
-          class="menu-item-text">基础工具</span></div>
+          class="menu-item-text">场景控制</span></div>
+      <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
+          class="menu-item-text">测量工具</span></div>
       <div class="tool-menu-item" onclick="analysisToolSelect()"><i class="menu-item-logo-analysis"></i><span
           class="menu-item-text">空间分析</span></div>
     </div>
@@ -672,6 +676,12 @@
         </div>
       </form>
     </div>
+    <!--弹窗：沉浸漫游-->
+    <div id="wandering">
+      <div class="my-form-container" style="width:335px;top:20px;">
+        <span>操作提示：使用WASD，操作小车移动。</span>    
+      </div>
+    </div>
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -703,6 +713,7 @@
     })
   </script>
   <script src="js/viewshed-analysis.js"></script>
+  <script src="js/wandering.js"></script>
   <script src="js/visibility-analysis.js"></script>
   <script src="js/buffer-analysis.js"></script>
   <script src="js/model-add-to-map.js"></script>

@@ -281,6 +281,14 @@ input[type="file"] {
     background-size: cover;
 }
 
+.nav_wander {
+    vertical-align: middle;
+    background-image: url("../image/wandering_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 /*选中特效？*/
 .nav_active {
     border-bottom: 4px solid #4b8df8;
@@ -383,7 +391,7 @@ input[type="file"] {
 
 .tool-menu-active {
     /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
-    height: 80px;
+    height: 120px;
 }
 
 /*hover伪类，实现鼠标悬停特效*/

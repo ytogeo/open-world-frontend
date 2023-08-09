@@ -37,7 +37,7 @@ function addTilesToMap(res) {
     //动态渲染管理器界面
     addElementOfTilesManager(res, "model" + (tilesManagerDic.size));
     //调整3dtiles 配合depthTestAgainstTerrain = true 使之贴地
-    var heightOffset = 16;
+    var heightOffset = 12;
     tileset.readyPromise.then(function (tileset) {
         // Position tileset
         var boundingSphere = tileset.boundingSphere;
