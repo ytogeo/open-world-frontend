@@ -217,7 +217,11 @@ function initCartContent() {
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
         if (layEvent === "cart-delete") {
             //删除指定元素
-            userCart.splice(userCart.indexOf(data), 1);
+            userCart.map((item, index) => {
+                if (item.zipname == data.zipname) {
+                    userCart.splice(index, 1);
+                }
+            })
             //重载表格
             table.reloadData('db-table-square-cart', {
                 data: userCart,
@@ -242,9 +246,6 @@ function displayMyCart() {
             var checkStatus = table.checkStatus('db-table-square-cart');
             //将选中的数据存入我的展柜
             addDataFromCart(checkStatus.data);
-            table.reloadData('db-table-square-cart', {
-                data: userCart,
-            });
         },
         btn2: function (index, layero, that) {
             //清空购物车
@@ -290,8 +291,16 @@ function addDataFromCart(data) {
             }
         });
         //将数据从购物车中删除
-        userCart.splice(userCart.indexOf(i), 1);
+        userCart.map((item, index) => {
+            if (item.zipname == i.zipname) {
+                userCart.splice(index, 1);
+            }
+        })
     }
+    var table = layui.table;
+    table.reloadData('db-table-square-cart', {
+        data: userCart,
+    });
     layer.msg("已将所选数据放入展柜！")
 }
 /**

@@ -298,10 +298,13 @@
           <div class="tool-box-item-icon icon-visibility-analysis"></div>
           <span class="tool-box-item-text">通视分析</span>
         </div>
-        <!-- <div class="tool-box-item" onclick="viewshedAnalysis()">
-          <div class="tool-box-item-icon icon-viewshed-analysis"></div>
-          <span class="tool-box-item-text">视域分析</span>
-        </div> -->
+        <div class="tool-box-item" onclick="displaySkylineWindow()">
+          <div class="tool-box-item-icon icon-skyline-analysis"></div>
+          <span class="tool-box-item-text">天际线分析</span>
+        </div>
+        <div class="tool-box-item" onclick="displaySkylineWindow()">
+          <div class="tool-box-item-icon icon-visibility-analysis"></div>
+          <span class="tool-box-item-text">？？分析</span>
         </div>
       </div>
     </div>
@@ -347,7 +350,7 @@
     <!--弹窗：图像重建-->
     <div class="layui-upload" display="none" id="choose-img">
       <button type="button" class="layui-btn" id="uploadimg"
-        style="background-color: rgba(15, 74, 151, 0.7); color: #edffff">多图片上传</button>
+        style="background-color: rgba(15, 74, 151, 0.7); color: #edffff;position:relative;left:15px;top:2px;">上传照片</button>
       <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px">
         <div class="layui-upload-list" id="up-load-list"></div>
       </blockquote>
@@ -560,43 +563,43 @@
       <form id="adjust-form" class="layui-form" style="position: relative; top: 10px">
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">X轴平移</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="x-translate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">Y轴平移</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="y-translate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">Z轴平移</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="z-translate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">X轴旋转</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="x-rotate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">Y轴旋转</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="y-rotate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">Z轴旋转</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="z-rotate" class="adjust-slide"></div>
           </div>
         </div>
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">比例缩放</label>
-          <div class="layui-input-block" style="width: 50%">
+          <div class="layui-input-block" style="width: 65%">
             <div id="scale-adjust" class="adjust-slide"></div>
           </div>
         </div>
@@ -725,6 +728,19 @@
         </div>
       </form>
     </div>
+    <!--弹窗：天际线分析-->
+    <div id="skyline-analysis" style="overflow: hidden;">
+      <div class="my-form-container">
+        <div class="my-form-item">
+          <div class="my-form-label">操作</div>
+          <div class="my-form-input">
+            <button class="layui-btn" style="display: inline-block;" onclick="initSkyline()">添加天际线</button>
+            <button class="layui-btn" style="display: inline-block;" onclick="stopSkyline()">清除天际线</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
     <!--弹窗：沉浸漫游-->
     <div id="wandering">
       <div class="my-form-container" style="width: 335px; top: 20px">
@@ -755,7 +771,7 @@
         <span>操作提示：鼠标左键确定测量路径，右键结束单次坡度量测。</span>
       </div>
     </div>
-    
+
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -800,6 +816,7 @@
   <script src="js/user-add-tiles.js"></script>
   <script src="js/weather-display.js"></script>
   <script src="js/model-square.js"></script>
+  <script src="js/skyline.js"></script>
   <!--ThreeJS相关，渲染侧边栏模型预览窗口-->
   <script type="module">
     //flag：是否加载完成，防止在场景中加入多个模型

@@ -333,12 +333,12 @@ input[type="file"] {
 }
 
 #all-model-manager-button {
-    bottom: 16%;
+    bottom: 21%;
     margin-left: 0px;
 }
 
 #display-temp-3dtiles-button {
-    bottom: 21%;
+    bottom: 16%;
     margin-left: 0px;
     /*layui没有合适的，自定义按钮图标*/
     background-image: url("../image/tiles_button_logo.png");
@@ -464,11 +464,13 @@ input[type="file"] {
     grid-template-rows: repeat(1, 100px);
     overflow: hidden;
 }
+
 .analysis-tool-container {
     grid-template-columns: repeat(4, 110px);
     grid-template-rows: repeat(1, 100px);
     overflow: hidden;
 }
+
 .tool-box-container>.tool-box-item {
     background-color: transparent;
     text-align: center;
@@ -499,7 +501,7 @@ input[type="file"] {
     height: 70px;
     /* margin-left: 18px; */
     background-image: url("../image/length_measure_tool_logo.png");
-    background-color: rgb(225, 180, 65);
+    background-color: rgba(121, 228, 205, 0.853);
 }
 
 .icon-measure-area {
@@ -508,7 +510,8 @@ input[type="file"] {
     /* margin-left: 18px; */
     background-image: url("../image/area_measure_tool_logo.png");
     background-size: 39px;
-    background-color: rgba(121, 228, 205, 0.853);
+    background-color: rgb(255, 166, 58);
+
 }
 
 .icon-measure-tri {
@@ -517,7 +520,7 @@ input[type="file"] {
     /* margin-left: 18px; */
     background-image: url("../image/tri_measure_tool_logo.png");
     background-size: 39px;
-    background-color: rgb(246, 164, 96);
+    background-color: rgb(255, 228, 94);
 }
 
 .icon-measure-slope {
@@ -551,6 +554,14 @@ input[type="file"] {
     /* margin-left: 18px; */
     background-image: url("../image/visibility_analysis_logo.png");
     background-color: rgba(173, 240, 234, 0.922);
+}
+
+.icon-skyline-analysis {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/skyline_analysis_logo.png");
+    background-color: rgba(179, 197, 250, 0.922);
 }
 
 /*
@@ -723,4 +734,32 @@ input[type="file"] {
 .my-form-input {
     display: inline-block;
     margin-left: 10px;
+}
+
+div.layui-slider-input>div.layui-slider-input-txt>input {
+    background-color: transparent;
+    height: 19px;
+    line-height: 30px;
+}
+
+.layui-slider-input {
+    width: 60px;
+    height: 30px;
+    border: 1px solid #2a447e;
+}
+
+div.layui-slider-input>div.layui-slider-input-btn {
+    border: 1px solid #2a447e;
+}
+
+
+.layui-slider-input-btn i:first-child {
+    border-bottom: 1px solid #2a447e;
+}
+
+#skyline-button {
+    position: relative;
+    height: 100%;
+    top:8px;
+    left: 20px;
 }

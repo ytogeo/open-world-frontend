@@ -225,7 +225,7 @@ function editModelAdjustment(obj) {
             title: "模型调整", //弹出层的标题
             content: $('#adjust-tiles'),
             shade: 0, //不显示遮罩
-            area: ['300px', '520px'],
+            area: ['350px', '520px'],
             offset: ['80px', '10px'],
             closeBtn: 2,
             btn: ['保存', '重置'],
@@ -295,7 +295,7 @@ function addModelToMap(id, modelname, lng, lat) {
             title: "模型调整", //弹出层的标题
             content: $('#adjust-tiles'),
             shade: 0, //不显示遮罩
-            area: ['300px', '520px'],
+            area: ['350px', '520px'],
             offset: ['80px', '10px'],
             closeBtn: 2,
             btn: ['保存', '重置'],
@@ -388,9 +388,10 @@ function initSliders(params) {
             //第i个滑块对应第i个参数
             slider.render({
                 value: params[adjustSelections[i]],
-                max: 50,
-                min: -50,
+                max: 55,
+                min: -55,
                 elem: sliderList[i],
+                input: true,
                 change: function (value) {
                     //对每个滑块都加上监听：第几个滑块的value改变，就改变第几个参数（newParams[i]）
                     let newParams = curModelManager.getParams();

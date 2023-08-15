@@ -4,8 +4,8 @@
 
 class Car {
     entity = null;
-    speed = 0.2;
-    position = Cesium.Cartesian3.fromDegrees(114.612846, 30.461900);
+    speed = 0.4;
+    position = Cesium.Cartesian3.fromDegrees(114.612844, 30.462312, 18);
     cameraX = 0;
     cameraY = 1;
     //方向
@@ -114,7 +114,7 @@ class Car {
             return result;
         }
         let scratch = getModelMatrix(this.entity);
-        let transformX = 100; //距离运动点的距离（后方）
+        let transformX = 80; //距离运动点的距离（后方）
         let transformZ = 30; //距离运动点的高度（上方）
         let transformY = 0; //距离运动点的高度（侧方）
         //设置摄像机位置
@@ -158,9 +158,9 @@ class Car {
 //创建一个小车模型
 let carModel = {
     id: 'a model car',
-    position: Cesium.Cartesian3.fromDegrees(114.612846, 30.461900),
+    position: Cesium.Cartesian3.fromDegrees(114.612844, 30.462312, 18),
     orientation: Cesium.Transforms.headingPitchRollQuaternion(
-        Cesium.Cartesian3.fromDegrees(114.612846, 30.461900),
+        Cesium.Cartesian3.fromDegrees(114.612844, 30.462312, 18),
         new Cesium.HeadingPitchRoll(
             Cesium.Math.toRadians(90), //将小车的头部朝向设置为正南方向
             Cesium.Math.toRadians(0),
@@ -170,7 +170,7 @@ let carModel = {
     model: {
         uri: "data/CesiumTruck.glb",
         scale: 1,
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND //贴地
+        //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND //贴地
     }
 }
 let car = null;

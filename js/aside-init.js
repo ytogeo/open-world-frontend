@@ -4,6 +4,8 @@
 
 const pinDataSource = new Map();
 let myUpload = new Array();
+
+let listeningHandler
 /**
  * 初始化侧边栏用户界面数据库
  */
@@ -93,6 +95,10 @@ function initUserTable() {
                         if (res == 0) {
                             layer.msg('删除成功');
                             obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            //重新加载数据
+                            table.reloadData('db-table', {
+                                url: myserver + '/wxcloud_query',
+                            });
                             layer.close(index);
                         } else {
                             layer.msg('删除失败');
@@ -113,6 +119,7 @@ function initUserTable() {
                     setTimeout(function () {
                         //调用添加模型到地图的函数
                         addModelToMap(data["zipname"], data["ModelName"], data["lng"], data["lat"]);
+
                         layer.msg('请在地图中调整模型');
                     }, 3000)
                     layer.close(index);

@@ -113,8 +113,9 @@ function drawViewPoint() {
             viewer.entities.remove(viewPoint);
         }
         //获取地形上的坐标
-        let ray = viewer.camera.getPickRay(event.position);
-        let dcrCoor = viewer.scene.globe.pick(ray, viewer.scene);
+        //let ray = viewer.camera.getPickRay(event.position);
+        //let dcrCoor = viewer.scene.globe.pick(ray, viewer.scene);
+        let dcrCoor = viewer.scene.pickPosition(event.position);
         viewPoint = drawPoint(dcrCoor, viewPointPinURI);
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
@@ -126,8 +127,8 @@ function drawDestinationPoint() {
     $('#drawDestinationPoint').addClass("layui-btn-disabled").attr("disabled", true);
     handler.setInputAction(function (event) {
         //获取地形上的坐标
-        let ray = viewer.camera.getPickRay(event.position);
-        let dcrCoor = viewer.scene.globe.pick(ray, viewer.scene);
+        //let ray = viewer.camera.getPickRay(event.position);
+        let dcrCoor = viewer.scene.pickPosition(event.position);
         destinationPoint = drawPoint(dcrCoor, viewDestinationPinURI);
         destinationPointArray.push(destinationPoint);
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
@@ -174,9 +175,18 @@ function startVisibilityAnalysis(viewPoint, destinationPointArray) {
         let direction = Cesium.Cartesian3.normalize(Cesium.Cartesian3.subtract(destinationPointArray[i].position._value, viewPointPosition, new Cesium.Cartesian3()), new Cesium.Cartesian3());
         //获取射线（起始点+方向向量）
         let ray = new Cesium.Ray(viewPointPosition, direction);
-        //计算相交
-        //let result = viewer.scene.pickFromRay(ray,);
-        let result = viewer.scene.globe.pick(ray, viewer.scene);
+        let result = null;
+        // 求得射线与场景entity的交点
+        var entity = viewer.scene.pickFromRay(ray); // 从射线中获取entity的交点
+        if (Cesium.defined(entity)) {
+            console.log(entity)
+            // 如果存在交点
+            var position = entity.position; // 获取entity的位置
+            console.log("射线与entity的交点坐标：" + position);
+            result = position;
+        }
+        //计算射线与地形的交点
+        //let result = viewer.scene.globe.pick(ray, viewer.scene);
         if (result !== undefined && result !== null) {
             //计算result与起点的方向向量与距离，用于后面的比较
             let resultDirection = Cesium.Cartesian3.normalize(Cesium.Cartesian3.subtract(result, viewPointPosition, new Cesium.Cartesian3()), new Cesium.Cartesian3());
