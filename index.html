@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
   <!-- Use correct character set. -->
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="libs/layui-v2.8.11/layui/css/layui.css" />
   <link rel="stylesheet" type="text/css" href="css/aside-style.css" />
   <link rel="stylesheet" type="text/css" href="css/my-style.css" />
-  <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="css/square-style.css" />
   <title>Open World首页</title>
   <style>
     @import url(Build/CesiumUnminified/Widgets/widgets.css);
@@ -58,16 +58,35 @@
     <a title="添加到地图" lay-event="add-to-map-model" href="javascript:void(0);">
       <i class="layui-icon info-bar-icon" style="font-size:13.5px;">&#xe715;</i>
     </a>
-    <a title="上传到广场" lay-event="upload-to-square" href="javascript:void(0);">
+    <a title="上传到共享中心" lay-event="upload-to-square" href="javascript:void(0);">
       <i class="layui-icon info-bar-icon" style="font-size:13.8px;">&#xe681;</i>
     </a>
   </script>
-
+  <!--数据广场中工具条-->
+  <script type="text/html" id="square-tool-bar">
+    <a title="查看详情" class="layui-btn layui-btn-xs layui-btn-primary" lay-event="more-info"><i
+        class="layui-icon">预览</i></a>
+    <a title="加入购物车" class="layui-btn layui-btn-xs layui-btn-primary" lay-event="add-to-cart"><i
+        class="layui-icon layui-icon-cart-simple"></i></a>
+  </script>
+  <!--购物车中工具条-->
+  <script type="text/html" id="cart-tool-bar">
+    <a title="从购物车中删除" class="layui-btn layui-btn-xs layui-btn-primary" lay-event="cart-delete"><i
+        class="layui-icon">删除</i></a>
+  </script>
+  <!--上传管理中工具条-->
+  <script type="text/html" id="my-upload-tool-bar">
+    <a title="从共享中心中撤下" class="layui-btn layui-btn-xs layui-btn-primary" lay-event="upload-delete"><i
+        class="layui-icon">撤下</i></a>
+  </script>
   <!--标题-->
   <header class="header left">
     <div class="left nav">
       <ul>
-        <li class="nav_active"><i class="nav_map"></i><a href="index.html" style="text-decoration: none">地图界面</a></li>
+        <li id="mapLi" class="nav_active">
+          <i class="nav_map"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick="displayMap()">地图界面</a>
+        </li>
         <li>
           <i class="nav_tool"></i><a href="javascript:void(0)" style="text-decoration: none"
             onmouseover="showMenu()">我的工具</a><i id="menu-display-state" class="layui-icon layui-icon-down"
@@ -88,22 +107,23 @@
     <div class="right nav text_right">
       <ul>
         <li><i class="nav_wander"></i><a href="javascript:void(0)" style="text-decoration: none"
-            onclick="activeWandering()">沉浸漫游</a>
-        </li>
-        <li><i class="nav_square"></i><a href="model-square.html" target="_blank" style="text-decoration: none">共享广场</a>
+            onclick="activeWandering()">沉浸漫游</a></li>
+        <li id="squareLi">
+          <i class="nav_square"></i><a href="javascript:void(0)" style="text-decoration: none"
+            onclick="displayModelSquare()">共享中心</a>
         </li>
         <li><i class="nav_statistics"></i><a href="javascript:void(0)" style="text-decoration: none"
             onclick=" displayStatistics()">数据统计</a></li>
         <li><i class="nav_user"></i><a href="javascript:void(0)" onclick="switchAside()"
-            style="text-decoration: none">用户界面</a></li>
+            style="text-decoration: none">我的展柜</a></li>
         <!-- <li><i class="nav_7"></i><a href="javascript:void(0)" onclick="querymodel()">查询模型</a> </li> -->
       </ul>
     </div>
     <!--菜单栏：我的工具-->
     <div class="tool-menu" id="tool-menu" onmouseleave="hideMenu()">
-      <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
-          class="menu-item-text">场景控制</span></div>
-      <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
+      <!-- <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-basic"></i><span
+          class="menu-item-text">场景控制</span></div> -->
+      <div class="tool-menu-item" onclick="basicToolSelect()"><i class="menu-item-logo-measure"></i><span
           class="menu-item-text">测量工具</span></div>
       <div class="tool-menu-item" onclick="analysisToolSelect()"><i class="menu-item-logo-analysis"></i><span
           class="menu-item-text">空间分析</span></div>
@@ -152,6 +172,43 @@
 
   <!--主界面-->
   <main>
+    <!--共享广场页面-->
+    <div id="square">
+      <!--广场的模型列表-->
+      <div class="model-square-list" id="model-square-list">
+        <!--用户操作-->
+        <div class="user-square-button">
+          <span style="color: rgba(202, 208, 222, 0.462); display: inline">用户 admin，您好！</span>
+          <div style="display: inline">
+            <button class="layui-btn" onclick="goToUpdate()">我要上传</button>
+            <button class="layui-btn" onclick="displayMyUpdate()">上传管理</button>
+            <button class="layui-btn" onclick="displayMyCart()">我的购物车</button>
+          </div>
+        </div>
+        <!--表格：模型列表-->
+        <div id="model-square-list-container">
+          <table id="db-table-square-all" lay-filter="db-table-square-all"></table>
+        </div>
+      </div>
+      <!--模型预览窗口：渲染-->
+      <div id="square-obj-display" class="square-obj-display">
+        <div id="square-render-loading-box">渲染中</div>
+        <canvas id="square-obj-canvas" style="visibility: hidden"></canvas>
+      </div>
+      <!--弹窗：我的购物车-->
+      <div id="my-cart">
+        <div id="my-cart-container">
+          <table id="db-table-square-cart" lay-filter="db-table-square-cart"></table>
+        </div>
+      </div>
+      <!--弹窗：上传管理-->
+      <div id="my-upload">
+        <div id="my-upload-container">
+          <table id="db-table-square-upload" lay-filter="db-table-square-upload"></table>
+        </div>
+      </div>
+    </div>
+
     <!--地图-->
     <div id="map">
       <!--图层选择按钮-->
@@ -161,19 +218,26 @@
       <!--天气效果按钮-->
       <button id="display-weather-button" class="map-setting-button layui-btn" title="天气效果"
         onclick="weatherWinDisplay()">
-        <i class="layui-icon" style="position: relative;font-size:23px;top:3px;"> &#x2601;</i>
+        <i class="layui-icon" style="position: relative; font-size: 23px; top: 3px"> &#x2601;</i>
       </button>
+      <!--模型管理器按钮-->
       <button id="all-model-manager-button" class="map-setting-button layui-btn" title="模型管理"
         onclick="modelManagerDisplay()">
         <i class="layui-icon layui-icon-app"></i>
       </button>
+      <!--3DTiles管理器按钮-->
       <button id="display-temp-3dtiles-button" class="map-setting-button layui-btn" title="3DTiles管理"
         onclick="tilesManagerDisplay()">
         <i class="layui-icon"></i>
       </button>
+      <!--标注展示按钮-->
       <button id="display-model-pin-button" class="map-setting-button layui-btn" title="打开模型标记"
         onclick="switchDisplayState()">
         <i id="display-model-pin-button-icon" class="layui-icon layui-icon-eye"></i>
+      </button>
+      <!--home键-->
+      <button id="home-button" class="map-setting-button layui-btn" title="跳转回主场景" onclick="homeButtonClick()">
+        <i class="layui-icon layui-icon-home"></i>
       </button>
       <!--cesium容器-->
       <div id="cesium-container"></div>
@@ -202,53 +266,42 @@
         </form>
       </div>
     </div>
-    <!--弹窗：基础工具箱-->
+    <!--弹窗：测量工具箱-->
     <div id="basic-tool-box">
-      <div class="tool-box-container">
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
+      <div class="tool-box-container measure-tool-container">
+        <div class="tool-box-item" onclick="lengthMeasureWindow()">
+          <div class="tool-box-item-icon icon-measure-length"></div>
           <span class="tool-box-item-text">距离量测</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="areaMeasureWindow()">
+          <div class="tool-box-item-icon icon-measure-area"></div>
+          <span class="tool-box-item-text">面积量测</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="triangulationMeasureWindow()">
+          <div class="tool-box-item-icon icon-measure-tri"></div>
+          <span class="tool-box-item-text">三角量测</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
-        </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <div class="tool-box-item" onclick="slopeMeasureWindow()">
+          <div class="tool-box-item-icon icon-measure-slope"></div>
+          <span class="tool-box-item-text">坡度量测</span>
         </div>
       </div>
     </div>
     <!--弹窗：空间分析工具箱-->
     <div id="analysis-tool-box">
-      <div class="tool-box-container">
+      <div class="tool-box-container analysis-tool-container">
         <div class="tool-box-item" onclick="bufferAnalysis()">
           <div class="tool-box-item-icon icon-buffer-analysis"></div>
           <span class="tool-box-item-text">缓冲区分析</span>
-        </div>
-        <div class="tool-box-item" onclick="viewshedAnalysis()">
-          <div class="tool-box-item-icon icon-viewshed-analysis"></div>
-          <span class="tool-box-item-text">视域分析</span>
         </div>
         <div class="tool-box-item" onclick="visibilityAnalysis()">
           <div class="tool-box-item-icon icon-visibility-analysis"></div>
           <span class="tool-box-item-text">通视分析</span>
         </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
-        </div>
-        <div class="tool-box-item">
-          <div class="tool-box-item-icon icon-measure"></div>
-          <span class="tool-box-item-text">距离量测</span>
+        <!-- <div class="tool-box-item" onclick="viewshedAnalysis()">
+          <div class="tool-box-item-icon icon-viewshed-analysis"></div>
+          <span class="tool-box-item-text">视域分析</span>
+        </div> -->
         </div>
       </div>
     </div>
@@ -334,9 +387,9 @@
               <div class="layui-form-item" style="margin-top: 15px">
                 <label class="layui-form-label">模型类型</label>
                 <div class="layui-input-block" style="width: 85%" id="modelType-write">
-                  <input type="radio" name="modelType" value="建筑" title="建筑" checked>
-                  <input type="radio" name="modelType" value="雕塑" title="雕塑">
-                  <input type="radio" name="modelType" value="其他物件" title="其他物件">
+                  <input type="radio" name="modelType" value="建筑" title="建筑" checked />
+                  <input type="radio" name="modelType" value="雕塑" title="雕塑" />
+                  <input type="radio" name="modelType" value="其他物件" title="其他物件" />
                 </div>
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
@@ -433,9 +486,9 @@
               <div class="layui-form-item" style="margin-top: 15px">
                 <label class="layui-form-label">模型类型</label>
                 <div class="layui-input-block" style="width: 85%" id="modelType-show">
-                  <input type="radio" name="modelType" value="建筑" title="建筑">
-                  <input type="radio" name="modelType" value="雕塑" title="雕塑">
-                  <input type="radio" name="modelType" value="其他物件" title="其他物件">
+                  <input type="radio" name="modelType" value="建筑" title="建筑" />
+                  <input type="radio" name="modelType" value="雕塑" title="雕塑" />
+                  <input type="radio" name="modelType" value="其他物件" title="其他物件" />
                 </div>
               </div>
               <div class="layui-form-item" style="margin-top: 15px">
@@ -504,7 +557,7 @@
     </div>
     <!--弹窗：模型位置尺寸调整-->
     <div id="adjust-tiles">
-      <form id="adjust-form" class="layui-form" style="position: relative;top: 10px;">
+      <form id="adjust-form" class="layui-form" style="position: relative; top: 10px">
         <div class="layui-form-item" style="margin-top: 15px">
           <label class="layui-form-label">X轴平移</label>
           <div class="layui-input-block" style="width: 50%">
@@ -622,11 +675,11 @@
     </div>
     <!--弹窗：缓冲区分析-->
     <div id="buffer-analysis">
-      <div class="my-form-container" style="width:335px;top:12px;">
+      <div class="my-form-container" style="width: 335px; top: 12px">
         <div class="my-form-item">
           <label class="my-form-label">缓冲半径</label>
-          <input class="my-form-input" type="text" id="buffer-radius" style="width:120px;">
-          <select id="radius-unit" lay-verify="" style="background-color: #edffff;font-size:13.5px;">
+          <input class="my-form-input" type="text" id="buffer-radius" style="width: 120px" />
+          <select id="radius-unit" lay-verify="" style="background-color: #edffff; font-size: 13.5px">
             <option value="meters">米</option>
             <option value="kilometers">千米</option>
             <option value="radians">弧度</option>
@@ -636,21 +689,19 @@
         <div class="my-form-item">
           <label class="my-form-label">绘制图形</label>
           <div class="my-form-input">
-            <button class="layui-btn layui-btn-sm" style="margin-left: 0px;font-size:13px;"
+            <button class="layui-btn layui-btn-sm" style="margin-left: 0px; font-size: 13px"
               onclick="drawPointForBuffer()">绘制点</button>
-            <button class="layui-btn layui-btn-sm" style="font-size:13px;"
+            <button class="layui-btn layui-btn-sm" style="font-size: 13px"
               onclick="drawPolylineForBuffer()">绘制线</button>
-            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="drawPolygonForBuffer()">绘制面</button>
-            <button class="layui-btn layui-btn-sm" style="font-size:13px;" onclick="removeEntities()">清除</button>
+            <button class="layui-btn layui-btn-sm" style="font-size: 13px" onclick="drawPolygonForBuffer()">绘制面</button>
+            <button class="layui-btn layui-btn-sm" style="font-size: 13px" onclick="removeEntities()">清除</button>
           </div>
         </div>
       </div>
     </div>
     <!--弹窗：视域分析-->
     <div id="viewshed-analysis">
-      <div class="my-form-container" style="width:335px;top:20px;">
-        操作提示：鼠标左键选择观察点，右键确定观察范围，完成可视域分析。
-      </div>
+      <div class="my-form-container" style="width: 335px; top: 20px">操作提示：鼠标左键选择观察点，右键确定观察范围，完成可视域分析。</div>
       <!-- <div class="weather-adjust-container">
         <div class="weather-adjust-item">
           <label class="weather-adjust-label">雾气浓度</label>
@@ -660,28 +711,51 @@
     </div>
     <!--弹窗：通视分析-->
     <div id="visibilityAnalysisDiv" hidden>
-      <br>
+      <br />
       <form id="visibilityAnalysisForm" class="layui-form">
         <div class="layui-form-item">
           <label class="layui-form-label">观察点</label>
-          <button id="drawViewPoint" type="button" class="layui-btn">绘制观察点
-          </button>
+          <button id="drawViewPoint" type="button" class="layui-btn">绘制观察点</button>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">被观察点</label>
           <div class="layui-input-inline">
-            <button id="drawDestinationPoint" type="button" class="layui-btn">绘制被观察点
-            </button>
+            <button id="drawDestinationPoint" type="button" class="layui-btn">绘制被观察点</button>
           </div>
         </div>
       </form>
     </div>
     <!--弹窗：沉浸漫游-->
     <div id="wandering">
-      <div class="my-form-container" style="width:335px;top:20px;">
-        <span>操作提示：使用WASD，操作小车移动。</span>    
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span>操作提示：使用WASD，操作小车移动。</span>
       </div>
     </div>
+    <!--弹窗：距离量测-->
+    <div id="length-measure">
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span>操作提示：鼠标左键绘制测量路径，右键点击确定终点，完成距离量测。</span>
+      </div>
+    </div>
+    <!--弹窗：面积量测-->
+    <div id="area-measure">
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span>操作提示：鼠标左键绘制测量范围，右键点击确定终点，完成面积量测。</span>
+      </div>
+    </div>
+    <!--弹窗：三角量测-->
+    <div id="tri-measure">
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span>操作提示：鼠标左键确定测量范围，右键结束单次三角量测。</span>
+      </div>
+    </div>
+    <!--弹窗：坡度量测-->
+    <div id="slope-measure">
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span>操作提示：鼠标左键确定测量路径，右键结束单次坡度量测。</span>
+      </div>
+    </div>
+    
     <!--tooltip：鼠标移动跟随tooltip-->
     <div class="mouse-move-tooltip" id="mouse-move-tooltip">提示文本</div>
   </main>
@@ -712,7 +786,9 @@
       var slider = layui.slider;
     })
   </script>
+  <script src="libs/jquery-3.6.0.js" type="text/javascript"></script>
   <script src="js/viewshed-analysis.js"></script>
+  <script src="js/measure-tool.js"></script>
   <script src="js/wandering.js"></script>
   <script src="js/visibility-analysis.js"></script>
   <script src="js/buffer-analysis.js"></script>
@@ -723,6 +799,7 @@
   <script src="js/model-reconstruction.js"></script>
   <script src="js/user-add-tiles.js"></script>
   <script src="js/weather-display.js"></script>
+  <script src="js/model-square.js"></script>
   <!--ThreeJS相关，渲染侧边栏模型预览窗口-->
   <script type="module">
     //flag：是否加载完成，防止在场景中加入多个模型
@@ -745,19 +822,22 @@
       //threejs相关
       import * as THREE from "three";
       import { OrbitControls } from "/libs/three.js-master/examples/jsm/controls/OrbitControls.js";
+      import { TrackballControls } from "/libs/three.js-master/examples/jsm/controls/TrackballControls.js";
       import { OBJLoader } from "/libs/three.js-master/examples/jsm/loaders/OBJLoader.js";
       import { MTLLoader } from "/libs/three.js-master/examples/jsm/loaders/MTLLoader.js";
+      import { GLTFLoader } from "/libs/three.js-master/examples/jsm/loaders/GLTFLoader.js";
       const scene = new THREE.Scene();
       //使用loadingmanager，用于为所有loader添加onload回调函数（mtl调用了preload，所以需要使用manager添加onload）
       var manager = new THREE.LoadingManager();
       manager.onLoad = objOnLoad;
 
-      //初始化loader时，添加到manager中
-      const objLoader = new OBJLoader(manager);
-      const mtlLoader = new MTLLoader(manager);
+      // //初始化loader时，添加到manager中
+      // const objLoader = new OBJLoader(manager);
+      // const mtlLoader = new MTLLoader(manager);
+      const gltfLoader = new GLTFLoader(manager);
       //画布
       const canvas = document.querySelector("#obj-canvas");
-      var canvasDiv = document.getElementById("obj-display");
+      const canvasDiv = document.getElementById("obj-display");
       canvas.setAttribute("width", 390);
       canvas.setAttribute("height", 300);
       //渲染器
@@ -773,62 +853,48 @@
       const near = 0.001; //摄像机视锥体近端面
       const far = 10000; //摄像机视锥体远端面
       const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      camera.position.z = 0.15;
-      const controls = new OrbitControls(camera, canvas);
-      controls.update();
+      camera.position.z = 5;
+      //const controls = new OrbitControls(camera, canvas);
+      const controls = new TrackballControls(camera, canvas);
+
       //光源
       const pointLight = new THREE.PointLight(0xffffff, 1.0);
       pointLight.position.set(400, 0, 0); //点光源放在x轴上
       scene.add(pointLight);
 
       //暂存引用，用于后期删除
-      var curObj = null;
-      var curMtl = null;
-
+      var curGltf=null;
       /**
        * 加载obj模型
        */
-      function loadObjWithMtl(objPath) {
-        //移除上次模型
-        scene.remove(curObj);
-        scene.remove(curMtl);
-        //控制器重置
+      function loadGltf(gltfPath) {
+        scene.remove(curGltf);
         controls.reset();
-        //加载带mtl的obj
-        mtlLoader.load(objPath + ".mtl", (mtl) => {
-          curMtl = mtl;
-          mtl.side = THREE.DoubleSide;
-          mtl.preload();
-          objLoader.setMaterials(mtl);
-          objLoader.load(objPath, (obj) => {
-            curObj = obj;
-            obj.position.set(0, 0, 0);
-            obj.scale.set(0.1, 0.1, 0.1);
-            /*防止模型变黑*/
-            obj.traverse(function (child) {
-              if (child.isMesh) {
-                child.frustumCulled = false;
-                //模型阴影
-                child.castShadow = true;
-                //模型自发光
-                child.material.emissive = child.material.color;
-                child.material.emissiveMap = child.material.map;
-              }
-            });
-            /*将模型调整到屏幕中心（原点）*/
-            //计算模型尺寸
-            var box = new THREE.Box3();
-            box.expandByObject(obj);
-            var x = (box.max.x + box.min.x) / 2;
-            var y = (box.max.y + box.min.y) / 2;
-            var z = (box.max.z + box.min.z) / 2;
-            //调整模型位置
-            obj.position.set(0 - x, 0 - y, 0 - z);
-            scene.add(obj);
-            //console.log("complete adding!");
+        gltfLoader.load(gltfPath, function (gltf) {  
+          var model = gltf.scene;
+          curGltf=model;
+          model.traverse(function (child) {
+            if (child.isMesh) {
+              child.frustumCulled = false;
+              //模型阴影
+              child.castShadow = true;
+              //模型自发光
+              child.material.emissive = child.material.color;
+              child.material.emissiveMap = child.material.map;
+            }
           });
-          renderer.render(scene, camera);
+          /*将模型调整到屏幕中心（原点）*/
+          //计算模型尺寸
+          var box = new THREE.Box3();
+          box.expandByObject(model);
+          var x = (box.max.x + box.min.x) / 2;
+          var y = (box.max.y + box.min.y) / 2;
+          var z = (box.max.z + box.min.z) / 2;
+          //调整模型位置
+          model.position.set(0 - x, 0 - y, 0 - z);
+          scene.add(model);
         });
+        renderer.render(scene, camera);
       }
 
       /**
@@ -837,7 +903,7 @@
        */
       function displayItemObj(item) {
         var objId = item.zipname;
-        var objPath = "http://127.0.0.1:8180/OBJ/" + objId + "/scene_dense_mesh_refine_texture.obj";
+        var objPath = "http://127.0.0.1:8180/GLTF/" + objId +"/"+objId+".gltf";
         //加上loading遮罩
         let loadingBox = document.getElementById("render-loading-box");
         let objCanvas = document.getElementById("obj-canvas");
@@ -845,14 +911,16 @@
         objCanvas.style.visibility = "hidden";
         //展示地理信息
         displayGeoInfo(item);
-        loadObjWithMtl(objPath);
+        //加载模型
+        loadGltf(objPath);
       }
+
       // 渲染
       function render() {
         renderer.render(scene, camera);
         requestAnimationFrame(render);
+        controls.update();
       }
-      //必要的？
       requestAnimationFrame(render);
 
       /**
@@ -889,6 +957,125 @@
         objCanvas.style.visibility = "visible";
         //flag：加载完成
         isCompleteLoading = true;
+      }
+    </script>
+  <!--模型广场预览渲染-->
+  <script type="module">
+    var table = layui.table;
+      //共享中心表格工具条
+      table.on("tool(db-table-square-all)", function (obj) {
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        if (layEvent === "more-info") {
+          //查看详情
+          displayItemObjForSquare(data);
+        } else if (layEvent === "add-to-cart") {
+          //判断data是否存在userCart内，不允许重复存入
+          if(userCart.some(item => item.zipname == data.zipname)){
+            layer.msg("该模型已在购物车中");
+            return;
+          }
+          //加入购物车
+          layer.msg("已将" + data.ModelName + "加入购物车");
+          userCart.push(data);
+        }
+      });
+
+      /*ThreeJS相关*/
+      import * as THREE from "three";
+      import { GLTFLoader } from "/libs/three.js-master/examples/jsm/loaders/GLTFLoader.js";
+      import { TrackballControls } from "/libs/three.js-master/examples/jsm/controls/TrackballControls.js";
+      var curGltf = null;
+      let loadingBox = document.getElementById("square-render-loading-box");
+      let objCanvas = document.getElementById("square-obj-canvas");
+      function init(gltfPath) {
+        //加上loading遮罩
+        loadingBox.style.display = "block";
+        objCanvas.style.visibility = "hidden";
+        //场景和loader
+        let gltfScene = new THREE.Scene();
+        let gltfLoader = new GLTFLoader();
+        //画布
+        let gltfCanvas = document.querySelector("#square-obj-canvas");
+        let gltfCanvasDiv = document.getElementById("square-obj-display");
+        // gltfCanvas.setAttribute("width", gltfCanvasDiv.offsetWidth);
+        // gltfCanvas.setAttribute("height", gltfCanvasDiv.offsetHeight);
+        //渲染器
+        let gltfRenderer = new THREE.WebGLRenderer({
+          antialias: true,
+          canvas: gltfCanvas,
+        });
+
+        gltfRenderer.setSize(gltfCanvasDiv.offsetWidth, gltfCanvasDiv.offsetHeight);
+        gltfRenderer.setClearColor(0xffffff, 0.9);
+        // gltfCanvasDiv.appendChild(gltfRenderer.domElement)
+        //相机
+        let gltfCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        gltfCamera.position.z = 5;
+        let gltfControls = new TrackballControls(gltfCamera, gltfCanvas);
+        //光源
+        let gltfPointLight = new THREE.PointLight(0xffffff, 1.0);
+        gltfPointLight.position.set(400, 0, 0); //点光源放在x轴上
+        gltfScene.add(gltfPointLight);
+        /**
+         * 加载gltf模型
+         */
+        gltfScene.remove(curGltf);
+        gltfControls.reset();
+        gltfLoader.load(gltfPath, function (gltf) {
+          var model = gltf.scene;
+          model.traverse(function (child) {
+            if (child.isMesh) {
+              child.frustumCulled = false;
+              //模型阴影
+              child.castShadow = true;
+              //模型自发光
+              child.material.emissive = child.material.color;
+              child.material.emissiveMap = child.material.map;
+            }
+          });
+          /*将模型调整到屏幕中心（原点）*/
+          //计算模型尺寸
+          var box = new THREE.Box3();
+          box.expandByObject(model);
+          var x = (box.max.x + box.min.x) / 2;
+          var y = (box.max.y + box.min.y) / 2;
+          var z = (box.max.z + box.min.z) / 2;
+          //调整模型位置
+          model.position.set(0 - x, 0 - y, 0 - z);
+          //console.log("complete adding!");
+          gltfScene.add(model);
+          //去除loading遮罩
+          loadingBox.style.display = "none";
+          objCanvas.style.visibility = "visible";
+        });
+        gltfRenderer.render(gltfScene, gltfCamera);
+        // 渲染
+        function renderGltf() {
+          gltfRenderer.render(gltfScene, gltfCamera);
+          requestAnimationFrame(renderGltf);
+          gltfControls.update();
+        }
+        requestAnimationFrame(renderGltf);
+      }
+      function displayItemObjForSquare(item) {
+        var gltfId = item.zipname;
+        var gltfPath = "http://127.0.0.1:8180/public/GLTF/" + gltfId + "/"+gltfId+".gltf"; //打开模型展示窗口
+        layer.open({
+          title: "模型预览",
+          type: 1,
+          shade: 0.6,
+          area: ["40%", "60%"],
+          content: $("#square-obj-display"),
+          success: function (layero, index) {
+            //由于弹窗还没产生，需要在弹窗出来后再初始化相关变量！
+            init(gltfPath);
+          },
+          cancel: function (index, layero) {
+            $("#square-obj-display").hide(); //防止关不掉
+          },
+        });
       }
     </script>
 </body>

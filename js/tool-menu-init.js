@@ -54,10 +54,10 @@ function hideMenu() {
 /*窗体展示 */
 function basicToolSelect() {
     layer.open({
-        title: "基础工具箱",
+        title: "测量工具箱",
         type: 1,
         shade: 0,
-        area: ["470px", "300px"],
+        area: ["470px", "180px"],
         content: $("#basic-tool-box"),
         success: function (layero, index) {
             $(".tool-box-item").on("click", function () {
@@ -76,7 +76,7 @@ function analysisToolSelect() {
         title: "空间分析工具箱",
         type: 1,
         shade: 0,
-        area: ["470px", "300px"],
+        area: ["470px", "180px"],
         content: $("#analysis-tool-box"),
         success: function (layero, index) {
             $(".tool-box-item").on("click", function () {

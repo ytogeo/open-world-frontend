@@ -345,3 +345,15 @@ body {
 .layui-table, .layui-table-view {
     margin: 0px 0;
 }
+
+.layui-table-checked{
+    background-color: rgba(65, 138, 194, 0.393);
+}
+
+.layui-table-checked.layui-table-hover{
+    background-color: rgba(49, 102, 143, 0.393);
+}
+
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even) {
+    background-color: rgba(64, 132, 185, 0.393);
+}

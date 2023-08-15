@@ -3,6 +3,7 @@
  */
 
 const pinDataSource = new Map();
+let myUpload = new Array();
 /**
  * 初始化侧边栏用户界面数据库
  */
@@ -120,7 +121,7 @@ function initUserTable() {
                 layer.confirm('要将模型上传到共享广场吗？', {
                     title: "上传至广场",
                 }, function (index) {
-                    //待补
+                    uploadToSquare(data);
                     layer.close(index);
                 });
             }
@@ -294,5 +295,16 @@ function displayStatistics() {
             maxmin: false,
             closeBtn: 2,
         });
+    });
+}
+
+function uploadToSquare(data) {
+    $.post(myserver + '/wxcloud-add-us2sq', data, function (res) {
+        if (res == 0) {
+            myUpload.push(data);
+            layer.msg('上传成功');
+        } else {
+            layer.msg('上传失败');
+        }
     });
 }

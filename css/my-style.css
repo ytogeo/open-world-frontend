@@ -20,7 +20,6 @@ input[type="file"] {
 
 /* 文件选择框的样式 */
 .file-button {
-
     display: flex;
     padding: 8px 20px;
     margin: auto;
@@ -106,7 +105,6 @@ input[type="file"] {
     background-color: rgba(5, 28, 59, 0.7);
     position: absolute;
     z-index: 9;
-
 }
 
 .header_center {
@@ -349,10 +347,16 @@ input[type="file"] {
     background-size: 21px;
 }
 
-#display-model-pin-button {
+#home-button {
     bottom: 26%;
     margin-left: 0px;
 }
+
+#display-model-pin-button {
+    bottom: 31%;
+    margin-left: 0px;
+}
+
 
 /*登录界面*/
 .user-icon-container {
@@ -383,7 +387,7 @@ input[type="file"] {
     height: 0;
     width: 121px;
     background-color: rgba(8, 41, 83, 0.9);
-    z-index: 9999;
+    z-index: 99999;
     /*子容器宽度用px定死的时候，需要设置overflow hidden才能和父容器一起隐藏*/
     overflow: hidden !important;
     transition: height 0.2s;
@@ -391,7 +395,7 @@ input[type="file"] {
 
 .tool-menu-active {
     /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
-    height: 120px;
+    height: 80px;
 }
 
 /*hover伪类，实现鼠标悬停特效*/
@@ -419,14 +423,24 @@ input[type="file"] {
     background-size: cover;
 }
 
+.tool-menu>.tool-menu-item>.menu-item-logo-measure {
+    vertical-align: middle;
+    width: 17px;
+    height: 17px;
+    background-image: url("../image/measure_tool_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
 .tool-menu>.tool-menu-item>.menu-item-logo-analysis {
     vertical-align: middle;
     width: 17px;
-    height: 20px;
+    height: 17px;
     background-image: url("../image/analysis_tool_logo.png");
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 20px;
 }
 
 .tool-menu>.tool-menu-item>.menu-item-text {
@@ -445,6 +459,16 @@ input[type="file"] {
     grid-template-rows: repeat(3, 110px);
 }
 
+.measure-tool-container {
+    grid-template-columns: repeat(4, 110px);
+    grid-template-rows: repeat(1, 100px);
+    overflow: hidden;
+}
+.analysis-tool-container {
+    grid-template-columns: repeat(4, 110px);
+    grid-template-rows: repeat(1, 100px);
+    overflow: hidden;
+}
 .tool-box-container>.tool-box-item {
     background-color: transparent;
     text-align: center;
@@ -470,12 +494,39 @@ input[type="file"] {
     font-size: 13.5px;
 }
 
-.icon-measure {
+.icon-measure-length {
     width: 70px;
     height: 70px;
     /* margin-left: 18px; */
-    background-image: url("../image/measure_tool_logo.png");
-    background-color: chocolate;
+    background-image: url("../image/length_measure_tool_logo.png");
+    background-color: rgb(225, 180, 65);
+}
+
+.icon-measure-area {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/area_measure_tool_logo.png");
+    background-size: 39px;
+    background-color: rgba(121, 228, 205, 0.853);
+}
+
+.icon-measure-tri {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/tri_measure_tool_logo.png");
+    background-size: 39px;
+    background-color: rgb(246, 164, 96);
+}
+
+.icon-measure-slope {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/slope_measure_tool_logo.png");
+    background-size: 39px;
+    background-color: rgb(101, 204, 233);
 }
 
 .icon-buffer-analysis {

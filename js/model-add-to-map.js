@@ -411,7 +411,7 @@ function initSliders(params) {
  * @param {*} lat 
  */
 function initGltfToMap(id, modelname, lng, lat) {
-    var path = "http://127.0.0.1:8180/GLTF/" + id + "/scene_dense_mesh_refine_texture.gltf";
+    var path = "http://127.0.0.1:8180/GLTF/" + id + "/" + id + ".gltf";
     var model = viewer.entities.add({
         id: id,
         name: modelname,
@@ -457,7 +457,7 @@ function initGltfFromDb(data) {
     let modelLng = item["modellng"];
     let modelLat = item["modellat"];
     //加入模型
-    var path = "http://127.0.0.1:8180/GLTF/" + id + "/scene_dense_mesh_refine_texture.gltf";
+    var path = "http://127.0.0.1:8180/GLTF/" + id + "/" + id + ".gltf";
     var model = new Cesium.Entity({
         id: id,
         name: modelName,

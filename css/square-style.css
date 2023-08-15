@@ -1,0 +1,110 @@
+#square {
+    display: none;
+    width: auto;
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: auto;
+    overflow: hidden;
+    background-color: rgba(6, 32, 68, 0.9);
+}
+
+#aside-content-square {
+    display: inline-block;
+    top: 80px;
+    /*防止塌陷*/
+    vertical-align: top;
+    width: 15%;
+    height: 100%;
+}
+
+.model-square-list {
+    position: relative;
+    top: 90px;
+    width: 95%;
+    height: 86.5%;
+    margin: auto;
+    /* border: 1px solid rgba(255, 255, 255, 0.7); */
+}
+
+#render-loading-box-square {
+    position: absolute;
+    display: none;
+    top: -1px;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    width: 392px;
+    height: 302px;
+    background: url("../image/loading_rendering.gif");
+    background-color: rgba(190, 190, 190, 0.35);
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+    line-height: 370px;
+    color: #acd0e4;
+    font-size: 13px;
+}
+
+
+.info-head-square {
+    position: relative;
+    height: 35px;
+    text-align: center;
+    background-color: rgba(22, 137, 204, 0.768);
+    color: #c5e4f0;
+}
+
+#model-square-list-container {
+    position: relative;
+    top: 10px;
+    height: 92.5%;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.user-square-button {
+    width: 100%;
+    clear: both;
+}
+
+
+
+.square-obj-display {
+    display: none;
+    margin: auto;
+    width: 99%;
+    height: 99%;
+    background-color: rgba(40, 45, 56, 0.797);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    overflow: hidden;
+}
+
+#square-render-loading-box {
+    position: absolute;
+    /* display: none; */
+    top: -1px;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    width: 99%;
+    height: 99%;
+    background: url("../image/loading_rendering.gif");
+    background-color: rgba(85, 85, 85, 0.35);
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+    line-height: 330px;
+    color: #acd0e4;
+    font-size: 13px;
+}
+
+#my-cart {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+#my-cart-container {
+    width: 100%;
+    height: 100%;
+}

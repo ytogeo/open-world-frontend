@@ -75,6 +75,7 @@ function addPinToMap(pinDataSource) {
     //点击事件
     handlerOfClickPin = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     handlerOfClickPin.setInputAction(clickPin, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    console.log(viewer.entities)
 }
 /**
  * 从地图中移除Pin

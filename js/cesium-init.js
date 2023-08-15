@@ -123,3 +123,14 @@ document.getElementById("choose-layer-button").addEventListener('click', functio
 //构建pinBuilder
 const pinBuilder = new Cesium.PinBuilder();
 
+function homeButtonClick(){
+    console.log(1)
+    viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(lon, lat, 2000.0),
+        orientation: {
+            pitch: Cesium.Math.toRadians(-90.0),
+            roll: 0
+        }
+    });
+}
+

@@ -146,7 +146,7 @@ class Car {
         //注销监听
         $(document).off('keydown');
         $(document).off('keyup');
-        viewer.clock.onTick._listeners = [];
+        viewer.clock.onTick._listeners[2] = null;
         //移除小车
         viewer.entities.remove(this.entity);
         //视角解锁
