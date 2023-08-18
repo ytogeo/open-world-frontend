@@ -109,11 +109,11 @@ function initUserTable() {
                 layer.confirm('要将模型添加到地图吗？', {
                     title: "添加到地图",
                 }, function (index) {
-                    //判断是否已经添加过
-                    if (modelManagerDic.has(data["zipname"])) {
-                        layer.msg("不可重复添加模型");
-                        return;
-                    }
+                    // //判断是否已经添加过
+                    // if (modelManagerDic.has(data["zipname"])) {
+                    //     layer.msg("不可重复添加模型");
+                    //     return;
+                    // }
                     //提示信息
                     layer.msg('加载中，请稍后');
                     setTimeout(function () {
@@ -246,6 +246,7 @@ function viewModel_info(item) {
     $("#model-id-show").val(item["zipname"]);
     $("#model-name-show").val(item["ModelName"]);
     $("#model-info-show").val(item["ModelInfo"]);
+    $("#modelType-show input[name='modelType']").removeAttr("checked"); //清除上一次选择
     $("#modelType-show input[name='modelType'][value=" + item["ModelType"] + "]").attr("checked", true);
     $("#postname-show").val(item["PostName"]);
     $("#city-show").val(item["city"]);

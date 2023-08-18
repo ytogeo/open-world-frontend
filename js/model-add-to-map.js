@@ -7,6 +7,7 @@ let curModelManager = null; //储存当前操作的模型管理器
 let sliderList = document.getElementsByClassName("adjust-slide"); //获取所有滑块
 let modelManagerDic = new Map(); //模型管理器字典，key是id，value是ModelManager实例
 let adjustSelections = ['lng', 'lat', 'height', 'rx', 'ry', 'rz', 'scale']; //params对象的参数名，用于按顺序（下标i）查找对应的成员变量名
+
 /**
  * 模型管理器：储存模型（entity）及其对应的变换参数（滑块值）
  */
@@ -185,9 +186,8 @@ function checkBoxChangeVisibility(obj) {
  * @param {*} params 
  */
 function adjustModel(modelManager, params) {
-
     let entity = modelManager.model;
-    console.log(entity.position)
+    //console.log(entity.position)
     let modelLng = parseFloat(modelManager.modelLng);
     let modelLat = parseFloat(modelManager.modelLat);
     //调整位置：平移
@@ -411,6 +411,8 @@ function initSliders(params) {
  * @param {*} lng 
  * @param {*} lat 
  */
+
+
 function initGltfToMap(id, modelname, lng, lat) {
     var path = "http://127.0.0.1:8180/GLTF/" + id + "/" + id + ".gltf";
     var model = viewer.entities.add({
@@ -466,7 +468,7 @@ function initGltfFromDb(data) {
         model: {
             uri: path,
             scale: 10,
-        }
+        },
     })
     //初始化每个模型的同时，创建对应的模型管理器
     let curModelManagerForInit = new ModelManager(model, modelLng, modelLat);

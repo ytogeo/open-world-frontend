@@ -36,15 +36,17 @@ function startLoadAnimation() {
         content: '建模中',
         success: function (layero) {
             layero.find('.layui-layer-content').css({
-                'padding-top': '39px',
                 'width': '42px',
                 'height': 'auto',
-                "color": "#FFFFFF",
-                "background-color": "rgba(0,0,0,0)",
+                "color": "#D6D6D6",
+                "background-color": "transparent",
             });
+            document.getElementById('layui-layer1').style.backgroundColor = "transparent";
+            document.getElementById('layui-layer1').style.boxShadow = "none";
         }
     });
 }
+
 /**
  * 时间选择器
  */

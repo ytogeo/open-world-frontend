@@ -89,11 +89,12 @@ function initModelSquare() {
                     {
                         field: 'PostName',
                         title: '提交人',
+                        width: 110,
                     },
                     {
                         field: 'city',
                         title: '市名',
-                        width: 100
+                        width: 90,
                     },
                     {
                         field: 'location',
@@ -125,12 +126,12 @@ function initModelSquare() {
                 ]
             ],
             page: {
-                limit: 10,
-                limits: [10, 20, 50, 100]
+                limit: 15,
+                limits: [15, 20, 50, 100]
             },
             done: function (res, curr, count) {
                 model_data = res.data;
-                $("table").css("width", "100%");
+                
             }
         });
 

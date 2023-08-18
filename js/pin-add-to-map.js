@@ -35,9 +35,9 @@ function switchDisplayState() {
  */
 function addPinToMap(pinDataSource) {
     //定义三种模型对应的Pin样式
-    let pinURIOfBuilding = pinBuilder.fromMakiIconId("building", Cesium.Color.GOLDENROD, 40);
-    let pinURIOfStatue = pinBuilder.fromMakiIconId("landmark", Cesium.Color.DODGERBLUE, 40);
-    let pinURIOfOthers = pinBuilder.fromMakiIconId("natural", Cesium.Color.SEAGREEN, 40);
+    let pinURIOfBuilding = pinBuilder.fromMakiIconId("building", Cesium.Color.GOLDENROD, 35);
+    let pinURIOfStatue = pinBuilder.fromMakiIconId("landmark", Cesium.Color.DODGERBLUE, 35);
+    let pinURIOfOthers = pinBuilder.fromMakiIconId("natural", Cesium.Color.SEAGREEN, 35);
     let currentPinURI = null;
     //遍历数据源
     for (let i of pinDataSource.values()) {
@@ -49,7 +49,7 @@ function addPinToMap(pinDataSource) {
             case "雕塑":
                 currentPinURI = pinURIOfStatue;
                 break;
-            case "其他物件":
+            case "其他地物":
                 currentPinURI = pinURIOfOthers;
                 break;
             default:
@@ -89,6 +89,9 @@ function removePinFromMap(pinArray) {
     //在表格中重新加载所有数据
     let table = layui.table;
     table.reloadData('db-table', {
+        page: {
+            curr: 1 //重新从第 1 页开始
+        },
         url: myserver + '/wxcloud_query',
     })
     //移除点击事件
@@ -123,6 +126,9 @@ function clickPin(e) {
         //根据pickItem的id条件查找
         let table = layui.table;
         table.reloadData('db-table', {
+            page: {
+                curr: 1 //重新从第 1 页开始
+            },
             url: myserver + '/wxcloud_dify_query', //条件查询接口
             where: {
                 zipname: pickItem['id'],
