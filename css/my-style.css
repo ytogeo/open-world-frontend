@@ -395,7 +395,7 @@ input[type="file"] {
 
 .tool-menu-active {
     /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
-    height: 80px;
+    height: 120px;
 }
 
 /*hover伪类，实现鼠标悬停特效*/
@@ -443,6 +443,16 @@ input[type="file"] {
     background-size: 20px;
 }
 
+.tool-menu>.tool-menu-item>.menu-item-logo-fire {
+    vertical-align: middle;
+    width: 17px;
+    height: 17px;
+    background-image: url("../image/fire_logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 17px;
+}
+
 .tool-menu>.tool-menu-item>.menu-item-text {
     vertical-align: middle;
     font-size: 14px;
@@ -457,6 +467,7 @@ input[type="file"] {
     padding: 10px;
     grid-template-columns: repeat(4, 110px);
     grid-template-rows: repeat(3, 110px);
+    
 }
 
 .measure-tool-container {
@@ -467,7 +478,8 @@ input[type="file"] {
 
 .analysis-tool-container {
     grid-template-columns: repeat(4, 110px);
-    grid-template-rows: repeat(1, 100px);
+    grid-template-rows: repeat(2, 100px);
+    grid-gap:15px 0px;
     overflow: hidden;
 }
 
@@ -562,7 +574,16 @@ input[type="file"] {
     /* margin-left: 18px; */
     background-image: url("../image/clip_analysis_tool_logo.png");
     background-size: 38px;
-    background-color: rgba(164, 216, 250, 0.922);
+    background-color: rgba(216, 197, 247, 0.922);
+}
+
+.icon-section-analysis {
+    width: 70px;
+    height: 70px;
+    /* margin-left: 18px; */
+    background-image: url("../image/section_analysis_logo.png");
+    background-size: 35px;
+    background-color: rgba(121, 196, 245, 0.922);
 }
 
 /*

@@ -76,7 +76,7 @@ function analysisToolSelect() {
         title: "空间分析工具箱",
         type: 1,
         shade: 0,
-        area: ["470px", "180px"],
+        area: ["470px", "290px"],
         content: $("#analysis-tool-box"),
         success: function (layero, index) {
             $(".tool-box-item").on("click", function () {

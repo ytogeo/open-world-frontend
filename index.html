@@ -127,6 +127,8 @@
           class="menu-item-text">测量工具</span></div>
       <div class="tool-menu-item" onclick="analysisToolSelect()"><i class="menu-item-logo-analysis"></i><span
           class="menu-item-text">空间分析</span></div>
+      <div class="tool-menu-item" onclick="displayFireSimulateWindow()"><i class="menu-item-logo-fire"></i><span
+          class="menu-item-text">消防模拟</span></div>
     </div>
   </header>
 
@@ -302,9 +304,17 @@
           <span class="tool-box-item-text">天际线分析</span>
         </div>
         <div class="tool-box-item" onclick="displaySectionWindow()">
-          <div class="tool-box-item-icon icon-clip-analysis "></div>
+          <div class="tool-box-item-icon icon-section-analysis"></div>
           <span class="tool-box-item-text">剖面分析</span>
         </div>
+        <div class="tool-box-item" onclick="displayClipWindow()">
+          <div class="tool-box-item-icon icon-clip-analysis "></div>
+          <span class="tool-box-item-text">剖切分析</span>
+        </div>
+        <!-- <div class="tool-box-item" onclick="displayClipWindow()">
+          <div class="tool-box-item-icon icon-clip-analysis "></div>
+          <span class="tool-box-item-text">淹没分析</span>
+        </div> -->
       </div>
     </div>
     <!--弹窗：天气效果-->
@@ -769,10 +779,46 @@
         </div>
       </div>
     </div>
+    <!--弹窗：剖切分析-->
+    <div id="clip-analysis" style="overflow: hidden;">
+      <div class="my-form-container">
+        <div class="my-form-item">
+          <div class="my-form-label">剖切模型</div>
+          <div class="my-form-input">
+            <select class="my-select" id="clip-model-list" name="clip-model-list">
+              <option value="">请选择待剖切模型</option>
+            </select>
+          </div>
+        </div>
+        <div class="my-form-item">
+          <div class="my-form-label">剖切位置</div>
+          <div class="my-form-input">
+            <div id="clip-slider" style="width:300px"></div>
+          </div>
+        </div>
+        <div class="my-form-item">
+          <div class="my-form-label">分析操作</div>
+          <div class="my-form-input">
+            <button id="draw-clipline" class="layui-btn layui-btn-sm" onclick="drawLineForClip()">绘制剖面</button>
+            <button id="horizontal-clip" class="layui-btn layui-btn-sm layui-btn-disabled"
+              onclick="getLeftClipPlane();clipSlider.setValue(0)">左侧剖切</button>
+            <button id="vertical-clip" class="layui-btn layui-btn-sm layui-btn-disabled"
+              onclick="getRightClipPlane();clipSlider.setValue(0)">右侧剖切</button>
+            <button id="clear-clipline" class="layui-btn layui-btn-sm" onclick="stopClip()">清除</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--弹窗：沉浸漫游-->
     <div id="wandering">
       <div class="my-form-container" style="width: 335px; top: 20px">
         <span id="wander-text">操作提示：点击场景，在对应位置放置小车。</span>
+      </div>
+    </div>
+    <!--弹窗：消防模拟-->
+    <div id="fire-simulate">
+      <div class="my-form-container" style="width: 335px; top: 20px">
+        <span id="fire-simulate-text">操作提示：左键点击场景，选择火灾发生位置。</span>
       </div>
     </div>
     <!--弹窗：距离量测-->
@@ -846,7 +892,8 @@
   <script src="js/model-square.js"></script>
   <script src="js/skyline.js"></script>
   <script src="js/section-analysis.js"></script>
-  <!-- <script src="js/clip-model.js"></script> -->
+  <script src="js/fire-simulate.js"></script>
+  <script src="js/clip-model.js"></script>
   <!--ThreeJS相关，渲染侧边栏模型预览窗口-->
   <script type="module">
     //flag：是否加载完成，防止在场景中加入多个模型

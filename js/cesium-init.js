@@ -28,6 +28,7 @@ viewer = new Cesium.Viewer("cesium-container", {
     terrainProvider: Cesium.createWorldTerrain({
         requestWaterMask: true,
     }),
+    shouldAnimate: true,
     //Mapbox自定义样式地图图层
     imageryProvider: new Cesium.MapboxStyleImageryProvider({
         username: "houchaogis",
@@ -123,7 +124,7 @@ document.getElementById("choose-layer-button").addEventListener('click', functio
 //构建pinBuilder
 const pinBuilder = new Cesium.PinBuilder();
 
-function homeButtonClick(){
+function homeButtonClick() {
     viewer.camera.setView({
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, 2000.0),
         orientation: {
@@ -132,4 +133,3 @@ function homeButtonClick(){
         }
     });
 }
-

@@ -6,6 +6,7 @@ const myserver = "http://127.0.0.1:8081"
 let curModelManager = null; //储存当前操作的模型管理器
 let sliderList = document.getElementsByClassName("adjust-slide"); //获取所有滑块
 let modelManagerDic = new Map(); //模型管理器字典，key是id，value是ModelManager实例
+let clippingPlanesDic = new Map();
 let adjustSelections = ['lng', 'lat', 'height', 'rx', 'ry', 'rz', 'scale']; //params对象的参数名，用于按顺序（下标i）查找对应的成员变量名
 
 /**
@@ -414,6 +415,13 @@ function initSliders(params) {
 
 
 function initGltfToMap(id, modelname, lng, lat) {
+    var clippingPlanes = new Cesium.ClippingPlaneCollection({
+        planes: [
+
+        ],
+        edgeColor: Cesium.Color.RED,
+        edgeWidth: 1
+    });
     var path = "http://127.0.0.1:8180/GLTF/" + id + "/" + id + ".gltf";
     var model = viewer.entities.add({
         id: id,
@@ -422,8 +430,11 @@ function initGltfToMap(id, modelname, lng, lat) {
         model: {
             uri: path,
             scale: 10,
+            clippingPlanes: clippingPlanes
         }
     })
+    //将id及其对应的剖切面存入字典，方便之后的剖切操作
+    clippingPlanesDic.set(id, clippingPlanes);
     //初始化每个模型的同时，创建对应的模型管理器，并设为当前操作的管理器
     curModelManager = new ModelManager(model, lng, lat);
     //放入字典（map）储存，id与ModelManager一一对应
@@ -451,6 +462,13 @@ function initModelOnMap() {
  * @param {*} data 
  */
 function initGltfFromDb(data) {
+    var clippingPlanes = new Cesium.ClippingPlaneCollection({
+        planes: [
+
+        ],
+        edgeColor: Cesium.Color.RED,
+        edgeWidth: 1
+    });
     let item = JSON.parse(data);
     let id = item["zipname"];
     if (modelManagerDic.has(id)) {
@@ -468,8 +486,11 @@ function initGltfFromDb(data) {
         model: {
             uri: path,
             scale: 10,
+            clippingPlanes: clippingPlanes
         },
     })
+    //将id及其对应的剖切面存入字典，方便之后的剖切操作
+    clippingPlanesDic.set(id, clippingPlanes);
     //初始化每个模型的同时，创建对应的模型管理器
     let curModelManagerForInit = new ModelManager(model, modelLng, modelLat);
     //获得模型调整参数。Json传回来的是字符串！要参与调整运算的得是数字！！如果不转成Number会导致卡死

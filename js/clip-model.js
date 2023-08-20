@@ -4,20 +4,45 @@
  */
 let mouseEventManagerForClip = null;
 let entitiesForClip = new Array();
-
+let isLeftClip = false; //判断现在是左侧还是右侧剖切
+let clipSlider = null; //滑块
 
 function displayClipWindow() {
+    //滑块渲染
+    layui.use(function () {
+        var slider = layui.slider;
+        clipSlider = slider.render({
+            value: 0,
+            max: 200,
+            min: -200,
+            step: 1,
+            elem: '#clip-slider',
+            input: true,
+            change: function (distance) {
+                if (distance == 0) {
+                    return; //防止在什么都没有的时候调用了后面的东西
+                }
+                //判断现在是左侧还是右侧剖切
+                if (isLeftClip) {
+                    getLeftClipPlane(distance);
+                    return;
+                }
+                getRightClipPlane(distance);
+            }
+        })
+    });
+    //窗体
     layer.open({
         title: ['剖切分析', 'height:30px;font-size:14px;line-height:30px;'],
         type: 1,
         shade: 0,
-        area: ["450px", "150px"],
+        area: ["450px", "190px"],
         offset: ['100px', '15px'],
         content: $("#clip-analysis"),
         success: function (layero, index) {
+            initClipModelList();
             layero[0].childNodes[2].childNodes[0].style.top = "-8px";
             layero[0].childNodes[2].childNodes[0].style.right = "-5px";
-            initClipModelList();
             //构造几何绘制控制对象
             entityControllerForClip = new CesiumZondy.Manager.EntityController({
                 viewer: viewer
@@ -28,17 +53,20 @@ function displayClipWindow() {
             });
         },
         cancel: function () {
-            stopSkyline();
+            stopClip();
         }
     })
 }
-displayClipWindow()
+
 /**
  * 初始化待剖析模型列表（根据当前地图上的模型，动态渲染select元素）
  */
 function initClipModelList() {
     //下拉框select元素
     let modelList = document.getElementById("clip-model-list");
+    if (modelList.children.length > 1) { //子元素是chidren不是childNodes！
+        return; //已添加过的话，禁止重复添加
+    }
     //遍历模型管理器字典
     modelManagerDic.forEach(function (value, key) {
         //新建option元素
@@ -49,6 +77,7 @@ function initClipModelList() {
         modelList.appendChild(newOption);
     });
 }
+
 /**
  * 为生成剖切面绘制线
  */
@@ -150,38 +179,98 @@ function displayHintTextOfClip() {
     mapDiv.addEventListener('mouseout', hideTooltipForClip);
 }
 
-/**
- * 根据绘制的线，构造水平剖切面
- */
+
 let curClippingPlanes = null;
-
-
-
-function getHorizontalClipPlane() {
+/**
+ * 根据绘制的线，构造右侧剖切面
+ */
+function getRightClipPlane(distance = 0.0) {
+    isLeftClip = false;
     //去除该次绘制的线
     viewer.entities.remove(curLine);
     //获取绘制的线的坐标数组
     let pointArray = curLine.polyline.positions.getValue();
     //获取剖切面作用的模型id
     let modelId = document.getElementById("clip-model-list").value;
-    let model = viewer.entities.getById(modelId)
+    //计算绘制的线相对于该模型的法向量
+    let normal = getNormal(modelId, pointArray, 1);
     //获得当前模型对应的剖切面集合
-    curClippingPlanes = clippingPlanesDic.get(modelId)
-    console.log(model)
+    curClippingPlanes = clippingPlanesDic.get(modelId);
+    curClippingPlanes.removeAll();
+    //添加剖切面
+    let plane = new Cesium.ClippingPlane(normal, distance)
+    curClippingPlanes.add(plane);
+}
+
+function getNormal(modelId, pointArray, direction) {
+    //局部坐标系的原点
+    let origin = modelManagerDic.get(modelId).model.position.getValue();
+    //计算局部坐标系到世界坐标系的变换矩阵
+    let transformToWorld = Cesium.Transforms.eastNorthUpToFixedFrame(origin);
+    //通过矩阵求逆，计算世界坐标系到局部坐标系的变换矩阵
+    let transform = Cesium.Matrix4.inverse(transformToWorld, new Cesium.Matrix4());
+    //加上Z轴旋转的影响，继续计算变换矩阵
+    let radian = Cesium.Math.toRadians(Number(modelManagerDic.get(modelId).rz) * 3.6);
+    let rotz = Cesium.Matrix3.fromRotationZ(-radian);
+    let rotationZ = Cesium.Matrix4.fromRotationTranslation(rotz);
+    Cesium.Matrix4.multiply(transform, rotationZ, transform);
+    //根据变换矩阵，计算每个点在局部坐标系中的新坐标
+    let newPointArray = new Array();
+    for (let i = 0; i < pointArray.length; i++) {
+        newPointArray.push(Cesium.Matrix4.multiplyByPoint(transform, pointArray[i], new Cesium.Cartesian3()))
+    }
+    //两点间的向量
+    let vector = Cesium.Cartesian3.subtract(newPointArray[1], newPointArray[0], new Cesium.Cartesian3())
+    //方向
+    if (direction == 1) {
+        // 定义一个垂直向上的向量up
+        direction = new Cesium.Cartesian3(0, 0, 10)
+    } else if (direction == -1) {
+        // 定义一个垂直向下的向量right
+        direction = new Cesium.Cartesian3(0, 0, -10)
+    }
+    //计算法向量
+    let normal = Cesium.Cartesian3.cross(vector, direction, new Cesium.Cartesian3())
+    //归一化
+    return Cesium.Cartesian3.normalize(normal, normal)
 }
 /**
- * 根据绘制的线，构造垂直剖切面
+ * 根据绘制的线，构造左侧剖切面
  */
-function getVerticalClipPlane() {
-
+function getLeftClipPlane(distance = 0.0) {
+    isLeftClip = true;
+    //去除该次绘制的线
+    viewer.entities.remove(curLine);
+    //获取绘制的线的坐标数组
+    let pointArray = curLine.polyline.positions.getValue();
+    //获取剖切面作用的模型id
+    let modelId = document.getElementById("clip-model-list").value;
+    //计算绘制的线相对于该模型的法向量
+    let normal = getNormal(modelId, pointArray, -1);
+    //获得当前模型对应的剖切面集合
+    curClippingPlanes = clippingPlanesDic.get(modelId);
+    curClippingPlanes.removeAll();
+    //添加剖切面
+    let plane = new Cesium.ClippingPlane(normal, distance)
+    curClippingPlanes.add(plane);
 }
 /**
  * 结束剖切，清除剖切线/面
  */
 function stopClip() {
+    clipSlider.setValue(0)
     //清除剖切线
     viewer.entities.remove(curLine);
     curLine = null;
+    //清除剖切面
+    if (curClippingPlanes != null) {
+        curClippingPlanes.removeAll();
+    }
+    curClippingPlanes = null;
+    //清除所有剖切面
+    for (let key in clippingPlanesDic) {
+        clippingPlanesDic[key].removeAll();
+    }
     //按钮状态复原
     document.getElementById("draw-clipline").classList.remove("layui-btn-disabled");
     document.getElementById("horizontal-clip").classList.add("layui-btn-disabled");

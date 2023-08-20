@@ -5,7 +5,7 @@
 class Car {
     entity = null;
     speed = 0.6;
-    position = Cesium.Cartesian3.fromDegrees(114.612844, 30.462312, 18);
+    position = null;
     cameraX = 0;
     cameraY = 1;
     //方向
@@ -15,14 +15,11 @@ class Car {
         moveRight: false,
         moveLeft: false,
     }
-    hpr = new Cesium.HeadingPitchRoll(
-        Cesium.Math.toRadians(90), //将小车的头部朝向设置为正南方向
-        Cesium.Math.toRadians(0),
-        Cesium.Math.toRadians(0)
-    );
-    constructor(model, coor) {
+    hpr = null;
+    constructor(model, coor, hpr) {
         this.entity = viewer.entities.add(model);
         this.position = coor;
+        this.hpr = hpr;
     }
     /**
      * 根据按键的keyCode，改变对应方向的状态
@@ -228,17 +225,18 @@ function activeWandering(e) {
     mapDiv.removeEventListener('mouseout', hideTooltipForWander);
     //移除点击事件
     handlerForCar.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    let hpr = new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(90), //将小车的头部朝向设置为正南方向
+        Cesium.Math.toRadians(0),
+        Cesium.Math.toRadians(0)
+    );
     //创建一个小车模型
     let carModel = {
         id: 'a model car',
         position: coor,
         orientation: Cesium.Transforms.headingPitchRollQuaternion(
             coor,
-            new Cesium.HeadingPitchRoll(
-                Cesium.Math.toRadians(90), //将小车的头部朝向设置为正南方向
-                Cesium.Math.toRadians(0),
-                Cesium.Math.toRadians(0)
-            )
+            hpr,
         ),
         model: {
             uri: "data/CesiumTruck.glb",
@@ -247,7 +245,7 @@ function activeWandering(e) {
         }
     }
     //创建漫游用的小车
-    car = new Car(carModel, coor);
+    car = new Car(carModel, coor, hpr);
     car.active();
     viewer.flyTo(car.entity);
     //更新提示文字
@@ -265,12 +263,6 @@ function inactiveWandering() {
     mapDiv.removeEventListener('mouseout', hideTooltipForWander);
     //移除点击事件
     handlerForCar.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
-    //注销小车
-    if (car == null) {
-        return;
-    }
-    car.inactive();
-    car = null;
     //修改摄像头位置（初始）
     viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, 2000.0),
@@ -281,4 +273,10 @@ function inactiveWandering() {
     });
     //更新提示文字
     document.getElementById("wander-text").innerHTML = "操作提示：点击场景，在对应位置放置小车。";
+    //注销小车
+    if (car == null) {
+        return;
+    }
+    car.inactive();
+    car = null;
 }
