@@ -37,7 +37,9 @@ function addPinToMap(pinDataSource) {
     //定义三种模型对应的Pin样式
     let pinURIOfBuilding = pinBuilder.fromMakiIconId("building", Cesium.Color.GOLDENROD, 35);
     let pinURIOfStatue = pinBuilder.fromMakiIconId("landmark", Cesium.Color.DODGERBLUE, 35);
-    let pinURIOfOthers = pinBuilder.fromMakiIconId("natural", Cesium.Color.SEAGREEN, 35);
+    let pinURIOfStone = pinBuilder.fromMakiIconId("monument", Cesium.Color.DARKGRAY, 35);
+    let pinURIOfMovable = pinBuilder.fromMakiIconId("triangle", Cesium.Color.SEAGREEN, 35);
+    let pinURIOfImmovable = pinBuilder.fromMakiIconId("triangle-stroked", Cesium.Color.DARKSEAGREEN, 35);
     let currentPinURI = null;
     //遍历数据源
     for (let i of pinDataSource.values()) {
@@ -49,8 +51,14 @@ function addPinToMap(pinDataSource) {
             case "雕塑":
                 currentPinURI = pinURIOfStatue;
                 break;
-            case "其他地物":
-                currentPinURI = pinURIOfOthers;
+            case "石刻":
+                currentPinURI = pinURIOfStone;
+                break;
+            case "可动设施":
+                currentPinURI = pinURIOfMovable;
+                break;
+            case "固定设施":
+                currentPinURI = pinURIOfImmovable;
                 break;
             default:
                 break;

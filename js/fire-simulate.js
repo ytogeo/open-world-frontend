@@ -26,7 +26,7 @@ class FireTruck {
     waterEffect = new Cesium.ParticleSystem({
         image: '../image/circular_particle.png',
         startColor: new Cesium.Color(0.27, 0.5, 0.7, 0.0),
-        endColor: new Cesium.Color(0.27, 0.5, 0.7, 0.80),
+        endColor: new Cesium.Color(0.27, 0.5, 0.7, 0.90),
         startScale: 1,
         endScale: 1,
         //设定粒子寿命可能持续时间的最小限值(以秒为单位)，在此限值之上将随机选择粒子的实际寿命。
@@ -36,7 +36,7 @@ class FireTruck {
         maximumSpeed: 100,
         imageSize: new Cesium.Cartesian2(5, 5),
         // Particles per second.
-        emissionRate: 1000,
+        emissionRate: 2000,
         lifetime: 50.0,
         //cesium内置的发射器：锥形发射器
         emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(0.0)),
@@ -231,7 +231,7 @@ function displayFireSimulateWindow() {
             type: 1,
             shade: 0,
             offset: ['100px', '15px'],
-            area: ["350px", "100px"],
+            area: ["350px", "110px"],
             content: $("#fire-simulate"),
             move: false,
             success: function (layero, index) {
@@ -500,7 +500,6 @@ function clearFireSimulate() {
     viewer.entities.remove(warnLine); //警戒线实体
     fireEffect = null;
     warnLine = null;
-
     //注销鼠标各项事件
     //调用此函数时若鼠标仍在地图内，textDiv不会消失，则需额外移除提示文本
     textDiv.style.display = "none";
@@ -521,7 +520,7 @@ function clearFireSimulate() {
         }
     });
     //更新提示文字
-    document.getElementById("wander-text").innerHTML = "操作提示：左键点击场景，选择火灾发生位置。";
+    document.getElementById("fire-simulate-text").innerHTML = "操作提示：左键点击场景，选择火灾发生位置。";
     //注销小车
     if (fireTruck == null) {
         return;

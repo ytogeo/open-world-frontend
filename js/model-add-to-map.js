@@ -214,6 +214,7 @@ function editModelAdjustment(obj) {
     let id = obj.parentNode.parentNode.id;
     //根据模型id，从字典中获取对应的模型管理器
     curModelManager = modelManagerDic.get(id);
+    viewer.flyTo(curModelManager.model)
     //获取当前模型的参数
     let params = curModelManager.getParams();
     //根据参数初始化滑块

@@ -170,7 +170,7 @@ function chart_ModelType() {
                             }
                             percent = ((params.value / total) * 100).toFixed(0);
                             if (params.name !== '') {
-                                return '模型类型：' + params.name + '\n' + '\n' + '占百分比：' + percent + '%' + '\n' + '\n' + '数量：' + params.value;
+                                return '模型类型：' + params.name + '\n' + '\n' + '占百分比：' + percent + '%' + '\n'+ '\n' ;
                             } else {
                                 return '';
                             }

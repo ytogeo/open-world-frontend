@@ -209,11 +209,6 @@ function getNormal(modelId, pointArray, direction) {
     let transformToWorld = Cesium.Transforms.eastNorthUpToFixedFrame(origin);
     //通过矩阵求逆，计算世界坐标系到局部坐标系的变换矩阵
     let transform = Cesium.Matrix4.inverse(transformToWorld, new Cesium.Matrix4());
-    //加上Z轴旋转的影响，继续计算变换矩阵
-    let radian = Cesium.Math.toRadians(Number(modelManagerDic.get(modelId).rz) * 3.6);
-    let rotz = Cesium.Matrix3.fromRotationZ(-radian);
-    let rotationZ = Cesium.Matrix4.fromRotationTranslation(rotz);
-    Cesium.Matrix4.multiply(transform, rotationZ, transform);
     //根据变换矩阵，计算每个点在局部坐标系中的新坐标
     let newPointArray = new Array();
     for (let i = 0; i < pointArray.length; i++) {
@@ -221,6 +216,11 @@ function getNormal(modelId, pointArray, direction) {
     }
     //两点间的向量
     let vector = Cesium.Cartesian3.subtract(newPointArray[1], newPointArray[0], new Cesium.Cartesian3())
+    //加上Z轴旋转的影响，将向量做个Z轴方向旋转
+    let radian = Cesium.Math.toRadians(Number(modelManagerDic.get(modelId).rz) * 3.6);
+    let rotz = Cesium.Matrix3.fromRotationZ(-radian);
+    let rotationZ = Cesium.Matrix4.fromRotationTranslation(rotz);
+    Cesium.Matrix4.multiplyByPointAsVector(rotationZ, vector, vector);
     //方向
     if (direction == 1) {
         // 定义一个垂直向上的向量up

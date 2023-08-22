@@ -89,7 +89,7 @@ function chooseimage() {
                         title: "模型信息填写", //弹出层的标题
                         content: $('#model-infocard-write'),
                         shade: 0, //不显示遮罩
-                        area: ['400px', '560px'],
+                        area: ['400px', '570px'],
                         offset: 'auto',
                         btn: ['保存'],
                         yes: function (index, layero) {

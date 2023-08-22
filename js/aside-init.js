@@ -264,7 +264,7 @@ function viewModel_info(item) {
             title: "模型信息", //弹出层的标题
             content: $('#model-infocard-show'),
             shade: 0, //不显示遮罩
-            area: ['400px', '560px'],
+            area: ['400px', '570px'],
             offset: ['80px', '10px'],
             closeBtn: 2,
             btn: ['保存'],
