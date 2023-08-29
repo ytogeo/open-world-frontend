@@ -4,7 +4,7 @@
 
 class Car {
     entity = null;
-    speed = 0.6;
+    speed = 0.5;
     position = null;
     cameraX = 0;
     cameraY = 1;

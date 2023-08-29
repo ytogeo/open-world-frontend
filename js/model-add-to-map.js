@@ -514,5 +514,3 @@ function initGltfFromDb(data) {
     //将模型添加到场景
     viewer.entities.add(model);
 }
-
-initModelOnMap();

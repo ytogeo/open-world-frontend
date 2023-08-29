@@ -16,7 +16,7 @@ class FireTruck {
         moveBackward: false,
         moveRight: false,
         moveLeft: false,
-    }
+    };
     hpr = null;
     constructor(model, coor, hpr) {
         this.entity = viewer.entities.add(model);
@@ -24,28 +24,28 @@ class FireTruck {
         this.hpr = hpr;
     }
     waterEffect = new Cesium.ParticleSystem({
-        image: '../image/circular_particle.png',
+        image: "../image/circular_particle.png",
         startColor: new Cesium.Color(0.27, 0.5, 0.7, 0.0),
-        endColor: new Cesium.Color(0.27, 0.5, 0.7, 0.90),
+        endColor: new Cesium.Color(0.27, 0.5, 0.7, 0.9),
         startScale: 1,
         endScale: 1,
         //设定粒子寿命可能持续时间的最小限值(以秒为单位)，在此限值之上将随机选择粒子的实际寿命。
         minimumParticleLife: 1,
         maximumParticleLife: 1,
-        minimumSpeed: 40,
-        maximumSpeed: 100,
+        minimumSpeed: 55,
+        maximumSpeed: 70,
         imageSize: new Cesium.Cartesian2(5, 5),
         // Particles per second.
-        emissionRate: 2000,
-        lifetime: 50.0,
+        emissionRate: 2500,
+        lifetime: 15.0,
         //cesium内置的发射器：锥形发射器
-        emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(0.0)),
+        emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(2.0)),
         updateCallback: applyGravity, //回调：重力效果
     });
     /**
      * 根据按键的keyCode，改变对应方向的状态
-     * @param {*} keycode 
-     * @param {*} value 
+     * @param {*} keycode
+     * @param {*} value
      */
     switchDirectionState(keycode, value) {
         switch (keycode) {
@@ -58,7 +58,7 @@ class FireTruck {
             case 65: //A
                 this.direction.moveLeft = value;
                 break;
-            case 68: //D 
+            case 68: //D
                 this.direction.moveRight = value;
                 break;
             case 13: //回车键，消防车灭火
@@ -78,7 +78,7 @@ class FireTruck {
                 viewer.scene.primitives.add(this.waterEffect);
                 //喷水开始后15秒，灭火结束
                 setTimeout(() => {
-                    layer.msg("火已扑灭！消防模拟结束。")
+                    layer.msg("火已扑灭！消防模拟结束。");
                     viewer.scene.primitives.remove(this.waterEffect);
                     viewer.scene.primitives.remove(fireEffect);
                     viewer.entities.remove(warnLine);
@@ -102,7 +102,7 @@ class FireTruck {
                 //前进右转
                 this.hpr.heading += Cesium.Math.toRadians(2);
             }
-            this.moveCarByState('forward');
+            this.moveCarByState("forward");
         } else if (direction.moveBackward) {
             if (direction.moveLeft) {
                 //后退左转
@@ -111,14 +111,13 @@ class FireTruck {
                 //后退右转
                 this.hpr.heading += Cesium.Math.toRadians(2);
             }
-            this.moveCarByState('backward');
+            this.moveCarByState("backward");
         }
-
     }
     moveCarByState(forwardOrBackword) {
         //速度向量
         let speedVector = null;
-        if (forwardOrBackword == 'forward') {
+        if (forwardOrBackword == "forward") {
             //向前
             speedVector = Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.UNIT_Y, this.speed, new Cesium.Cartesian3());
         } else {
@@ -126,7 +125,7 @@ class FireTruck {
             speedVector = Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.UNIT_Y, -this.speed, new Cesium.Cartesian3());
         }
         // 根据速度计算出下一个位置的坐标
-        let fixedFrameTransforms = Cesium.Transforms.localFrameToFixedFrameGenerator('east', 'north');
+        let fixedFrameTransforms = Cesium.Transforms.localFrameToFixedFrameGenerator("east", "north");
         let modelMatrix = Cesium.Transforms.headingPitchRollToFixedFrame(this.position, this.hpr, Cesium.Ellipsoid.WGS84, fixedFrameTransforms);
         //计算结果将赋值到this.position
         Cesium.Matrix4.multiplyByPoint(modelMatrix, speedVector, this.position);
@@ -157,7 +156,7 @@ class FireTruck {
     }
     /**
      * 令摄像机跟踪小车，有参考
-     * @param {*} leftOrRight 
+     * @param {*} leftOrRight
      */
     cameraTrackingCar() {
         //视角变换
@@ -195,11 +194,11 @@ class FireTruck {
          */
         //监听键盘：按下WASD按键时，改变direction（将对应方向设为true）
         $(document).keydown((e) => {
-            this.switchDirectionState(e.keyCode, true)
+            this.switchDirectionState(e.keyCode, true);
         });
         //监听键盘：松开WASD按键时，改变direction（将对应方向设为false）
         $(document).keyup((e) => {
-            this.switchDirectionState(e.keyCode, false)
+            this.switchDirectionState(e.keyCode, false);
         });
         //设置每一秒都会执行回调函数的内容
         viewer.clock.onTick.addEventListener((clock) => {
@@ -209,8 +208,8 @@ class FireTruck {
     }
     inactive() {
         //注销监听
-        $(document).off('keydown');
-        $(document).off('keyup');
+        $(document).off("keydown");
+        $(document).off("keyup");
         viewer.clock.onTick._listeners[2] = null;
         //移除小车
         viewer.entities.remove(this.entity);
@@ -227,10 +226,10 @@ function displayFireSimulateWindow() {
     layui.use("layer", function () {
         var layer = layui.layer;
         layer.open({
-            title: ['消防模拟', 'height:30px;font-size:13.5px;line-height:30px;'],
+            title: ["消防模拟", "height:30px;font-size:13.5px;line-height:30px;"],
             type: 1,
             shade: 0,
-            offset: ['100px', '15px'],
+            offset: ["100px", "15px"],
             area: ["350px", "110px"],
             content: $("#fire-simulate"),
             move: false,
@@ -245,7 +244,7 @@ function displayFireSimulateWindow() {
             },
             cancel: function () {
                 clearFireSimulate();
-            }
+            },
         });
     });
 }
@@ -269,9 +268,9 @@ function hideTooltipForFire(evt) {
 
 function displayHintTextOfFire() {
     //鼠标移动到地图上时，显示提示文本
-    mapDiv.addEventListener('mousemove', showTooltipForFire);
+    mapDiv.addEventListener("mousemove", showTooltipForFire);
     //鼠标移出地图时，隐藏提示文本
-    mapDiv.addEventListener('mouseout', hideTooltipForFire);
+    mapDiv.addEventListener("mouseout", hideTooltipForFire);
 }
 
 function showTooltipForTruck(evt) {
@@ -291,13 +290,13 @@ function hideTooltipForTruck(evt) {
 function displayHintTextOfTruck() {
     textDiv.innerHTML = "左键点击，选择消防车起点位置";
     //鼠标移动到地图上时，显示提示文本
-    mapDiv.addEventListener('mousemove', showTooltipForTruck);
+    mapDiv.addEventListener("mousemove", showTooltipForTruck);
     //鼠标移出地图时，隐藏提示文本
-    mapDiv.addEventListener('mouseout', hideTooltipForTruck);
+    mapDiv.addEventListener("mouseout", hideTooltipForTruck);
 }
 /**
  * 鼠标点击选择火灾发生位置
- * @param {*} e 
+ * @param {*} e
  */
 let fireLocation = null;
 
@@ -307,8 +306,8 @@ function chooseFireLocation(e) {
     //修改提示文本
     document.getElementById("fire-simulate-text").innerHTML = "操作提示：左键点击，选择消防车起点位置。";
     displayHintTextOfTruck();
-    mapDiv.removeEventListener('mousemove', showTooltipForFire);
-    mapDiv.removeEventListener('mouseout', hideTooltipForFire);
+    mapDiv.removeEventListener("mousemove", showTooltipForFire);
+    mapDiv.removeEventListener("mouseout", hideTooltipForFire);
     //移除点击事件
     handlerForFire.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     handlerForFire.setInputAction(chooseFireTruckLocation, Cesium.ScreenSpaceEventType.LEFT_CLICK);
@@ -317,7 +316,7 @@ function chooseFireLocation(e) {
 }
 /**
  * 鼠标点击，选择消防车起点位置
- * @param {*} e 
+ * @param {*} e
  */
 let fireTruckLocation = null;
 
@@ -329,17 +328,17 @@ function chooseFireTruckLocation(e) {
     textDiv.style.display = "none";
     textDiv.innerHTML = "提示文本";
     //注销提示的toolTip事件
-    mapDiv.removeEventListener('mousemove', showTooltipForTruck);
-    mapDiv.removeEventListener('mouseout', hideTooltipForTruck);
+    mapDiv.removeEventListener("mousemove", showTooltipForTruck);
+    mapDiv.removeEventListener("mouseout", hideTooltipForTruck);
     //移除点击事件
     handlerForFire.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     initFireTruck();
 }
 /**
  * 计算p1p2连线的heading角
- * @param {*} p1 
- * @param {*} p2 
- * @returns 
+ * @param {*} p1
+ * @param {*} p2
+ * @returns
  */
 function getHeading(pointA, pointB) {
     //建立以点A为原点，X轴为east,Y轴为north,Z轴朝上的坐标系
@@ -357,8 +356,8 @@ function getHeading(pointA, pointB) {
 
 /**
  * 计算起点的切线与水平方向的夹角
- * @param {*} pointA 
- * @param {*} pointB 
+ * @param {*} pointA
+ * @param {*} pointB
  * @returns pitch
  */
 function getPitch(pointA, pointB) {
@@ -384,7 +383,7 @@ function computeEmitterModelMatrix(heading, pitch, roll) {
     trs.translation = Cesium.Cartesian3.fromElements(2.5, 4, 1);
     trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr);
     let result = Cesium.Matrix4.fromTranslationRotationScale(trs);
-    return result
+    return result;
 }
 /**
  * 初始化火灾效果
@@ -394,7 +393,7 @@ let fireEffect = null;
 function initFireEffect() {
     //添加粒子效果
     fireEffect = new Cesium.ParticleSystem({
-        image: '../image/fire.png',
+        image: "../image/fire.png",
         startColor: Cesium.Color.RED.withAlpha(0.7),
         endColor: Cesium.Color.YELLOW.withAlpha(0.3),
         startScale: 0,
@@ -413,35 +412,30 @@ function initFireEffect() {
         //设置火灾位置
         modelMatrix: Cesium.Transforms.eastNorthUpToFixedFrame(fireLocation),
         //在粒子系统局部坐标系中变换粒子系统发射器的4x4变换矩阵。
-        emitterModelMatrix: computeEmitterModelMatrix(0, 0, 0)
-    })
+        emitterModelMatrix: computeEmitterModelMatrix(0, 0, 0),
+    });
     viewer.scene.primitives.add(fireEffect);
-
 }
 /**
  * 初始化消防车
  */
-
 
 function initFireTruck() {
     let hpr = new Cesium.HeadingPitchRoll(
         Cesium.Math.toRadians(180), //将小车的头部朝向设置为正南方向
         Cesium.Math.toRadians(0),
         Cesium.Math.toRadians(0)
-    )
+    );
     //创建消防车模型
     let fireTruckModel = {
-        id: 'fire truck',
+        id: "fire truck",
         position: fireTruckLocation,
-        orientation: Cesium.Transforms.headingPitchRollQuaternion(
-            fireTruckLocation,
-            hpr,
-        ),
+        orientation: Cesium.Transforms.headingPitchRollQuaternion(fireTruckLocation, hpr),
         model: {
             uri: "data/fire_truck.glb",
             scale: 1,
         },
-    }
+    };
     //创建漫游用的小车
     fireTruck = new FireTruck(fireTruckModel, fireTruckLocation, hpr);
     fireTruck.active();
@@ -469,8 +463,8 @@ function initFireScene() {
             }, false),
             width: 2,
             material: Cesium.Color.RED,
-        }
-    })
+        },
+    });
     //计算距离，添加提示文字
     //将坐标转为经纬度
     let cartographicA = Cesium.Cartographic.fromCartesian(fireTruckLocation);
@@ -488,8 +482,7 @@ function initFireScene() {
             document.getElementById("fire-simulate-text").innerHTML = "操作提示：按下回车键，开始灭火。";
             clearInterval(interval); //清除定时器
         }
-    }, 100)
-
+    }, 100);
 }
 /**
  * 清除消防模拟效果
@@ -505,10 +498,10 @@ function clearFireSimulate() {
     textDiv.style.display = "none";
     textDiv.innerHTML = "提示文本";
     //注销提示的toolTip事件
-    mapDiv.removeEventListener('mousemove', showTooltipForFire);
-    mapDiv.removeEventListener('mouseout', hideTooltipForFire);
-    mapDiv.removeEventListener('mousemove', showTooltipForTruck);
-    mapDiv.removeEventListener('mouseout', hideTooltipForTruck);
+    mapDiv.removeEventListener("mousemove", showTooltipForFire);
+    mapDiv.removeEventListener("mouseout", hideTooltipForFire);
+    mapDiv.removeEventListener("mousemove", showTooltipForTruck);
+    mapDiv.removeEventListener("mouseout", hideTooltipForTruck);
     //移除点击事件
     handlerForFire.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     //修改摄像头位置（初始）
@@ -516,8 +509,8 @@ function clearFireSimulate() {
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, 2000.0),
         orientation: {
             pitch: Cesium.Math.toRadians(-90.0),
-            roll: 0
-        }
+            roll: 0,
+        },
     });
     //更新提示文字
     document.getElementById("fire-simulate-text").innerHTML = "操作提示：左键点击场景，选择火灾发生位置。";

@@ -32,13 +32,17 @@
     text-align: center;
 }
 
-.hint-text>a {
+#hint-text-login {
+    top: 40%;
+}
+
+.hint-text > a {
     font-size: 14px;
     color: rgba(209, 209, 209, 0.9);
 }
 
 .user-closet {
-    /* display: none; */
+    visibility: hidden;
     width: 614px;
 }
 
@@ -59,7 +63,6 @@
     background-color: transparent;
 }
 
-
 .obj-geoinfo-display {
     display: inline-block;
     vertical-align: top;
@@ -71,6 +74,7 @@
 }
 
 .user-db-table {
+    visibility: hidden;
     margin: 10px;
     margin-top: 25px;
     width: 594px;
@@ -129,6 +133,6 @@
     background-repeat: no-repeat;
     text-align: center;
     line-height: 370px;
-    color:#acd0e4;
+    color: #acd0e4;
     font-size: 13px;
 }

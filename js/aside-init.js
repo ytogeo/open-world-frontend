@@ -5,137 +5,154 @@
 const pinDataSource = new Map();
 let myUpload = new Array();
 
-let listeningHandler
+let listeningHandler;
 /**
  * 初始化侧边栏用户界面数据库
  */
 
 function initUserTable() {
-    layui.use('table', function () {
+    layui.use("table", function () {
         var table = layui.table;
         table.render({
-            id: 'db-table',
-            elem: '#db-table',
-            height: '325px',
-            url: myserver + '/wxcloud_query',
-            parseData: function (res) { //res 即为原始返回的数据
+            id: "db-table",
+            elem: "#db-table",
+            height: "325px",
+            url: myserver + "/wxcloud_query",
+            parseData: function (res) {
+                //res 即为原始返回的数据
                 return {
-                    "code": res.errcode, //解析接口状态
-                    "msg": res.errmsg, //解析提示文本
-                    "count": res.pager.Total, //解析数据长度
-                    "data": res.data.map(function (str) {
+                    code: res.errcode, //解析接口状态
+                    msg: res.errmsg, //解析提示文本
+                    count: res.pager.Total, //解析数据长度
+                    data: res.data.map(function (str) {
                         return JSON.parse(str);
-                    }) //解析数据列表
+                    }), //解析数据列表
                 };
             },
             cols: [
-                [{
-                        field: 'ModelName',
-                        title: '模型名称',
-                        fixed: 'left',
+                [
+                    {
+                        field: "ModelName",
+                        title: "模型名称",
+                        fixed: "left",
                     },
                     {
-                        field: 'zipname',
-                        title: '模型ID',
-                        sort: true
+                        field: "zipname",
+                        title: "模型ID",
+                        sort: true,
                     },
                     {
-                        field: 'ModelInfo',
-                        title: '模型描述',
+                        field: "ModelInfo",
+                        title: "模型描述",
                     },
                     {
-                        field: 'ModelType',
-                        title: '模型类别',
+                        field: "ModelType",
+                        title: "模型类别",
                     },
                     {
-                        field: 'PostName',
-                        title: '提交人',
+                        field: "PostName",
+                        title: "提交人",
                     },
 
                     {
-                        title: '操作',
+                        title: "操作",
                         width: 125,
-                        align: 'center',
-                        fixed: 'right',
-                        toolbar: '#info-tool-bar',
-                    }
-                ]
+                        align: "center",
+                        fixed: "right",
+                        toolbar: "#info-tool-bar",
+                    },
+                ],
             ],
             page: {
                 limit: 5,
-                limits: [5, 10, 20, 50, 100]
+                limits: [5, 10, 20, 50, 100],
             },
             done: function (res, curr, count) {
                 model_data = res.data;
                 $("table").css("width", "100%");
-            }
+            },
         });
-        table.on('tool(db-table)', function (obj) {
+        table.on("tool(db-table)", function (obj) {
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
-            if (layEvent === 'view-info') { //查看信息
+            if (layEvent === "view-info") {
+                //查看信息
                 viewer.camera.flyTo({
                     destination: Cesium.Cartesian3.fromDegrees(data["lng"], data["lat"], 500),
                     orientation: {
                         heading: Cesium.Math.toRadians(0.0),
                         pitch: Cesium.Math.toRadians(-90.0),
-                        roll: 0.0
-                    }
+                        roll: 0.0,
+                    },
                 });
                 viewModel_info(data);
-            } else if (layEvent === 'download-model') { //下载
-                window.open(myserver + '/download/' + data["zipname"]);
-            } else if (layEvent === 'delete-model') { //删除
-                layer.confirm('确定删除这个模型吗？', function (index) {
-                    $.post(myserver + '/wxcloud_delete', {
-                        zipname: data["zipname"]
-                    }, function (res) {
-                        console.log(res);
-                        if (res == 0) {
-                            layer.msg('删除成功');
-                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            //重新加载数据
-                            table.reloadData('db-table', {
-                                url: myserver + '/wxcloud_query',
-                            });
-                            layer.close(index);
-                        } else {
-                            layer.msg('删除失败');
+            } else if (layEvent === "download-model") {
+                //下载
+                window.open(myserver + "/download/" + data["zipname"]);
+            } else if (layEvent === "delete-model") {
+                //删除
+                layer.confirm("确定删除这个模型吗？", function (index) {
+                    $.post(
+                        myserver + "/wxcloud_delete",
+                        {
+                            zipname: data["zipname"],
+                        },
+                        function (res) {
+                            console.log(res);
+                            if (res == 0) {
+                                layer.msg("删除成功");
+                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                //重新加载数据
+                                table.reloadData("db-table", {
+                                    url: myserver + "/wxcloud_query",
+                                });
+                                layer.close(index);
+                            } else {
+                                layer.msg("删除失败");
+                            }
                         }
-                    });
+                    );
                 });
-            } else if (layEvent === 'add-to-map-model') { //将模型添加到地图
-                layer.confirm('要将模型添加到地图吗？', {
-                    title: "添加到地图",
-                }, function (index) {
-                    // //判断是否已经添加过
-                    // if (modelManagerDic.has(data["zipname"])) {
-                    //     layer.msg("不可重复添加模型");
-                    //     return;
-                    // }
-                    //提示信息
-                    layer.msg('加载中，请稍后');
-                    setTimeout(function () {
-                        //调用添加模型到地图的函数
-                        addModelToMap(data["zipname"], data["ModelName"], data["lng"], data["lat"]);
+            } else if (layEvent === "add-to-map-model") {
+                //将模型添加到地图
+                layer.confirm(
+                    "要将模型添加到地图吗？",
+                    {
+                        title: "添加到地图",
+                    },
+                    function (index) {
+                        // //判断是否已经添加过
+                        // if (modelManagerDic.has(data["zipname"])) {
+                        //     layer.msg("不可重复添加模型");
+                        //     return;
+                        // }
+                        //提示信息
+                        layer.msg("加载中，请稍后");
+                        setTimeout(function () {
+                            //调用添加模型到地图的函数
+                            addModelToMap(data["zipname"], data["ModelName"], data["lng"], data["lat"]);
 
-                        layer.msg('请在地图中调整模型');
-                    }, 3000)
-                    layer.close(index);
-                });
-            } else if (layEvent === 'upload-to-square') { //将模型上传至共享广场
-                layer.confirm('要将模型上传到共享广场吗？', {
-                    title: "上传至广场",
-                }, function (index) {
-                    uploadToSquare(data);
-                    layer.close(index);
-                });
+                            layer.msg("请在地图中调整模型");
+                        }, 3000);
+                        layer.close(index);
+                    }
+                );
+            } else if (layEvent === "upload-to-square") {
+                //将模型上传至共享广场
+                layer.confirm(
+                    "要将模型上传到共享广场吗？",
+                    {
+                        title: "上传至广场",
+                    },
+                    function (index) {
+                        uploadToSquare(data);
+                        layer.close(index);
+                    }
+                );
             }
         });
-
     });
-
 }
 /**
  * 初始化地图上Pin的数据源
@@ -156,10 +173,30 @@ function initPinDataSource(data) {
 //初始化侧边栏用户表格
 initUserTable();
 //发送请求，初始化pinDataSource
-$.post(myserver + '/wxcloud-query-total-data', function (res) {
-    initPinDataSource(res.data)
+$.post(myserver + "/wxcloud-query-total-data", function (res) {
+    initPinDataSource(res.data);
 });
 let isAsideShow = false;
+let isExitShow = false;
+function clickUserCloset(event) {
+    if (event.which == 1) {
+        //左键单击
+        switchAside();
+        return;
+    }
+    //右键单击
+    var menu = document.getElementById("user-menu");
+    if (!isExitShow) {
+        //改变高度，实现折叠动画
+        menu.classList.add("user-menu-active");
+        isExitShow = true;
+        return;
+    } else {
+        menu.classList.remove("user-menu-active");
+        isExitShow = false;
+    }
+}
+
 /**
  * 实现侧边栏的显示与隐藏的函数
  * @returns void
@@ -185,24 +222,54 @@ function userLogin() {
         shade: 0,
         area: ["350px", "350px"],
         content: $("#user-login"),
-        btn: ['登录', '取消'],
+        btn: ["登录", "取消"],
         yes: function (index, layero) {
             let username = $("#username").val();
             let password = $("#password").val();
             if (username == "admin" && password == "sa.openworld") {
-                layer.msg("登录成功", {
-                    time: 1000
-                }, function () {
-                    layer.close(index);
-                    document.getElementById("hint-text-login").style.display = "none";
-                    document.getElementById("user-closet").style.display = "block";
-                });
+                layer.msg(
+                    "登录成功",
+                    {
+                        time: 1000,
+                    },
+                    function () {
+                        layer.close(index);
+                        document.getElementById("hint-text-login").style.display = "none";
+                        document.getElementById("user-closet").style.visibility = "visible";
+                        document.getElementById("user-db-table").style.visibility = "visible";
+                        //用户放置到地图上的模型
+                        initModelOnMap();
+                    }
+                );
                 return;
             }
             layer.msg("登陆失败", {
-                time: 1000
+                time: 1000,
             });
         },
+    });
+}
+function userExit() {
+    layer.confirm("确定退出登录吗？", function (index) {
+        //用户展柜显隐性
+        document.getElementById("hint-text-login").style.display = "block";
+        document.getElementById("user-closet").style.visibility = "hidden";
+        document.getElementById("user-db-table").style.visibility = "hidden";
+        //清除用户放置到地图上的实体
+        viewer.entities.removeAll();
+        //移除所有pin（显示状态改变）
+        let visibilityStateIcon = document.getElementById("display-model-pin-button-icon");
+        visibilityStateIcon.classList.remove("layui-icon-eye-invisible");
+        visibilityStateIcon.classList.add("layui-icon-eye");
+        visibilityStateIcon.title = "打开模型标记";
+        isDisplayPin = false;
+        //退出菜单的关闭
+        var menu = document.getElementById("user-menu");
+        menu.classList.remove("user-menu-active");
+        isExitShow = false;
+        layer.msg("已退出");
+        //关闭确认界面
+        layer.close(index);
     });
 }
 /**
@@ -221,21 +288,20 @@ function model_info_submit() {
     data["lng"] = $("#lng-show").val();
     data["lat"] = $("#lat-show").val();
     data["time"] = $("#time-show").val();
-    $.post(myserver + '/wxcloud_update', data, function (res) {
+    $.post(myserver + "/wxcloud_update", data, function (res) {
         console.log(res);
         if (res == 0) {
-            layer.msg('更新成功');
+            layer.msg("更新成功");
             initUserTable();
             //重新初始化PinDataSource
             pinDataSource.clear();
-            $.post(myserver + '/wxcloud-query-total-data', function (res) {
-                initPinDataSource(res.data)
+            $.post(myserver + "/wxcloud-query-total-data", function (res) {
+                initPinDataSource(res.data);
             });
         } else {
-            layer.msg('更新失败');
+            layer.msg("更新失败");
         }
     });
-
 }
 
 /**
@@ -262,29 +328,29 @@ function viewModel_info(item) {
             fix: false,
             anim: 3,
             title: "模型信息", //弹出层的标题
-            content: $('#model-infocard-show'),
+            content: $("#model-infocard-show"),
             shade: 0, //不显示遮罩
-            area: ['400px', '570px'],
-            offset: ['80px', '10px'],
+            area: ["400px", "570px"],
+            offset: ["80px", "10px"],
             closeBtn: 2,
-            btn: ['保存'],
+            btn: ["保存"],
             yes: function (index, layero) {
                 //上传更新信息
-                model_info_submit()
-                //移除cesium左键单击事件与tooltip      
+                model_info_submit();
+                //移除cesium左键单击事件与tooltip
                 handler0.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK, leftClickCallback);
-                mapDiv.removeEventListener('mousemove', showTooltip);
-                mapDiv.removeEventListener('mouseout', hideTooltip);
+                mapDiv.removeEventListener("mousemove", showTooltip);
+                mapDiv.removeEventListener("mouseout", hideTooltip);
                 layer.close(index);
             },
             cancel: function (index, layero) {
                 //移除cesium左键单击事件与tooltip
                 handler0.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK, leftClickCallback);
-                mapDiv.removeEventListener('mousemove', showTooltip);
-                mapDiv.removeEventListener('mouseout', hideTooltip);
+                mapDiv.removeEventListener("mousemove", showTooltip);
+                mapDiv.removeEventListener("mouseout", hideTooltip);
                 layer.close(index);
-            }
-        })
+            },
+        });
     });
 }
 
@@ -297,9 +363,9 @@ function displayStatistics() {
         layer.open({
             type: 2,
             title: "统计分析", //弹出层的标题
-            content: 'chart.html',
+            content: "chart.html",
             shade: 0, //不显示遮罩
-            area: ['85%', '90%'],
+            area: ["85%", "90%"],
             maxmin: false,
             closeBtn: 2,
         });
@@ -307,12 +373,12 @@ function displayStatistics() {
 }
 
 function uploadToSquare(data) {
-    $.post(myserver + '/wxcloud-add-us2sq', data, function (res) {
+    $.post(myserver + "/wxcloud-add-us2sq", data, function (res) {
         if (res == 0) {
             myUpload.push(data);
-            layer.msg('上传成功');
+            layer.msg("上传成功");
         } else {
-            layer.msg('上传失败');
+            layer.msg("上传失败");
         }
     });
 }

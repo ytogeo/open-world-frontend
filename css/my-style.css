@@ -71,10 +71,6 @@ input[type="file"] {
     color: #edffff;
 }
 
-
-
-
-
 /*大屏*/
 * {
     margin: 0;
@@ -110,7 +106,7 @@ input[type="file"] {
 .header_center {
     width: 30%;
     margin: 0px auto;
-    color: #FFFFff;
+    color: #ffffff;
     text-align: center;
     height: 80px;
     background-image: url("../image/bg_logo.png");
@@ -132,7 +128,6 @@ input[type="file"] {
 .header_logo {
     margin-left: 1%;
     margin-top: 12px;
-
 }
 
 .header_logo img {
@@ -143,8 +138,7 @@ input[type="file"] {
     width: 35%;
 }
 
-
-.nav>ul>li {
+.nav > ul > li {
     display: inline-block;
     width: 120px;
     text-align: center;
@@ -160,15 +154,12 @@ input[type="file"] {
     border-radius: 5px;
 }
 
-.nav>ul>li:hover {
-    box-shadow: -10px 0px 15px #034c6a inset,
-        0px -10px 15px #034c6a inset,
-        10px 0px 15px #034c6a inset,
-        0px 10px 15px #034c6a inset;
+.nav > ul > li:hover {
+    box-shadow: -10px 0px 15px #034c6a inset, 0px -10px 15px #034c6a inset, 10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
     box-sizing: border-box;
 }
 
-.nav>ul>li i {
+.nav > ul > li i {
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -176,8 +167,7 @@ input[type="file"] {
     margin-right: 5px;
 }
 
-
-.nav>ul>li>a {
+.nav > ul > li > a {
     color: #ffffff;
     vertical-align: middle;
     /*display: inline-block;*/
@@ -196,7 +186,6 @@ input[type="file"] {
     /*border-top:4px solid #4b8df8;*/
     display: none;
     z-index: 999;
-
 }
 
 .li_ul li {
@@ -290,10 +279,7 @@ input[type="file"] {
 /*选中特效？*/
 .nav_active {
     border-bottom: 4px solid #4b8df8;
-    box-shadow: -10px 0px 15px #034c6a inset,
-        0px -10px 15px #034c6a inset,
-        10px 0px 15px #034c6a inset,
-        0px 10px 15px #034c6a inset;
+    box-shadow: -10px 0px 15px #034c6a inset, 0px -10px 15px #034c6a inset, 10px 0px 15px #034c6a inset, 0px 10px 15px #034c6a inset;
     box-sizing: border-box;
 }
 
@@ -312,13 +298,13 @@ input[type="file"] {
     border-color: #838687e7;
 }
 
-.map-setting-button>i {
+.map-setting-button > i {
     font-size: 18px;
     text-align: center;
 }
 
 /*调整天气展示按钮图标（unicode字符）的大小*/
-#display-weather>i {
+#display-weather > i {
     font-size: 23px;
 }
 
@@ -357,14 +343,13 @@ input[type="file"] {
     margin-left: 0px;
 }
 
-
 /*登录界面*/
 .user-icon-container {
     height: 90px;
     margin-top: 15px;
 }
 
-.user-icon-container>.icon-user {
+.user-icon-container > .icon-user {
     width: 80px;
     height: 80px;
     /*为了使真正居中，margin要设为auto*/
@@ -392,6 +377,14 @@ input[type="file"] {
     overflow: hidden !important;
     transition: height 0.2s;
 }
+#user-menu {
+    left: 1425px;
+    width: 100px;
+}
+.user-menu-active {
+    /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
+    height: 40px;
+}
 
 .tool-menu-active {
     /*为了实现动画效果，这里要定死；如果列表要增加下拉项，要改变这里的高度*/
@@ -401,7 +394,6 @@ input[type="file"] {
 /*hover伪类，实现鼠标悬停特效*/
 .tool-menu-item:hover {
     background-color: #385987d3;
-
 }
 
 .tool-menu-item {
@@ -413,7 +405,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.tool-menu>.tool-menu-item>.menu-item-logo-basic {
+.tool-menu > .tool-menu-item > .menu-item-logo-basic {
     vertical-align: middle;
     width: 17px;
     height: 17px;
@@ -423,7 +415,7 @@ input[type="file"] {
     background-size: cover;
 }
 
-.tool-menu>.tool-menu-item>.menu-item-logo-measure {
+.tool-menu > .tool-menu-item > .menu-item-logo-measure {
     vertical-align: middle;
     width: 17px;
     height: 17px;
@@ -433,7 +425,7 @@ input[type="file"] {
     background-size: 20px;
 }
 
-.tool-menu>.tool-menu-item>.menu-item-logo-analysis {
+.tool-menu > .tool-menu-item > .menu-item-logo-analysis {
     vertical-align: middle;
     width: 17px;
     height: 17px;
@@ -443,7 +435,7 @@ input[type="file"] {
     background-size: 20px;
 }
 
-.tool-menu>.tool-menu-item>.menu-item-logo-fire {
+.tool-menu > .tool-menu-item > .menu-item-logo-fire {
     vertical-align: middle;
     width: 17px;
     height: 17px;
@@ -453,7 +445,7 @@ input[type="file"] {
     background-size: 17px;
 }
 
-.tool-menu>.tool-menu-item>.menu-item-text {
+.tool-menu > .tool-menu-item > .menu-item-text {
     vertical-align: middle;
     font-size: 14px;
     margin: 6px;
@@ -467,7 +459,6 @@ input[type="file"] {
     padding: 10px;
     grid-template-columns: repeat(4, 110px);
     grid-template-rows: repeat(3, 110px);
-    
 }
 
 .measure-tool-container {
@@ -479,22 +470,22 @@ input[type="file"] {
 .analysis-tool-container {
     grid-template-columns: repeat(4, 110px);
     grid-template-rows: repeat(2, 100px);
-    grid-gap:15px 0px;
+    grid-gap: 15px 0px;
     overflow: hidden;
 }
 
-.tool-box-container>.tool-box-item {
+.tool-box-container > .tool-box-item {
     background-color: transparent;
     text-align: center;
     cursor: pointer;
 }
 
-.tool-box-container>.tool-box-item>.tool-box-item-icon:hover {
+.tool-box-container > .tool-box-item > .tool-box-item-icon:hover {
     /*悬浮到icon上时，有高光效果*/
     filter: brightness(1.1);
 }
 
-.tool-box-container>.tool-box-item>.tool-box-item-icon {
+.tool-box-container > .tool-box-item > .tool-box-item-icon {
     margin-bottom: 7px;
     border-radius: 50%;
     background-position: center center;
@@ -504,7 +495,7 @@ input[type="file"] {
     /*background-size: cover;*/
 }
 
-.tool-box-container>.tool-box-item>.tool-box-item-text {
+.tool-box-container > .tool-box-item > .tool-box-item-text {
     font-size: 13.5px;
 }
 
@@ -523,7 +514,6 @@ input[type="file"] {
     background-image: url("../image/area_measure_tool_logo.png");
     background-size: 39px;
     background-color: rgb(248, 205, 152);
-
 }
 
 .icon-measure-tri {
@@ -602,7 +592,7 @@ input[type="file"] {
     text-align: center;
 }
 
-.weather-item>.weather-item-icon {
+.weather-item > .weather-item-icon {
     margin: auto;
     width: 80px;
     height: 80px;
@@ -615,11 +605,11 @@ input[type="file"] {
     /*background-size: cover;*/
 }
 
-.weather-item>.weather-item-icon:hover {
+.weather-item > .weather-item-icon:hover {
     filter: brightness(1.1);
 }
 
-.weather-item>.weather-item-text {
+.weather-item > .weather-item-text {
     font-size: 15px;
 }
 
@@ -677,11 +667,11 @@ input[type="file"] {
     line-height: 14px;
 }
 
-.model-list-item>input {
+.model-list-item > input {
     margin-right: 5px;
 }
 
-.model-list-item>label {
+.model-list-item > label {
     font-size: 13px;
     position: absolute;
     /*限制label宽度为108px后，让溢出的字显示为省略号*/
@@ -691,14 +681,14 @@ input[type="file"] {
     overflow: hidden;
 }
 
-.model-list-item>.model-operations {
+.model-list-item > .model-operations {
     display: inline-block;
     /*同行*/
     position: absolute;
     right: 10px;
 }
 
-.model-list-item>.model-operations>a {
+.model-list-item > .model-operations > a {
     margin: 2px;
 }
 
@@ -737,7 +727,6 @@ input[type="file"] {
     margin: auto;
 }
 
-
 .my-form-container {
     position: relative;
     left: 15px;
@@ -758,7 +747,7 @@ input[type="file"] {
     margin-left: 10px;
 }
 
-div.layui-slider-input>div.layui-slider-input-txt>input {
+div.layui-slider-input > div.layui-slider-input-txt > input {
     background-color: transparent;
     height: 19px;
     line-height: 30px;
@@ -770,10 +759,9 @@ div.layui-slider-input>div.layui-slider-input-txt>input {
     border: 1px solid #2a447e;
 }
 
-div.layui-slider-input>div.layui-slider-input-btn {
+div.layui-slider-input > div.layui-slider-input-btn {
     border: 1px solid #2a447e;
 }
-
 
 .layui-slider-input-btn i:first-child {
     border-bottom: 1px solid #2a447e;
