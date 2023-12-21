@@ -13,7 +13,7 @@ function lengthMeasureWindow() {
             type: 1,
             shade: 0,
             offset: ['100px', '15px'],
-            area: ["350px", "100px"],
+            area: ["350px", "110px"],
             content: $("#length-measure"),
             move: false,
             success: function (layero, index) {
@@ -58,7 +58,7 @@ function areaMeasureWindow() {
             type: 1,
             shade: 0,
             offset: ['100px', '15px'],
-            area: ["350px", "100px"],
+            area: ["350px", "110px"],
             content: $("#area-measure"),
             move: false,
             success: function (layero, index) {
@@ -104,7 +104,7 @@ function triangulationMeasureWindow() {
             type: 1,
             shade: 0,
             offset: ['100px', '15px'],
-            area: ["350px", "100px"],
+            area: ["350px", "110px"],
             content: $("#tri-measure"),
             move: false,
             success: function (layero, index) {
@@ -148,7 +148,7 @@ function slopeMeasureWindow() {
             type: 1,
             shade: 0,
             offset: ['100px', '15px'],
-            area: ["350px", "100px"],
+            area: ["350px", "110px"],
             content: $("#slope-measure"),
             move: false,
             success: function (layero, index) {

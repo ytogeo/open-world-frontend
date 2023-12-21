@@ -134,3 +134,7 @@ function homeButtonClick() {
         },
     });
 }
+//设置直射光
+viewer.scene.light = new Cesium.DirectionalLight({ 
+    direction: new Cesium.Cartesian3(0.35492591601301104, -0.8909182691839401, -0.2833588392420772)
+})

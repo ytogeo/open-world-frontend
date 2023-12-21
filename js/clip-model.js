@@ -1,6 +1,5 @@
 /**
  * @file 该文件用于实现模型剖切分析
- * 进度：可能弃用。由于GLTF模型的原点与场景中模型应该有的原点不同，导致剖切面无法正确地设置在想要的地方
  */
 let mouseEventManagerForClip = null;
 let entitiesForClip = new Array();

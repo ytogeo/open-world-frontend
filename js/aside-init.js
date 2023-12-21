@@ -106,6 +106,17 @@ function initUserTable() {
                                 //重新加载数据
                                 table.reloadData("db-table", {
                                     url: myserver + "/wxcloud_query",
+                                    done: function (res, curr, count) {
+                                        if (res.data.length == 0) {
+                                            curr--; //返回有数据的最后一页
+                                            table.reloadData("db-table", {
+                                                url: myserver + "/wxcloud_query",
+                                                page: {
+                                                    curr: curr,
+                                                },
+                                            });
+                                        }
+                                    },
                                 });
                                 layer.close(index);
                             } else {
@@ -139,11 +150,11 @@ function initUserTable() {
                     }
                 );
             } else if (layEvent === "upload-to-square") {
-                //将模型上传至共享广场
+                //将模型上传至共享中心
                 layer.confirm(
-                    "要将模型上传到共享广场吗？",
+                    "要将模型上传到共享中心吗？",
                     {
-                        title: "上传至广场",
+                        title: "模型共享",
                     },
                     function (index) {
                         uploadToSquare(data);
@@ -382,3 +393,8 @@ function uploadToSquare(data) {
         }
     });
 }
+document.getElementById("hint-text-login").style.display = "none";
+document.getElementById("user-closet").style.visibility = "visible";
+document.getElementById("user-db-table").style.visibility = "visible";
+//用户放置到地图上的模型
+initModelOnMap();

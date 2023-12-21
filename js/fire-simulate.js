@@ -8,8 +8,6 @@ class FireTruck {
     entity = null;
     speed = 0.7;
     position = null;
-    cameraX = 0;
-    cameraY = 1;
     //方向
     direction = {
         moveForward: false,

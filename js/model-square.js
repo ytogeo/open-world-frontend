@@ -59,7 +59,7 @@ function initModelSquare() {
         table.render({
             id: 'db-table-square-all',
             elem: '#db-table-square-all',
-            height: '600px',
+            height: '585px',
             url: myserver + '/wxcloud-query-for-modelSquare',
             parseData: function (res) { //res 即为原始返回的数据
                 return {
@@ -147,7 +147,7 @@ function initCartContent() {
         table.render({
             id: 'db-table-square-cart',
             elem: '#db-table-square-cart',
-            height: '340px',
+            height: '330px',
             data: userCart,
             parseData: function (res) { //res 即为原始返回的数据
                 return {
@@ -331,7 +331,7 @@ function initMyUploadContent() {
         table.render({
             id: 'db-table-square-upload',
             elem: '#db-table-square-upload',
-            height: '340px',
+            height: '330px',
             url: myserver + '/wxcloud-query-for-userUpload',
             parseData: function (res) { //res 即为原始返回的数据
                 return {

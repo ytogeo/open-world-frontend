@@ -6,15 +6,13 @@ class Car {
     entity = null;
     speed = 0.5;
     position = null;
-    cameraX = 0;
-    cameraY = 1;
     //方向
     direction = {
         moveForward: false,
         moveBackward: false,
         moveRight: false,
         moveLeft: false,
-    }
+    };
     hpr = null;
     constructor(model, coor, hpr) {
         this.entity = viewer.entities.add(model);
@@ -23,8 +21,8 @@ class Car {
     }
     /**
      * 根据按键的keyCode，改变对应方向的状态
-     * @param {*} keycode 
-     * @param {*} value 
+     * @param {*} keycode
+     * @param {*} value
      */
     switchDirectionState(keycode, value) {
         switch (keycode) {
@@ -37,7 +35,7 @@ class Car {
             case 65: //A
                 this.direction.moveLeft = value;
                 break;
-            case 68: //D 
+            case 68: //D
                 this.direction.moveRight = value;
                 break;
             default:
@@ -58,7 +56,7 @@ class Car {
                 //前进右转
                 this.hpr.heading += Cesium.Math.toRadians(2);
             }
-            this.moveCarByState('forward');
+            this.moveCarByState("forward");
         } else if (direction.moveBackward) {
             if (direction.moveLeft) {
                 //后退左转
@@ -67,13 +65,13 @@ class Car {
                 //后退右转
                 this.hpr.heading += Cesium.Math.toRadians(2);
             }
-            this.moveCarByState('backward');
+            this.moveCarByState("backward");
         }
     }
     moveCarByState(forwardOrBackword) {
         //速度向量
         let speedVector = null;
-        if (forwardOrBackword == 'forward') {
+        if (forwardOrBackword == "forward") {
             //向前
             speedVector = Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.UNIT_X, this.speed, new Cesium.Cartesian3());
         } else {
@@ -81,12 +79,17 @@ class Car {
             speedVector = Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.UNIT_X, -this.speed, new Cesium.Cartesian3());
         }
         // 根据速度计算出下一个位置的坐标
-        let fixedFrameTransforms = Cesium.Transforms.localFrameToFixedFrameGenerator('east', 'north');
+        let fixedFrameTransforms = Cesium.Transforms.localFrameToFixedFrameGenerator("east", "north");
         let modelMatrix = Cesium.Transforms.headingPitchRollToFixedFrame(this.position, this.hpr, Cesium.Ellipsoid.WGS84, fixedFrameTransforms);
         //计算结果将赋值到this.position
         Cesium.Matrix4.multiplyByPoint(modelMatrix, speedVector, this.position);
         //贴地
-        this.position = viewer.scene.clampToHeight(this.position, [this.entity]);
+        let nextPosition = viewer.scene.clampToHeight(this.position, [this.entity]);
+        let nextHeight = Cesium.Cartographic.fromCartesian(nextPosition).height;
+        let thisHeight = Cesium.Cartographic.fromCartesian(this.position).height;
+        if (Math.abs(nextHeight - thisHeight) < 0.5) {
+            this.position = nextPosition;
+        }
         //设置位置
         this.entity.position = this.position;
         //设置姿态
@@ -96,7 +99,7 @@ class Car {
     }
     /**
      * 令摄像机跟踪小车，有参考
-     * @param {*} leftOrRight 
+     * @param {*} leftOrRight
      */
     cameraTrackingCar() {
         //视角变换
@@ -130,11 +133,11 @@ class Car {
          */
         //监听键盘：按下WASD按键时，改变direction（将对应方向设为true）
         $(document).keydown((e) => {
-            this.switchDirectionState(e.keyCode, true)
+            this.switchDirectionState(e.keyCode, true);
         });
         //监听键盘：松开WASD按键时，改变direction（将对应方向设为false）
         $(document).keyup((e) => {
-            this.switchDirectionState(e.keyCode, false)
+            this.switchDirectionState(e.keyCode, false);
         });
         //设置每一秒都会执行回调函数的内容
         viewer.clock.onTick.addEventListener((clock) => {
@@ -144,17 +147,15 @@ class Car {
     }
     inactive() {
         //注销监听
-        $(document).off('keydown');
-        $(document).off('keyup');
+        $(document).off("keydown");
+        $(document).off("keyup");
         viewer.clock.onTick._listeners[2] = null;
         //移除小车
         viewer.entities.remove(this.entity);
         //视角解锁
-        viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY)
+        viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
     }
 }
-
-
 
 let car = null;
 let handlerForCar = null;
@@ -166,10 +167,10 @@ function displayWanderingWindow() {
     layui.use("layer", function () {
         var layer = layui.layer;
         layer.open({
-            title: ['沉浸漫游', 'height:30px;font-size:13.5px;line-height:30px;'],
+            title: ["沉浸漫游", "height:30px;font-size:13.5px;line-height:30px;"],
             type: 1,
             shade: 0,
-            offset: ['100px', '15px'],
+            offset: ["100px", "15px"],
             area: ["350px", "100px"],
             content: $("#wandering"),
             move: false,
@@ -184,7 +185,7 @@ function displayWanderingWindow() {
             },
             cancel: function () {
                 inactiveWandering();
-            }
+            },
         });
     });
 }
@@ -207,9 +208,9 @@ function hideTooltipForWander(evt) {
 
 function displayHintTextOfWander() {
     //鼠标移动到地图上时，显示提示文本
-    mapDiv.addEventListener('mousemove', showTooltipForWander);
+    mapDiv.addEventListener("mousemove", showTooltipForWander);
     //鼠标移出地图时，隐藏提示文本
-    mapDiv.addEventListener('mouseout', hideTooltipForWander);
+    mapDiv.addEventListener("mouseout", hideTooltipForWander);
 }
 /**
  * 激活漫游功能
@@ -221,8 +222,8 @@ function activeWandering(e) {
     textDiv.style.display = "none";
     textDiv.innerHTML = "提示文本";
     //注销提示的toolTip事件
-    mapDiv.removeEventListener('mousemove', showTooltipForWander);
-    mapDiv.removeEventListener('mouseout', hideTooltipForWander);
+    mapDiv.removeEventListener("mousemove", showTooltipForWander);
+    mapDiv.removeEventListener("mouseout", hideTooltipForWander);
     //移除点击事件
     handlerForCar.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     let hpr = new Cesium.HeadingPitchRoll(
@@ -232,18 +233,15 @@ function activeWandering(e) {
     );
     //创建一个小车模型
     let carModel = {
-        id: 'a model car',
+        id: "a model car",
         position: coor,
-        orientation: Cesium.Transforms.headingPitchRollQuaternion(
-            coor,
-            hpr,
-        ),
+        orientation: Cesium.Transforms.headingPitchRollQuaternion(coor, hpr),
         model: {
             uri: "data/CesiumTruck.glb",
             scale: 1,
             //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND //贴地
-        }
-    }
+        },
+    };
     //创建漫游用的小车
     car = new Car(carModel, coor, hpr);
     car.active();
@@ -252,15 +250,14 @@ function activeWandering(e) {
     document.getElementById("wander-text").innerHTML = "操作提示：使用WASD，操作小车移动。";
 }
 
-
 function inactiveWandering() {
     //注销鼠标各项事件
     //调用此函数时若鼠标仍在地图内，textDiv不会消失，则需额外移除提示文本
     textDiv.style.display = "none";
     textDiv.innerHTML = "提示文本";
     //注销提示的toolTip事件
-    mapDiv.removeEventListener('mousemove', showTooltipForWander);
-    mapDiv.removeEventListener('mouseout', hideTooltipForWander);
+    mapDiv.removeEventListener("mousemove", showTooltipForWander);
+    mapDiv.removeEventListener("mouseout", hideTooltipForWander);
     //移除点击事件
     handlerForCar.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     //修改摄像头位置（初始）
@@ -268,8 +265,8 @@ function inactiveWandering() {
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, 2000.0),
         orientation: {
             pitch: Cesium.Math.toRadians(-90.0),
-            roll: 0
-        }
+            roll: 0,
+        },
     });
     //更新提示文字
     document.getElementById("wander-text").innerHTML = "操作提示：点击场景，在对应位置放置小车。";

@@ -39,10 +39,14 @@ function startLoadAnimation() {
                 'width': '42px',
                 'height': 'auto',
                 "color": "#D6D6D6",
-                "background-color": "transparent",
+                "background": "transparent",
             });
-            document.getElementById('layui-layer1').style.backgroundColor = "transparent";
-            document.getElementById('layui-layer1').style.boxShadow = "none";
+            // document.getElementById('layui-layer1').style.backgroundColor = "transparent";
+            // document.getElementById('layui-layer1').style.boxShadow = "none";
+            // document.getElementById('layui-layer2').style.backgroundColor = "transparent";
+            // document.getElementById('layui-layer2').style.boxShadow = "none";
+            document.getElementsByClassName('layui-layer-loading')[0].style.backgroundColor = "transparent";
+            document.getElementsByClassName('layui-layer-loading')[0].style.boxShadow = "none";
         }
     });
 }
@@ -59,6 +63,16 @@ layui.use('laydate', function () {
         type: 'datetime'
     });
 });
+layui.use('laydate', function () {
+    var laydate = layui.laydate;
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#time-show', //指定元素
+        theme: '#011530',
+        type: 'datetime'
+    });
+});
+
 /**
  * 选择图片
  */
@@ -76,8 +90,7 @@ function chooseimage() {
             area: ['500px', '300px'],
             offset: 'auto',
             btn: ['开始建模', '取消'],
-            yes: function (index, layero) {
-                startLoadAnimation();
+            yes: function (index, layero) {       
                 $('#up-load-list').empty();
                 $.get(myserver + '/restruct', function (res) {
                     console.log(res);
@@ -123,6 +136,7 @@ function chooseimage() {
                     })
                 });
                 layer.close(index);
+                startLoadAnimation();
             },
             btn2: function (index, layero) {
                 $('#up-load-list').empty();
