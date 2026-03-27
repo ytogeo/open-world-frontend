@@ -7,7 +7,7 @@ let lon = 114.612958;
 let lat = 30.459622;
 // Cesium密钥
 let defaultAccessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyYTQ1YWM4Yi1jMWQ2LTRjODktYWUwZi1iN2E3MGY0YTc4NzUiLCJpZCI6MTI2OTc3LCJpYXQiOjE2Nzc3NDg2MTB9.1sM-0Hkm_FzlYZFqnTQlYyLVWZcJqg8EelxDssdjl28";
+    "*****************************************";
 Cesium.Ion.defaultAccessToken = defaultAccessToken;
 var imageryLayersArray = new Array();
 
@@ -31,9 +31,9 @@ viewer = new Cesium.Viewer("cesium-container", {
     shouldAnimate: true,
     //Mapbox自定义样式地图图层
     imageryProvider: new Cesium.MapboxStyleImageryProvider({
-        username: "houchaogis",
-        styleId: "clg7s6veu000k01p3q9xjadf2",
-        accessToken: "pk.eyJ1IjoiaG91Y2hhb2dpcyIsImEiOiJjbGc3c3Njem4wbXVqM3NxeWFpbnJleHZnIn0.WRlYOVdh-05m6LJTt9u_IQ",
+        username: "*********************",
+        styleId: "*************************",
+        accessToken: "****************************************",
     }),
     //显式渲染
     //requestRenderMode: true,
@@ -63,9 +63,9 @@ viewer.camera.flyTo({
  * mapbox地图
  */
 let darkMap = new Cesium.MapboxStyleImageryProvider({
-    username: "houchaogis",
-    styleId: "clg7s6veu000k01p3q9xjadf2",
-    accessToken: "pk.eyJ1IjoiaG91Y2hhb2dpcyIsImEiOiJjbGc3c3Njem4wbXVqM3NxeWFpbnJleHZnIn0.WRlYOVdh-05m6LJTt9u_IQ",
+    username: "*******",
+    styleId: "***********************",
+    accessToken: "**********************************",
 });
 
 /**
