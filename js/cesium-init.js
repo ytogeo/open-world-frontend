@@ -9,6 +9,8 @@ let lat = 30.459622;
 let defaultAccessToken =
     "*****************************************";
 Cesium.Ion.defaultAccessToken = defaultAccessToken;
+// 天地图密钥（请勿将真实 key 提交至版本库，部署时替换此占位符）
+let tdtToken = "YOUR_TIANDITU_TOKEN";
 var imageryLayersArray = new Array();
 
 /**
@@ -72,12 +74,12 @@ let darkMap = new Cesium.MapboxStyleImageryProvider({
  * 天地图影像与注记
  */
 let tdtLayer = new Cesium.UrlTemplateImageryProvider({
-    url: "http://t7.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=49b046e65d94afd82ff0b5b7b69012fa",
+    url: `http://t7.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${tdtToken}`,
     minimumLevel: 3,
     maximumLevel: 18,
 });
 let tdtNoteLayer = new Cesium.UrlTemplateImageryProvider({
-    url: "http://t7.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=49b046e65d94afd82ff0b5b7b69012fa",
+    url: `http://t7.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${tdtToken}`,
     minimumLevel: 3,
     maximumLevel: 18,
 });
